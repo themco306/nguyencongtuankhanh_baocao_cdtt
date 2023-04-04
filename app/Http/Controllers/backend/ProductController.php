@@ -151,13 +151,14 @@ class ProductController extends Controller
             if (File::exists(public_path($path . $product->image))) {
                 File::delete(public_path($path . $product->image));
             }
-
-            $list_product_images = Product_images::where('product_id', '=', $id)->get();
+            $product_sale = $product->sale;
+            $product->sale()->delete($product_sale);
+            $list_product_images = $product->images;
             foreach ($list_product_images as $product_images) {
                 if (File::exists(public_path($path . $product_images->image))) {
                     File::delete(public_path($path . $product_images->image));
                 }
-                $product_images->delete();
+                $product->images()->delete($product_images);
             }
             return redirect()->route('product.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa vĩnh viễn thành công!']);
         }

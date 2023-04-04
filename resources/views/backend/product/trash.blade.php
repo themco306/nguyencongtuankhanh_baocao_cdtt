@@ -80,7 +80,14 @@
                                      </div>
                                  </td>
                                  <td>
-                                     <img src="{{ asset('images/product/'.$row->image) }}" class="img-fluid"
+                                    @php
+                                      if (!empty($row->images)) {
+                                        $image = $row->images[0]->image;
+                                        } else {
+                                            $image='';                                    
+                                        }
+                                  @endphp 
+                                     <img src="{{ asset('images/product/'.$image) }}" class="img-fluid"
                                          alt="">
                                  </td>
                                  <td>
