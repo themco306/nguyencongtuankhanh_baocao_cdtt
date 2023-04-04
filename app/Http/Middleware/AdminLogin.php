@@ -16,13 +16,13 @@ class AdminLogin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
+        if (!Auth::guard('admin')->check()) {
 
             return redirect()->route('admin.getlogin');
         } else {
-            $user = Auth::user();
+            $user = Auth::guard('admin')->user();
             if ($user->roles == 0) {
-                Auth::logout();
+                Auth::guard('admin')->logout();
                 return redirect()->route("site.index");
             }
         }

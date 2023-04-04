@@ -1,5 +1,11 @@
 @extends('layouts.backend.admin')
 @section('title', $title ?? 'Trang Quản Lý')
+@section('header')
+   <link rel="stylesheet" href="{{ asset('css/Warning.css') }}">
+@endsection
+@section('footer')
+ <script src="{{ asset('js/warning.js') }}"></script>
+@endsection
 @section('content')
 
     <div class="content-wrapper">
@@ -26,18 +32,21 @@
         <section class="content">
 
             <!-- Default box -->
-            <form action="{{ route('brand.trash_multi') }}" name="form1" method="post">
+            <form action="{{ route('brand.trash_multi') }}" name="form1" method="POST">
                 @csrf
+                
                 <!-- Default box -->
                 <div class="card">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-6">
-                                <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                    <i class="fas fa-trash"></i> Xóa đã chọn
+                            <div class="col-md-8">
+                                <button class="btn btn-sm btn-danger del" type="submit" name="DELETE_ALL"
+                             >
+                                    <i class="fas fa-trash"></i> Xóa vv đã chọn
                                 </button>
+                                   <span class="text-danger warning"> Lưu ý khi xóa Thương Hiệu thì các Sản Phẩm và Menu liên qua cũng bị xóa theo</span>
                             </div>
-                            <div class="col-md-6 text-right">
+                            <div class="col-md-4 text-right">
                                 <div class="text-right">
 
                                     <a class="btn btn-sm btn-info" href="{{ route('brand.index') }}">
@@ -105,7 +114,7 @@
                                                 href="{{ route('brand.restore', ['brand' => $row->id]) }}">
                                                 <i class="fa-solid fa-arrow-rotate-left"></i>
                                             </a>
-                                            <a class="btn btn-sm btn-danger"
+                                            <a class="btn btn-sm btn-danger del"
                                                 href="{{ route('brand.destroy', ['brand' => $row->id]) }}">
                                                 <i class="fas fa-trash"></i>
                                             </a>
@@ -121,12 +130,14 @@
                     <!-- /.card-body -->
                     <div class="card-footer">
                         <div class="row">
-                            <div class="col-md-6">
-                                <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                    <i class="fas fa-trash"></i> Xóa đã chọn
+                            <div class="col-md-8">
+                                <button class="btn btn-sm btn-danger del" type="submit" name="DELETE_ALL"
+                             >
+                                    <i class="fas fa-trash"></i> Xóa vv đã chọn
                                 </button>
+                                   <span class="text-danger warning"> Lưu ý khi xóa Thương Hiệu thì các Sản Phẩm và Menu liên qua cũng bị xóa theo</span>
                             </div>
-                            <div class="col-md-6 text-right">
+                            <div class="col-md-4 text-right">
                                 <div class="text-right">
 
                                     <a class="btn btn-sm btn-info" href="{{ route('brand.index') }}">

@@ -11,6 +11,7 @@ use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -57,14 +58,15 @@ class CategoryController extends Controller
         $category->updated_at = date('Y-m-d H:i:s');
         $category->updated_by = Auth::user()->id;
         if ($category->save()) {
-            $menus = Menu::where([['type', '=', 'category'], ['table_id', '=', $id]])->get();
-            if ($menus != null) {
-                foreach ($menus as $menu) {
-                    if ($category->status == 2) {
-                        $menu->status = 0;
-                        $menu->save();
-                    }
-                }
+            if ($category->status == 2) {
+                $category->product()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $category->menu()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
             }
             return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
         }
@@ -141,7 +143,13 @@ class CategoryController extends Controller
     public function update(CategoryUpdateRequest $request, $id)
     {
         $request->validate([
-            'name' => 'unique:category,name,' . $id . ',id',
+            'name' => [
+                Rule::unique('category', 'name')->ignore($id),
+                Rule::unique('product', 'name'),
+                Rule::unique('brand', 'name'),
+                Rule::unique('topic', 'name'),
+                Rule::unique('post', 'title'),
+            ]
         ], [
             'name.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
         ]);
@@ -159,18 +167,25 @@ class CategoryController extends Controller
         //upload file
 
         if ($category->save()) {
-            $link = Link::where([['type', '=', 'category'], ['table_id', '=', $category->id]])->first();
-            $link->slug = $category->slug;
-            $link->save();
-            $menus = Menu::where([['type', '=', 'category'], ['table_id', '=', $id]])->get();
-            if ($menus != null) {
-                foreach ($menus as $menu) {
-                    if ($category->status == 2) {
-                        $menu->status = 0;
-                        $menu->save();
-                    }
-                }
+            if ($category->status == 2) {
+                $category->product()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $category->menu()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
             }
+            $category->link()->update([
+                'slug' => $category->slug,
+            ]);
+            $category->menu()->update([
+                'name' => $category->name,
+
+                'link' => $category->slug,
+                'updated_by' => Auth::user()->id
+            ]);
             return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Cập nhật thành công!']);
         }
         return redirect()->route('category.edit')->with('message', ['type' => 'danger', 'msg' => 'Cập nhật thất bại!!']);
@@ -186,8 +201,12 @@ class CategoryController extends Controller
             return redirect()->route('category.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
         }
         if ($category->delete()) {
-            $link = Link::where([['type', '=', 'category'], ['table_id', '=', $id]])->first();
-            $link->delete();
+            $category->product()->update([
+                'status' => 0,
+                'updated_by' => Auth::user()->id
+            ]);
+            $category->menu()->delete();
+            $category->link()->delete();
             return redirect()->route('category.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa vĩnh viễn thành công!']);
         }
         return redirect()->route('category.trash')->with('message', ['type' => 'danger', 'msg' => 'Xóa thất bại!']);
@@ -202,11 +221,15 @@ class CategoryController extends Controller
         $category->updated_at = date('Y-m-d H:i:s');
         $category->updated_by = Auth::user()->id;
         if ($category->save()) {
-            $menus = Menu::where([['type', '=', 'category'], ['table_id', '=', $id]])->get();
-            if ($menus != null) {
-                foreach ($menus as $menu) {
-                    $menu->delete();
-                }
+            if ($category->status == 0) {
+                $category->product()->update([
+                    'status' => 0,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $category->menu()->update([
+                    'status' => 0,
+                    'updated_by' => Auth::user()->id
+                ]);
             }
             return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
         }
@@ -226,11 +249,15 @@ class CategoryController extends Controller
                 $category->updated_at = date('Y-m-d H:i:s');
                 $category->updated_by = Auth::user()->id;
                 if ($category->save()) {
-                    $menus = Menu::where([['type', '=', 'category'], ['table_id', '=', $id]])->get();
-                    if ($menus != null) {
-                        foreach ($menus as $menu) {
-                            $menu->delete();
-                        }
+                    if ($category->status == 0) {
+                        $category->product()->update([
+                            'status' => 0,
+                            'updated_by' => Auth::user()->id
+                        ]);
+                        $category->menu()->update([
+                            'status' => 0,
+                            'updated_by' => Auth::user()->id
+                        ]);
                     }
                 }
                 $count++;
@@ -261,8 +288,12 @@ class CategoryController extends Controller
                         return redirect()->route('category.trash')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!&&Đã xóa $count/$count_max !"]);
                     }
                     if ($category->delete()) {
-                        $link = Link::where([['type', '=', 'category'], ['table_id', '=', $id]])->first();
-                        $link->delete();
+                        $category->product()->update([
+                            'status' => 0,
+                            'updated_by' => Auth::user()->id
+                        ]);
+                        $category->menu()->delete();
+                        $category->link()->delete();
                         $count++;
                     }
                 }

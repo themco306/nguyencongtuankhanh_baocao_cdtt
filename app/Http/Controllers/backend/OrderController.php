@@ -37,17 +37,41 @@ class OrderController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function status(Request $request, $id)
     {
-        //
-    }
+        $order = Order::find($id);
+        if ($order == null) {
+            return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        } else {
+            $type = $request->status;
+            switch ($type) {
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+                case 'xacnhan': {
+                        $order->status = 1;
+                        break;
+                    }
+                case 'donggoi': {
+                        $order->status = 2;
+                        break;
+                    }
+                case 'vanchuyen': {
+                        $order->status = 3;
+                        break;
+                    }
+                case 'dagiao': {
+                        $order->status = 4;
+                        break;
+                    }
+                case 'huy': {
+                        $order->status = 5;
+                        break;
+                    }
+            }
+            $order->updated_at = date('Y-m-d H:i:m');
+            $order->updated_by = 1;
+            $order->save();
+            return redirect()->route('order.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
+        }
     }
 
     /**
@@ -55,20 +79,29 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::join('user', 'user.id', '=', 'order.user_id')
-            ->where('order.id', '=', $id)
-            ->first();
-        if ($order == null) {
-            return redirect()->route('brand.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
-        }
-        $list_orderdetail = Product::join('Orderdetail', 'product.id', '=', 'orderdetail.product_id')
-            ->select('*', 'product.price as product_price', 'product.qty as product_qty')
-            ->where('orderdetail.order_id', '=', $id)
-            ->get();
 
-        $title = 'Chi Tiết Đơn Hàng';
-        $tongtien = 0;
-        return view("backend.order.show", compact('title', 'order', 'list_orderdetail', 'order', 'tongtien'));
+        $title = 'Chi tiết hóa đơn';
+        $order = Order::find($id);
+        $list_orderdetail = $order->orderdetail;
+        $user = $order->user;
+
+
+
+        // $orderdetail=Orderdetail::where('')
+        // $list_orderdetail=Product::where('id','=',$order->)
+        // $list_orderdetail = Product::join('Orderdetail', 'product.id', '=', 'orderdetail.product_id')
+        //     ->join('product_sale', 'product.id', '=', 'product_sale.product_id')
+        //     ->select('*',  'product_sale.price_sale as product_price_sale')
+        //     ->where('orderdetail.order_id', '=', $id)
+        //     ->get();
+        $total = $list_orderdetail->sum(function ($sum) {
+            return $sum->amount;
+        });
+        if ($order == null) {
+            return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Sản phẩm không tồn tại']);
+        }
+
+        return view('backend.order.show', compact('order',  'title', 'list_orderdetail', 'total', 'user'));
     }
 
     /**

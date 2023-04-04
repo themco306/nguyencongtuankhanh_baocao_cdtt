@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class BrandController extends Controller
 {
@@ -119,7 +120,13 @@ class BrandController extends Controller
     public function update(BrandUpdateRequest $request, $id)
     {
         $request->validate([
-            'name' => 'unique:brand,name,' . $id . ',id',
+            'name' => [
+                Rule::unique('brand', 'name')->ignore($id),
+                Rule::unique('product', 'name'),
+                Rule::unique('category', 'name'),
+                Rule::unique('topic', 'name'),
+                Rule::unique('post', 'title'),
+            ]
         ], [
             'name.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
         ]);
@@ -147,9 +154,22 @@ class BrandController extends Controller
             $brand->image = $filename;
         }
         if ($brand->save()) {
-            $link = Link::where([['type', '=', 'brand'], ['table_id', '=', $brand->id]])->first();
-            $link->slug = $brand->slug;
-            $link->save();
+            if ($brand->status == 2) {
+                $brand->product()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $brand->menu()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
+            $brand->link()->update(['slug' => $brand->slug]);
+            $brand->menu()->update([
+                'name' => $brand->name,
+                'link' => $brand->slug,
+                'updated_by' => Auth::user()->id
+            ]);
             return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Cập nhật thành công!']);
         }
         return redirect()->route('brand.edit')->with('message', ['type' => 'danger', 'msg' => 'Cập nhật thất bại!!']);
@@ -165,13 +185,17 @@ class BrandController extends Controller
             return redirect()->route('brand.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
         }
         if ($brand->delete()) {
+
+            $brand->product()->update([
+                'status' => 0,
+                'updated_by' => Auth::user()->id
+            ]);
+            $brand->menu()->delete();
+            $brand->link()->delete();
             $path = 'images/brand/';
             if (File::exists(public_path($path . $brand->image))) {
                 File::delete(public_path($path . $brand->image));
             }
-
-            $link = Link::where([['type', '=', 'brand'], ['table_id', '=', $id]])->first();
-            $link->delete();
             return redirect()->route('brand.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa vĩnh viễn thành công!']);
         }
         return redirect()->route('brand.trash')->with('message', ['type' => 'danger', 'msg' => 'Xóa thất bại!']);
@@ -203,9 +227,12 @@ class BrandController extends Controller
                         if (File::exists(public_path($path . $brand->image))) {
                             File::delete(public_path($path . $brand->image));
                         }
-
-                        $link = Link::where([['type', '=', 'brand'], ['table_id', '=', $id]])->first();
-                        $link->delete();
+                        $brand->product()->update([
+                            'status' => 0,
+                            'updated_by' => Auth::user()->id
+                        ]);
+                        $brand->menu()->delete();
+                        $brand->link()->delete();
                         $count++;
                     }
                 }
@@ -247,10 +274,20 @@ class BrandController extends Controller
         $brand->status = 0;
         $brand->updated_at = date('Y-m-d H:i:s');
         $brand->updated_by = Auth::user()->id;
-        $brand->save();
-        return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
+        if ($brand->save()) {
+            if ($brand->status == 0) {
+                $brand->product()->update([
+                    'status' => 0,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $brand->menu()->update([
+                    'status' => 0,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
+            return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
+        }
     }
-
     public function delete_multi(Request $request)
     {
         if (isset($request->checkId)) {
@@ -267,6 +304,16 @@ class BrandController extends Controller
                 $brand->updated_at = date('Y-m-d H:i:s');
                 $brand->updated_by = Auth::user()->id;
                 $brand->save();
+                if ($brand->status == 0) {
+                    $brand->product()->update([
+                        'status' => 0,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                    $brand->menu()->update([
+                        'status' => 0,
+                        'updated_by' => Auth::user()->id
+                    ]);
+                }
                 $count++;
             }
             return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
@@ -286,8 +333,19 @@ class BrandController extends Controller
         $brand->status = ($brand->status == 1) ? 2 : 1;
         $brand->updated_at = date('Y-m-d H:i:s');
         $brand->updated_by = Auth::user()->id;
-        $brand->save();
-        return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
+        if ($brand->save()) {
+            if ($brand->status == 2) {
+                $brand->product()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $brand->menu()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
+            return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
+        }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function restore($id)

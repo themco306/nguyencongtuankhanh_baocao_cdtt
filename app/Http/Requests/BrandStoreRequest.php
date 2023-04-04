@@ -22,7 +22,7 @@ class BrandStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|unique:brand,name|max:255',
+            'name' => 'required|unique:brand,name|unique:category,name|unique:product,name|unique:topic,name|unique:post,title|max:255',
             'metadesc' => 'required|string|max:255',
             'metakey' => 'required|string|max:255',
             'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',

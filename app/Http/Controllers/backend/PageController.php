@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class PageController extends Controller
 {
@@ -103,9 +104,15 @@ class PageController extends Controller
     public function update(PageUpdateRequest $request, $id)
     {
         $request->validate([
-            'title' => 'unique:post,title,' . $id . ',id',
+            'title' => [
+                Rule::unique('post', 'title')->ignore($id),
+                Rule::unique('product', 'name'),
+                Rule::unique('brand', 'name'),
+                Rule::unique('category', 'name'),
+                Rule::unique('topic', 'name'),
+            ]
         ], [
-            'title.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
+            'name.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
         ]);
         $page = Post::find($id);
         $page->title = $request->title;
@@ -131,9 +138,21 @@ class PageController extends Controller
             $page->image = $filename;
         }
         if ($page->save()) {
-            $link = Link::where([['type', '=', 'page'], ['table_id', '=', $page->id]])->first();
-            $link->slug = $page->slug;
-            $link->save();
+            if ($page->status == 2) {
+                $page->menu()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
+            $page->link()->update([
+                'slug' => $page->slug,
+            ]);
+            $page->menu()->update([
+                'name' => $page->title,
+
+                'link' => $page->slug,
+                'updated_by' => Auth::user()->id
+            ]);
             return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Cập nhật thành công!']);
         }
         return redirect()->route('page.edit')->with('message', ['type' => 'danger', 'msg' => 'Cập nhật thất bại!!']);
@@ -154,8 +173,8 @@ class PageController extends Controller
                 File::delete(public_path($path . $page->image));
             }
 
-            $link = Link::where([['type', '=', 'page'], ['table_id', '=', $id]])->first();
-            $link->delete();
+            $page->menu()->delete();
+            $page->link()->delete();
             return redirect()->route('page.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa vĩnh viễn thành công!']);
         }
         return redirect()->route('page.trash')->with('message', ['type' => 'danger', 'msg' => 'Xóa thất bại!']);
@@ -188,8 +207,8 @@ class PageController extends Controller
                             File::delete(public_path($path . $page->image));
                         }
 
-                        $link = Link::where([['type', '=', 'page'], ['table_id', '=', $id]])->first();
-                        $link->delete();
+                        $page->menu()->delete();
+                        $page->link()->delete();
                         $count++;
                     }
                 }
@@ -231,10 +250,16 @@ class PageController extends Controller
         $page->status = 0;
         $page->updated_at = date('Y-m-d H:i:s');
         $page->updated_by = Auth::user()->id;
-        $page->save();
-        return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
+        if ($page->save()) {
+            if ($page->status == 0) {
+                $page->menu()->update([
+                    'status' => 0,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
+            return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
+        }
     }
-
     public function delete_multi(Request $request)
     {
         if (isset($request->checkId)) {
@@ -249,7 +274,14 @@ class PageController extends Controller
                 $page->status = 0;
                 $page->updated_at = date('Y-m-d H:i:s');
                 $page->updated_by = Auth::user()->id;
-                $page->save();
+                if ($page->save()) {
+                    if ($page->status == 0) {
+                        $page->menu()->update([
+                            'status' => 0,
+                            'updated_by' => Auth::user()->id
+                        ]);
+                    }
+                }
                 $count++;
             }
             return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
@@ -269,8 +301,15 @@ class PageController extends Controller
         $page->status = ($page->status == 1) ? 2 : 1;
         $page->updated_at = date('Y-m-d H:i:s');
         $page->updated_by = Auth::user()->id;
-        $page->save();
-        return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
+        if ($page->save()) {
+            if ($page->status == 2) {
+                $page->menu()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
+            return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
+        }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function restore($id)

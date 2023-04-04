@@ -24,6 +24,8 @@
         </section>
 
         <!-- Main content -->
+        <form action="{{ route('order.status', ['order' => $order->id]) }}" method="GET" >
+            @csrf
         <section class="content">
 
             <!-- Default box -->
@@ -37,35 +39,64 @@
                                 </a>
                             </div>
                             <div class="d-inline-block">
-                                <a class="btn btn-sm btn-primary"
-                                    href="">
+                                <button class="btn btn-sm btn-primary"
+                                name="status"
+                                type="submit" value="xacnhan" @if (($order->status!=1))
+                                    @disabled(true)
+                                @endif>
                                     <i class="fa-solid fa-clipboard-check"></i>Xác nhận
-                                </a>
+                                    @if ($order->status==1)
+                                    <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                    @endif
+                                </button>
                             </div>
                             <div class="d-inline-block">
-                                <a class="btn btn-sm btn-info"
-                                    href="">
+                                <button class="btn btn-sm btn-info"
+                                name="status"
+                                type="submit" value="donggoi"  @if (($order->status!=2)&&($order->status!=1))
+                                @disabled(true)
+                            @endif>
                                     <i class="fa-solid fa-box"></i> Đóng gói
-                                </a>
+                                    @if ($order->status==2)
+                                    <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                    @endif
+                                </button>
                             </div>
                             <div class="d-inline-block">
-                                <a class="btn btn-sm btn-warning"
-                                    href="">
+                                <button class="btn btn-sm btn-warning"
+                                name="status"
+                                type="submit" value="vanchuyen"  @if (($order->status!=3)&&($order->status!=2))
+                                @disabled(true)
+                            @endif>
                                     <i class="fa-solid fa-plane-up"></i> Vận chuyển
-                                </a>
+                                    @if ($order->status==3)
+                                    <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                    @endif
+                                </button>
                             </div>
                             <div class="d-inline-block">
 
-                                <a class="btn btn-sm btn-success"
-                                    href="">
+                                <button class="btn btn-sm btn-success"
+                                name="status"
+                                type="submit" value="dagiao"  @if (($order->status!=4)&&($order->status!=3))
+                                @disabled(true)
+                            @endif>
                                     <i class="fa-solid fa-plane-circle-check"></i>Đã giao
-                                </a>
+                                    @if ($order->status==4 )
+                                    <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                    @endif
+                                </button>
                             </div>
                             <div class="d-inline-block">
-                                <a class="btn btn-sm btn-danger"
-                                    href="">
+                                <button class="btn btn-sm btn-danger" name="status"
+                                     type="submit" value="huy"  @if ($order->status==4)
+                                     @disabled(true)
+                                 @endif>
                                     <i class="fas fa-trash"></i> Hủy
-                                </a>
+                                    @if ($order->status==5)
+                                    <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                    @endif
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -77,19 +108,19 @@
                             <h5 class="text-info">Thông tin khách hàng</h5>
                             <div>
                                 <h6><strong>Tên khách hàng</strong></h6>
-                                <input type="text" class="form-control" disabled value="{{$order->name }}">
+                                <input type="text" class="form-control" disabled value="{{$user->name }}">
                             </div>
                             <div class="mt-2">
                                 <h6><strong>Điện thoại</strong></h6>
-                                <input type="text" class="form-control" disabled value="{{$order->phone }}">
+                                <input type="text" class="form-control" disabled value="{{$user->phone }}">
                             </div>
                             <div class="mt-2">
                                 <h6><strong>Địa chỉ</strong></h6>
-                                <input type="text" class="form-control" disabled value="{{$order->address }}">
+                                <input type="text" class="form-control" disabled value="{{$user->address }}">
                             </div>
                             <div class="mt-2">
                                 <h6><strong>Email</strong></h6>
-                                <input type="text" class="form-control" disabled value="{{$order->email }}">
+                                <input type="text" class="form-control" disabled value="{{$user->email }}">
                             </div>
                         </div>
                         <div class="col-9">
@@ -121,12 +152,13 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <img src="{{ asset('images/product/'.$row->image) }}"
+                                        
+                                            <img src="{{ asset('images/product/'.$row->product->images[0]->image) }}"
                                                 class="img-fluid" alt="{{ $row->image }}">
 
                                         </td>
                                         <td>
-                                            {{ $row->name }}
+                                            {{ $row->product->name }}
                                         </td>
                                         <td>
                                             {{ number_format($row->price) }}
@@ -143,14 +175,11 @@
                                             {{ $row->id }}
                                         </td>
                                     </tr>
-                                    @php
-                                         $tongtien+= $row->amount
-                                    @endphp
                                     @endforeach
 
                                 </tbody>
                                 <td colspan="7">
-                                    <h5 class="text-danger">Tổng tiền: {{number_format($tongtien) }} </h5>
+                                    <h5 class="text-danger">Tổng tiền: {{number_format($total) }} </h5>
                                 </td>
 
                             </table>
@@ -178,6 +207,7 @@
             <!-- /.card -->
 
         </section>
+        </form>
         <!-- /.content -->
     </div>
 

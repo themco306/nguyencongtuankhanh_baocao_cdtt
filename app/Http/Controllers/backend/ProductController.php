@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -115,7 +116,14 @@ class ProductController extends Controller
         if ($product == null) {
             return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
         }
-
+        if ($product->brand->status != 1) {
+            $brand_name = $product->brand->name;
+            return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => "Bạn cần thay đổi trạng thái của thương hiệu $brand_name trước  "]);
+        }
+        if ($product->category->status != 1) {
+            $category_name = $product->category->name;
+            return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => "Bạn cần thay đổi trạng thái của danh mục $category_name trước  "]);
+        }
         $product->status = ($product->status == 1) ? 2 : 1;
         $product->updated_at = date('Y-m-d H:i:s');
         $product->updated_by = Auth::user()->id;
@@ -130,7 +138,14 @@ class ProductController extends Controller
         if ($product == null) {
             return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
         }
-
+        if ($product->brand->status == 0) {
+            $brand_name = $product->brand->name;
+            return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => "Thương hiệu $brand_name đang trong thùng rác  "]);
+        }
+        if ($product->category->status == 0) {
+            $category_name = $product->category->name;
+            return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => "Danh mục $category_name đang trong thùng rác  "]);
+        }
         $product->status = 2;
         $product->updated_at = date('Y-m-d H:i:s');
         $product->updated_by = Auth::user()->id;
@@ -148,18 +163,15 @@ class ProductController extends Controller
         }
         if ($product->delete()) {
             $path = 'images/product/';
-            if (File::exists(public_path($path . $product->image))) {
-                File::delete(public_path($path . $product->image));
-            }
-            $product_sale = $product->sale;
-            $product->sale()->delete($product_sale);
+
             $list_product_images = $product->images;
             foreach ($list_product_images as $product_images) {
                 if (File::exists(public_path($path . $product_images->image))) {
                     File::delete(public_path($path . $product_images->image));
                 }
-                $product->images()->delete($product_images);
             }
+            $product->sale()->delete();
+            $product->images()->delete();
             return redirect()->route('product.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa vĩnh viễn thành công!']);
         }
         return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => 'Xóa thất bại!']);
@@ -181,18 +193,14 @@ class ProductController extends Controller
                     }
                     if ($product->delete()) {
                         $path = 'images/product/';
-                        if (File::exists(public_path($path . $product->image))) {
-                            File::delete(public_path($path . $product->image));
-                        }
-
-
-                        $list_product_images = Product_images::where('product_id', '=', $id)->get();
+                        $list_product_images = $product->images;
                         foreach ($list_product_images as $product_images) {
                             if (File::exists(public_path($path . $product_images->image))) {
                                 File::delete(public_path($path . $product_images->image));
                             }
-                            $product_images->delete();
                         }
+                        $product->sale()->delete();
+                        $product->images()->delete();
                         $count++;
                     }
                 }
@@ -211,7 +219,14 @@ class ProductController extends Controller
                     if ($product == null) {
                         return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!&&Đã phục hồi $count/$count_max !"]);
                     }
-
+                    if ($product->brand->status == 0) {
+                        $brand_name = $product->brand->name;
+                        return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => "Thương hiệu $brand_name đang trong thùng rác &&Đã phục hồi $count/$count_max  "]);
+                    }
+                    if ($product->category->status == 0) {
+                        $category_name = $product->category->name;
+                        return redirect()->route('product.trash')->with('message', ['type' => 'danger', 'msg' => "Danh mục $category_name đang trong thùng rác &&Đã phục hồi $count/$count_max "]);
+                    }
                     $product->status = 2;
                     $product->updated_at = date('Y-m-d H:i:s');
                     $product->updated_by = Auth::user()->id;
@@ -311,10 +326,17 @@ class ProductController extends Controller
     public function update(ProductUpdateRequest $request, $id)
     {
         $request->validate([
-            'name' => 'unique:product,name,' . $id . ',id',
+            'name' => [
+                Rule::unique('product', 'name')->ignore($id),
+                Rule::unique('brand', 'name'),
+                Rule::unique('category', 'name'),
+                Rule::unique('topic', 'name'),
+                Rule::unique('post', 'title'),
+            ]
         ], [
             'name.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
         ]);
+
         $product = Product::find($id);
         $product->name = $request->name;
         $product->slug = Str::slug($request->name, '-');

@@ -22,7 +22,7 @@ class ProductStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|unique:product,name|max:255',
+            'name' => 'required|string|unique:product,name|unique:brand,name|unique:category,name|unique:post,title|unique:topic,name|max:255',
             'detail' => 'required|string|max:1500',
             'metadesc' => 'required|string|max:255',
             'metakey' => 'required|string|max:255',
@@ -31,7 +31,8 @@ class ProductStoreRequest extends FormRequest
             'price_sale' => 'nullable|required_with:date_begin,date_end|numeric|min:1000|lt:price',
             'date_begin' => 'nullable|required_with:price_sale|date',
             'date_end' => 'nullable|required_with:price_sale,date_begin|date|after:date_begin',
-            'images.*' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'images' => 'required|array|min:2',
+            'images.*' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
 
         ];
     }
@@ -75,9 +76,11 @@ class ProductStoreRequest extends FormRequest
             'date_end.after' => 'Ngày kết thúc phải nhỏ hơn ngày bắt đầu',
 
 
-            'images.*.required' => $messages['required'],
-            'images.*.mimes' => $messages['mimes'],
-            'images.*.max' => 'Dung lượng ảnh quá lớn',
+            'images.required' => 'Hình ảnh không được để trống.',
+            'images.min' => 'Bạn cần tải lên ít nhất 2 hình ảnh.',
+            'images.*.image' => 'Tập tin phải là hình ảnh.',
+            'images.*.mimes' => 'Hình ảnh phải có định dạng jpg, png, jpeg, gif hoặc svg.',
+            'images.*.max' => 'Kích thước hình ảnh tối đa là 2048KB.'
 
         ];
     }

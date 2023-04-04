@@ -10,6 +10,7 @@ use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class TopicController extends Controller
 {
@@ -50,8 +51,19 @@ class TopicController extends Controller
         $topic->status = ($topic->status == 1) ? 2 : 1;
         $topic->updated_at = date('Y-m-d H:i:s');
         $topic->updated_by = Auth::user()->id;
-        $topic->save();
-        return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
+        if ($topic->save()) {
+            if ($topic->status == 2) {
+                $topic->post()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $topic->menu()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
+            return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
+        }
     }
     /**
      * Store a newly created resource in storage.
@@ -126,7 +138,13 @@ class TopicController extends Controller
     public function update(TopicUpdateRequest $request, $id)
     {
         $request->validate([
-            'name' => 'unique:topic,name,' . $id . ',id',
+            'name' => [
+                Rule::unique('topic', 'name')->ignore($id),
+                Rule::unique('product', 'name'),
+                Rule::unique('brand', 'name'),
+                Rule::unique('category', 'name'),
+                Rule::unique('post', 'title'),
+            ]
         ], [
             'name.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
         ]);
@@ -144,9 +162,25 @@ class TopicController extends Controller
         //upload file
 
         if ($topic->save()) {
-            $link = Link::where([['type', '=', 'topic'], ['table_id', '=', $topic->id]])->first();
-            $link->slug = $topic->slug;
-            $link->save();
+            if ($topic->status == 2) {
+                $topic->post()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $topic->menu()->update([
+                    'status' => 2,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
+            $topic->link()->update([
+                'slug' => $topic->slug,
+            ]);
+            $topic->menu()->update([
+                'name' => $topic->name,
+
+                'link' => $topic->slug,
+                'updated_by' => Auth::user()->id
+            ]);
             return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Cập nhật thành công!']);
         }
         return redirect()->route('topic.edit')->with('message', ['type' => 'danger', 'msg' => 'Cập nhật thất bại!!']);
@@ -162,8 +196,12 @@ class TopicController extends Controller
             return redirect()->route('topic.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
         }
         if ($topic->delete()) {
-            $link = Link::where([['type', '=', 'topic'], ['table_id', '=', $id]])->first();
-            $link->delete();
+            $topic->post()->update([
+                'status' => 0,
+                'updated_by' => Auth::user()->id
+            ]);
+            $topic->menu()->delete();
+            $topic->link()->delete();
             return redirect()->route('topic.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa vĩnh viễn thành công!']);
         }
         return redirect()->route('topic.trash')->with('message', ['type' => 'danger', 'msg' => 'Xóa thất bại!']);
@@ -177,9 +215,21 @@ class TopicController extends Controller
         $topic->status = 0;
         $topic->updated_at = date('Y-m-d H:i:s');
         $topic->updated_by = Auth::user()->id;
-        $topic->save();
-        return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
+        if ($topic->save()) {
+            if ($topic->status == 0) {
+                $topic->post()->update([
+                    'status' => 0,
+                    'updated_by' => Auth::user()->id
+                ]);
+                $topic->menu()->update([
+                    'status' => 0,
+                    'updated_by' => Auth::user()->id
+                ]);
+            }
+            return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
+        }
     }
+
     public function delete_multi(Request $request)
     {
         if (isset($request->checkId)) {
@@ -195,7 +245,18 @@ class TopicController extends Controller
                 $topic->status = 0;
                 $topic->updated_at = date('Y-m-d H:i:s');
                 $topic->updated_by = Auth::user()->id;
-                $topic->save();
+                if ($topic->save()) {
+                    if ($topic->status == 0) {
+                        $topic->post()->update([
+                            'status' => 0,
+                            'updated_by' => Auth::user()->id
+                        ]);
+                        $topic->menu()->update([
+                            'status' => 0,
+                            'updated_by' => Auth::user()->id
+                        ]);
+                    }
+                }
                 $count++;
             }
             return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !&& Vào thùng rác để xem!!!"]);
@@ -224,8 +285,12 @@ class TopicController extends Controller
                         return redirect()->route('topic.trash')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!&&Đã xóa $count/$count_max !"]);
                     }
                     if ($topic->delete()) {
-                        $link = Link::where([['type', '=', 'topic'], ['table_id', '=', $id]])->first();
-                        $link->delete();
+                        $topic->post()->update([
+                            'status' => 0,
+                            'updated_by' => Auth::user()->id
+                        ]);
+                        $topic->menu()->delete();
+                        $topic->link()->delete();
                         $count++;
                     }
                 }

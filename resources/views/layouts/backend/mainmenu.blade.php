@@ -132,7 +132,7 @@
 
             <a href="{{ route('admin.logout') }}" class="nav-link">
                 <i class="fa-solid fa-right-from-bracket text-danger"></i>
-                <p class="text">Logout</p>
+                <p class="text">Đăng xuất</p>
             </a>
         </li>
         <li class="nav-item">

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -112,9 +113,15 @@ class PostController extends Controller
     public function update(PostUpdateRequest $request, $id)
     {
         $request->validate([
-            'title' => 'unique:post,title,' . $id . ',id',
+            'title' => [
+                Rule::unique('post', 'title')->ignore($id),
+                Rule::unique('product', 'name'),
+                Rule::unique('brand', 'name'),
+                Rule::unique('category', 'name'),
+                Rule::unique('topic', 'name'),
+            ]
         ], [
-            'title.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
+            'name.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
         ]);
         $post = Post::find($id);
         $post->title = $request->title;
@@ -212,7 +219,9 @@ class PostController extends Controller
                     if ($post == null) {
                         return redirect()->route('post.trash')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!&&Đã phục hồi $count/$count_max !"]);
                     }
-
+                    if ($post->topic && $post->topic->status == 0) {
+                        return redirect()->route('post.trash')->with('message', ['type' => 'danger', 'msg' => "Có chủ đề của bài viết đang trong thùng rác && Đã phục hồi $count/$count_max ! "]);
+                    }
                     $post->status = 2;
                     $post->updated_at = date('Y-m-d H:i:s');
                     $post->updated_by = Auth::user()->id;
@@ -268,7 +277,9 @@ class PostController extends Controller
         if ($post == null) {
             return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
         }
-
+        if ($post->topic && $post->topic->status != 1) {
+            return redirect()->route('post.index')->with('message', ['type' => 'danger', 'msg' => 'Bạn cần thay đổi trạng thái chủ đề bài viết trước']);
+        }
         $post->status = ($post->status == 1) ? 2 : 1;
         $post->updated_at = date('Y-m-d H:i:s');
         $post->updated_by = Auth::user()->id;
@@ -283,7 +294,9 @@ class PostController extends Controller
         if ($post == null) {
             return redirect()->route('post.trash')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
         }
-
+        if ($post->topic && $post->topic->status == 0) {
+            return redirect()->route('post.trash')->with('message', ['type' => 'danger', 'msg' => 'Chủ đề của bài viết này đang trong thùng rác && bạn cần thay đổi nó trước']);
+        }
         $post->status = 2;
         $post->updated_at = date('Y-m-d H:i:s');
         $post->updated_by = Auth::user()->id;

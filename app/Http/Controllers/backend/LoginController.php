@@ -27,7 +27,7 @@ class LoginController extends Controller
             $data['username'] = $username;
         }
         $remember = $request->has('remember');
-        if (Auth::attempt($data, $remember)) {
+        if (Auth::guard('admin')->attempt($data, $remember)) {
             $request->session()->regenerate();
 
             return redirect()->route('dashboard.index');
@@ -37,7 +37,7 @@ class LoginController extends Controller
     }
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
         return redirect()->route('admin.getlogin');
     }
 }

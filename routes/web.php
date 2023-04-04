@@ -17,6 +17,10 @@ use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\TopicController;
 use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\frontend\SiteController;
+use App\Http\Controllers\frontend\SiteContactController;
+use App\Http\Controllers\frontend\SiteLoginController;
+use App\Http\Controllers\frontend\SiteCartController;
+use App\Http\Controllers\frontend\SiteAccountController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,7 +35,25 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', [SiteController::class, 'index'])->name('site.index');
-Route::get('lien-he', [LienheController::class, 'index'])->name('site.lienhe');
+Route::get('lien-he', [SiteContactController::class, 'index'])->name('site.lienhe');
+Route::post('lien-he', [SiteContactController::class, 'store'])->name('site.postlienhe');
+
+Route::get('dang-ky', [SiteLoginController::class, 'register'])->name('site.register');
+Route::get('dang-nhap', [SiteLoginController::class, 'getlogin'])->name('site.getlogin');
+Route::post('dang-nhap', [SiteLoginController::class, 'postlogin'])->name('site.postlogin');
+Route::get('xac-nhan/{id}/{actived_token}', [SiteLoginController::class, 'actived'])->name('site.actived');
+Route::get('xac-nhan-lai/{id}', [SiteLoginController::class, 'actived_again'])->name('site.actived_again');
+Route::get('dang-xuat', [SiteLoginController::class, 'logout'])->name('site.logout');
+
+Route::get('tai-khoan', [SiteAccountController::class, 'myaccount'])->middleware('sitelogin')->name('site.myaccount');
+Route::prefix('tai-khoan')->group(function () {
+    Route::get('don-hang', [SiteAccountController::class, 'order'])->name('site.order-account');
+    Route::get('chi-tiet', [SiteAccountController::class, 'order'])->name('site.edit-account');
+});
+// Route::get('tai-khoan', [SiteAccountController::class, 'logout'])->name('site.logout');
+// Route::get('san-pham', [SiteController::class, 'index'])->name('site.lienhe');
+Route::get('them-gio-hang/{id}', [SiteCartController::class, 'addcart'])->middleware('sitelogin')->name('site.addcart');
+Route::get('gio-hang', [SiteCartController::class, 'cart'])->middleware('sitelogin')->name('site.cart');
 
 Route::get('admin/login', [LoginController::class, 'getlogin'])->name('admin.getlogin');
 Route::post('admin/login', [LoginController::class, 'postlogin'])->name('admin.postlogin');

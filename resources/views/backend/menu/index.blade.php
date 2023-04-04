@@ -81,14 +81,22 @@
                                             <div class="form-check">
                                                 <input class="form-check-input" name="categoryId[]" type="checkbox"
                                                     value="{{ $category->id }}" id="categoryCheck{{ $category->id }}">
+                                                    <input  name="categoryName[]" type="hidden"
+                                                    value="{{ $category->name }}" >
                                                 <label class="form-check-label" for="categoryCheck{{ $category->id }}">
                                                     {{ $category->name }}
                                                 </label>
                                             </div>
                                             @endforeach
+
                                             <div class="mt-3">
                                                 <input type="submit" name="AddCategory" value="Thêm menu"
                                                     class="btn btn-sm btn-success form-control">
+                                                    @if ($errors->has('categoryName'))
+                                            <div class="text-danger">
+                                                {{ $errors->first('categoryName') }}
+                                            </div>
+                                        @endif
                                             </div>
                                         </div>
                                     </div>

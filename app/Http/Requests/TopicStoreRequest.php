@@ -22,7 +22,7 @@ class TopicStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|unique:topic,name|max:255',
+            'name' => 'required|string|unique:brand,name|unique:category,name|unique:product,name|unique:topic,name|unique:post,title|max:255',
             'metadesc' => 'required|string|max:255',
             'metakey' => 'required|string|max:255',
 
