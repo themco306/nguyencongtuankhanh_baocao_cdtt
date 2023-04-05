@@ -117,6 +117,6 @@ class SiteController extends Controller
     }
     protected function error_404($slug)
     {
-        return view('frontend.error_404', compact('slug'));
+        return view('errors.404', compact('slug'));
     }
 }

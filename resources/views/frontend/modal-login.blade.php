@@ -29,11 +29,11 @@
                 @endif
             </div>
             <button type="submit">Đăng nhập</button><br />
-            <a href="">Quên mật khẩu?</a>
+            <a href="{{ route('site.forget_password') }}">Quên mật khẩu?</a>
         </form>
     </div>
     <div class="col-6 my-4 px-4">
-        <form action="{{ route('site.register') }}" method="get">
+        <form action="{{ route('site.register') }}" method="post">
             @csrf
             <h4>đăng ký</h4>
             <label for="email">Địa chỉ email</label>
@@ -45,7 +45,26 @@
                     {{ $errors->first('email') }}
                 </div>
             @endif
-            <p>Mật khẩu sẽ được gửi đến email của bạn</p>
+            <label for="password">Mật khẩu</label>
+            <input type="password" name="password" id="password" class="form-control" >
+            @if ($errors->has('password'))
+                <div style="  font-size: small;
+            " class="text-danger">
+                    {{ $errors->first('password') }}
+                </div>
+            @endif
+            <label for="confirm_password">Nhập lại mật khẩu</label>
+            <input type="password" name="confirm_password" id="confirm_password" class="form-control" >
+            @if ($errors->has('confirm_password'))
+                <div style="  font-size: small;
+            " class="text-danger">
+                    {{ $errors->first('confirm_password') }}
+                </div>
+            @endif
+            <p>Một liên kết sẽ được gửi vào Email của bạn</p>
+            <p class="text-danger">Lưu ý: Liên kết này chỉ có hiệu lực trong 15 phút</p>
+            <p style="font-size: small" class="text-success">Nếu email đã tồn tại , xin vui lòng đăng nhập để kích hoạt tài khoản và sau đó <a href="{{ route('site.forget_password') }}"> đặt lại mật khẩu </a>nếu bạn quên. </p>
+
             <p class="content">Dữ liệu cá nhân của bạn sẽ được sử dụng để hỗ trợ trải nghiệm của bạn
                 trên toàn bộ trang web này, để quản lý quyền truy cập vào tài khoản của bạn và cho các
                 mục đích khác được mô tả trong <a href="">chính sách riêng tư</a>.</p>

@@ -28,65 +28,170 @@ class SiteLoginController extends Controller
             return Str::endsWith($value, '@gmail.com');
         });
         $request->validate([
-            'email' => 'required|email|gmail|max:30'
+            'email' => 'required|unique:user,email|email|gmail|max:30',
+            'password' => 'required|max:40',
+            'confirm_password' => 'required|same:password|max:40',
         ], [
             'email.required' => 'Bạn chưa điền email',
             'email.email' => 'Email không hợp lệ',
             'email.gmail' => 'Gmail không hợp lệ "@gmail.com"',
-            'email.max' => 'Email không được dài quá 30 ký tự'
+            'email.max' => 'Email không được dài quá 30 ký tự',
+            'email.unique' => 'Email này đã được đăng ký, Xin hãy đăng nhập.',
+
+            'password.required' => 'Bạn chưa điền mật khẩu',
+            'password.max' => 'Mật khẩu không được dài quá 40 ký tự',
+
+            'confirm_password.required' => 'Bạn chưa nhập lại mật khẩu',
+            'confirm_password.max' => 'Không được dài quá 40 ký tự',
+            'confirm_password.same' => 'Mật khẩu không trùng khớp',
+
 
         ]);
         $actived_token = strtoupper(Str::random(6));
         $user = new User();
+
         $user->email = $request->email;
         $user->actived_token = $actived_token;
+        $expiresAt = now()->addMinutes(15);
+        $user->expires_at = $expiresAt;
         $parts = explode('@', $request->email);
         $user->username = $parts[0];
         $user->name = $parts[0];
-        $password_send = Str::random(8);
-        $user->password = bcrypt($password_send);
+        $user->image = 'user_men.jpg';
+        $user->password = bcrypt($request->password);
 
         if ($user->save()) {
-            return $this->send_mail($user, $password_send);
+            try {
+                Mail::send(
+                    'emails.actived_send',
+                    compact('user'),
+                    function ($send_email) use ($user) {
+                        $send_email->subject('ShopTK - Xác nhận tài khoản');
+                        $send_email->to($user->email, $user->name);
+                    }
+                );
+                return redirect()->route('site.getlogin')->with('message', ['type' => 'success', 'msg' => 'Đăng ký thành công vui lòng vào Email để xác nhận!!']);
+            } catch (\Exception $e) {
+                // Lấy thông điệp lỗi từ đối tượng ngoại lệ
+                $error_message = $e->getMessage();
+                return redirect()->route('site.getlogin')->with('message', ['type' => 'danger', 'msg' => $error_message]);
+            }
         }
     }
     public function actived_again($user)
     {
         $user = User::find($user);
         $user->actived_token = strtoupper(Str::random(6));
+        $expiresAt = now()->addMinutes(15);
+        $user->expires_at = $expiresAt;
         if ($user->save()) {
-            return $this->send_mail($user);
-        }
-    }
-    public function send_mail($user, $password_send = null)
-    {
-        $sent = Mail::send(
-            'emails.actived_send',
-            compact('user', 'password_send'),
-            function ($send_email) use ($user) {
-                $send_email->subject('ShopTK - Xác nhận tài khoản');
-                $send_email->to($user->email, $user->name);
+            try {
+                Mail::send(
+                    'emails.actived_send_again',
+                    compact('user'),
+                    function ($send_email) use ($user) {
+                        $send_email->subject('ShopTK - Xác nhận tài khoản');
+                        $send_email->to($user->email, $user->name);
+                    }
+                );
+                return redirect()->route('site.getlogin')->with('message', ['type' => 'success', 'msg' => 'Đăng ký thành công vui lòng vào Email để xác nhận!!']);
+            } catch (\Exception $e) {
+                // Lấy thông điệp lỗi từ đối tượng ngoại lệ
+                $error_message = $e->getMessage();
+                return redirect()->route('site.getlogin')->with('message', ['type' => 'danger', 'msg' => $error_message]);
             }
-        );
-        if (!$sent) {
-            $user->delete();
-            return redirect()->route('site.getlogin')->with('message', ['type' => 'danger', 'msg' => 'Email của bạn không tồn tại!! Vui lòng nhập lại!!']);
-        } else {
-            return redirect()->route('site.getlogin')->with('message', ['type' => 'success', 'msg' => 'Đăng ký thành công vui lòng vào Email để xác nhận!!']);
         }
     }
+
     public function actived($user, $actived_token)
     {
         $user = User::find($user);
 
-        if ($user->actived_token === $actived_token) {
+        if ($user->actived_token === $actived_token && $user->expires_at > now()) {
             $user->status = 1;
             $user->actived_token = null;
+            $user->expires_at = null;
             $user->save();
             return redirect()->route('site.getlogin')->with('message', ['type' => 'success', 'msg' => 'Xác nhận thành công !! Vui lòng đăng nhập!!']);
         } else {
-            return redirect()->route('site.getlogin')->with('message', ['type' => 'danger', 'msg' => 'Mã xác nhận đã bị chỉnh sửa!!']);
+            return redirect()->route('site.getlogin')->with('message', ['type' => 'danger', 'msg' => 'Mã xác nhận đã bị chỉnh sửa Hoặc đã hết hạn!!']);
         }
+    }
+    public function forget_password()
+    {
+        return view('frontend.forget_password');
+    }
+    public function postforget_password(Request $request)
+    {
+        Validator::extend('gmail', function ($attribute, $value, $parameters, $validator) {
+            return Str::endsWith($value, '@gmail.com');
+        });
+        $request->validate([
+            'email' => 'required|exists:user,email|email|gmail|max:30',
+        ], [
+            'email.required' => 'Bạn chưa điền email',
+            'email.email' => 'Email không hợp lệ',
+            'email.gmail' => 'Gmail không hợp lệ "@gmail.com"',
+            'email.max' => 'Email không được dài quá 30 ký tự',
+            'email.exists' => 'Email này không tồn tại trong hệ thống'
+        ]);
+        $user = User::where('email', $request->email)->first();
+        $user->actived_token = strtoupper(Str::random(6));
+        $expiresAt = now()->addMinutes(15);
+        $user->expires_at = $expiresAt;
+        if ($user->save()) {
+            try {
+                Mail::send(
+                    'emails.forget_password_send',
+                    compact('user'),
+                    function ($send_email) use ($user) {
+                        $send_email->subject('ShopTK - Đặt lại mật khẩu');
+                        $send_email->to($user->email, $user->name);
+                    }
+                );
+                return redirect()->back()->with('message', ['type' => 'success', 'msg' => 'Vui lòng vào Email để xác nhận thay đổi mật khẩu!!']);
+            } catch (\Exception $e) {
+                // Lấy thông điệp lỗi từ đối tượng ngoại lệ
+                $error_message = $e->getMessage();
+                return redirect()->back()->with('message', ['type' => 'danger', 'msg' => $error_message]);
+            }
+        }
+    }
+    public function get_password($user, $actived_token)
+    {
+
+        $user = User::find($user);
+        $id = $user->id;
+        if ($user->actived_token === $actived_token && $user->expires_at > now()) {
+            return view('frontend.get_password', compact('id'));
+        }
+        $slug = "Có thể liên kết đã hết hiệu lực hoặc gặp sự cố mạng";
+        return view('errors.404', compact('slug'));
+    }
+    public function postget_password($user, Request $request)
+    {
+        $request->validate([
+            'password' => 'required|max:40',
+            'confirm_password' => 'required|same:password|max:40',
+        ], [
+
+            'password.required' => 'Bạn chưa điền mật khẩu',
+            'password.max' => 'Mật khẩu không được dài quá 40 ký tự',
+
+            'confirm_password.required' => 'Bạn chưa nhập lại mật khẩu',
+            'confirm_password.max' => 'Không được dài quá 40 ký tự',
+            'confirm_password.same' => 'Mật khẩu không trùng khớp',
+
+
+        ]);
+        $user = User::find($user);
+        $user->password = bcrypt($request->password);
+        $user->actived_token = null;
+        if ($user->save()) {
+            return redirect()->route('site.getlogin')->with('message', ['type' => 'success', 'msg' => 'Đổi mật khẩu thành công !! Vui lòng đăng nhập!!']);
+        }
+        $slug = "Có thể liên kết đã hết hiệu lực hoặc gặp sự cố mạng";
+        return view('errors.404', compact('slug'));
     }
     public function postlogin(Request $request)
     {

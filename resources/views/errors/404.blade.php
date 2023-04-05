@@ -13,7 +13,7 @@
 <img src="https://assets.codepen.io/1538474/meteor.svg" class="meteor" />
 <p class="title">Ôi không!!Có gì đó không ổn</p>
 <p class="subtitle" >
-	Đường dẫn <span style="color: #F55B13 ">"{{ $slug }}"</span> của bạn sai <br /> hoặc nó không còn tồn tại ở đây nữa.
+	Đường dẫn @if ( isset($slug))<span style="color: #F55B13 ">"{{ $slug }}"</span>@endif của bạn sai <br /> hoặc nó không còn tồn tại ở đây nữa.
 </p>
 <div align="center">
 	<span class="btn-back" onclick="window.history.back()" >Về Trang Hồi Nãy</span>
