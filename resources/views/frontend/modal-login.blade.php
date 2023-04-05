@@ -64,10 +64,6 @@
             <p>Một liên kết sẽ được gửi vào Email của bạn</p>
             <p class="text-danger">Lưu ý: Liên kết này chỉ có hiệu lực trong 15 phút</p>
             <p style="font-size: small" class="text-success">Nếu email đã tồn tại , xin vui lòng đăng nhập để kích hoạt tài khoản và sau đó <a href="{{ route('site.forget_password') }}"> đặt lại mật khẩu </a>nếu bạn quên. </p>
-
-            <p class="content">Dữ liệu cá nhân của bạn sẽ được sử dụng để hỗ trợ trải nghiệm của bạn
-                trên toàn bộ trang web này, để quản lý quyền truy cập vào tài khoản của bạn và cho các
-                mục đích khác được mô tả trong <a href="">chính sách riêng tư</a>.</p>
             <button type="submit">Đăng ký</button>
         </form>
     </div>

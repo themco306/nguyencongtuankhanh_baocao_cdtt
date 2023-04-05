@@ -13,7 +13,27 @@ class SiteAccountController extends Controller
      */
     public function myaccount()
     {
-
-        return view('frontend.myaccount');
+        $user = Auth::guard('users')->user();
+        return view('frontend.customer.myaccount', compact('user'));
+    }
+    public function edit()
+    {
+        $user = Auth::guard('users')->user();
+        return view('frontend.customer.myaccount-edit', compact('user'));
+    }
+    public function order()
+    {
+        $user = Auth::guard('users')->user();
+        return view('frontend.customer.myaccount-order', compact('user'));
+    }
+    public function address()
+    {
+        $user = Auth::guard('users')->user();
+        return view('frontend.customer.myaccount-address', compact('user'));
+    }
+    public function wishlist()
+    {
+        $user = Auth::guard('users')->user();
+        return view('frontend.customer.myaccount-wishlist', compact('user'));
     }
 }

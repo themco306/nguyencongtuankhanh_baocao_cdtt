@@ -47,7 +47,28 @@
     font-weight: 300;
     transition: color 0.5s;
 }
+.myaccount .left-content ul li a i{
+   color: #fa6e4f;
+}
 .myaccount .left-content ul li:hover a{
     color: #444;
      
+  }
+  
+.myaccount .right-content  a{
+    color: #fa6e4f;
+    transition: color 0.5s;
+}
+.myaccount .right-content a:hover {
+    color: #A54312;
+     
+  }
+  .myaccount .right-content  button{
+    transition: all 0.5s;
+    background-color: #fa6e4f;
+    color: white; 
+    border: none;
+}
+.myaccount .right-content button:hover{
+    background-color: #B64E1E ;
   }
