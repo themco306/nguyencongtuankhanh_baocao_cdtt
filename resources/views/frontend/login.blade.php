@@ -2,7 +2,7 @@
 @section('title',$title??'Trang chủ')
 @section('content')
 <div class="container modal-body">
-    @includeIf('backend.message_alert')
+    
     <div class="text-center"><h4>TÀI KHOẢN CỦA TÔI</h4></div>
     @includeIf('frontend.modal-login')
 </div>

@@ -2,7 +2,7 @@
 @section('title',$title??'Trang chủ')
 @section('content')
 <div class="container modal-body">
-    @includeIf('backend.message_alert')
+    
     <div class="col-6 my-4 px-4">
         <form action="{{ route('site.postforget_password') }}" method="post">
             @csrf

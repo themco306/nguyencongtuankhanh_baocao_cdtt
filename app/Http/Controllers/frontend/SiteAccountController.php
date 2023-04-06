@@ -137,4 +137,8 @@ class SiteAccountController extends Controller
         $user = Auth::guard('users')->user();
         return view('frontend.customer.myaccount-wishlist', compact('user'));
     }
+    public function temp_wishlist()
+    {
+        return view('frontend.temp_wishlist');
+    }
 }

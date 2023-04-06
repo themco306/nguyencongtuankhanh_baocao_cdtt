@@ -29,7 +29,7 @@
                 hoặc để lại thông tin liên hệ ở đây, chúng tôi sẽ liên hệ lại ngay</p>
             <form action="{{ route('site.postlienhe') }}" method="post">
                 @csrf
-                @includeIf('backend.message_alert')
+                
                 <label for="name">Tên của bạn</label>
                 <input type="text" name="name" class="form-control">
                 @if ($errors->has('name'))

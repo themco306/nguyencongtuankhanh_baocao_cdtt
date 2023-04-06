@@ -67,8 +67,9 @@
                         </div>
                         <div class="infor align-self-center">
                             <ul class="d-flex align-items-center m-0 heart-far">
+                            @if (Auth::guard('users')->check())
                                 <li class="infor-item heart-icon-box heart-far">
-                                    <a href="">
+                                    <a href="{{ route('account.wishlist') }}">
                                         Yêu thích<i class="fa-solid fa-heart fs-2">
 
                                         </i>
@@ -76,7 +77,7 @@
                                     </a>
                                     <ul class="heart-sub">
                                         <li class="text-end text-decoration-underline fw-light">
-                                            <a href="">Xem Yêu Thích</a>
+                                            <a href="{{ route('account.wishlist') }}">Xem Yêu Thích</a>
                                         </li>
                                         <li>
                                             <div id="row_wishlist">
@@ -87,19 +88,52 @@
                                     </ul>
                                 </li>
                                 <li class="infor-item heart-far">
-                                    <a href="{{ route('site.cart') }}">
+                                    <a href="">
+                                        {{-- {{ route('site.cart') }} --}}
                                         Giỏ hàng<i class="fa-solid fa-cart-shopping fs-3 me-1">
                                         </i>
                                     </a>
 
                                 </li>
                                 <li class="infor-item heart-far">
-                                @if (Auth::guard('users')->check())
                                  <a href="{{ route('site.myaccount') }}">Tài khoản<i class="fa-solid fa-user fs-3"></i></a>
+                                </li>
+                                 @php
+                                     $user_ls=Auth::guard('users')->user()->id;
+                                 @endphp
+                                 <input type="hidden" id="get_user_ls" value="{{ $user_ls }}">
                                 @else
+                                <li class="infor-item heart-icon-box heart-far">
+                                    <a href="{{ route('temp.wishlist') }}">
+                                        Yêu thích<i class="fa-solid fa-heart fs-2">
+
+                                        </i>
+                                        <span class="badge fa-bounce" id="badge"></span>
+                                    </a>
+                                    <ul class="heart-sub">
+                                        <li class="text-end text-decoration-underline fw-light">
+                                            <a href="{{ route('temp.wishlist') }}">Xem Yêu Thích</a>
+                                        </li>
+                                        <li>
+                                            <div id="row_wishlist">
+
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="infor-item heart-far">
+                                    <a href="{{ route('temp.cart') }}">
+                                        Giỏ hàng<i class="fa-solid fa-cart-shopping fs-3 me-1">
+                                        </i>
+                                    </a>
+
+                                </li>
+                                <li class="infor-item heart-far">
                                 <a href="" data-bs-toggle="modal" data-bs-target="#myModal">
                                     Đăng nhập/Đăng ký
                                 </a>
+                                <input type="hidden" id="get_user_ls" value="_temporary">
                                 <div class="modal fade" id="myModal">
                                     <div class="modal-dialog modal-dialog-centered modal-lg">
                                         <div class="modal-content">
@@ -109,9 +143,9 @@
                                         </div>
                                     </div>
                                 </div>
-                               
+                            </li>
                                 @endif
-                                </li>
+                                
 
                             </ul>
                         </div>
@@ -161,7 +195,7 @@
                                     </ul>
                                 </li>
                                 <li class="infor-item heart-far">
-                                    <a href="{{ route('site.cart') }}">
+                                    <a href="">
                                         Giỏ hàng<i class="fa-solid fa-cart-shopping fs-3 me-1"></i>
                                     </a>
                                 </li>

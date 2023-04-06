@@ -55,13 +55,6 @@
               </tr>
             </thead>
             <tbody id="show_wishlist" >
-              {{-- <tr >
-                <th class="text-center align-middle" ><i onclick="del_wishlist(this.id)" id="'+id+'" class="fa-solid fa-circle-xmark "></i></th>
-                <td class="text-center align-middle"><img class="img-fluid" src="'+image+'"></td>
-                <td class="text-center align-middle"><a href=""  class="fw-200">'+name+'</a></td>
-                <td class="text-center align-middle"><span style="color:#FFAD03 ;">'+price+'</span></td>
-                <td class="text-center align-middle"><a class="btn_addcart" onclick="addCart(this.id)" value="'+id+'" >Thêm vào giỏ</a></td>
-              </tr> --}}
               
             </tbody>
           </table>

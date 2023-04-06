@@ -51,8 +51,10 @@ Route::post('dat-lai-mat-khau/{id}', [SiteLoginController::class, 'postget_passw
 
 Route::get('dang-xuat', [SiteLoginController::class, 'logout'])->name('site.logout');
 
+Route::get('yeu-thich', [SiteAccountController::class, 'temp_wishlist'])->name('temp.wishlist');
+
 Route::get('tai-khoan', [SiteAccountController::class, 'myaccount'])->middleware('sitelogin')->name('site.myaccount');
-Route::prefix('tai-khoan')->group(function () {
+Route::prefix('tai-khoan')->middleware('sitelogin')->group(function () {
     Route::get('/don-hang', [SiteAccountController::class, 'order'])->name('account.order');
     Route::get('/chi-tiet', [SiteAccountController::class, 'edit'])->name('account.edit');
     Route::post('/chi-tiet', [SiteAccountController::class, 'postedit']);
@@ -64,6 +66,7 @@ Route::prefix('tai-khoan')->group(function () {
 // Route::get('san-pham', [SiteController::class, 'index'])->name('site.lienhe');
 Route::get('them-gio-hang/{id}', [SiteCartController::class, 'addcart'])->middleware('sitelogin')->name('site.addcart');
 Route::get('gio-hang', [SiteCartController::class, 'cart'])->middleware('sitelogin')->name('site.cart');
+Route::get('gio-hang', [SiteCartController::class, 'temp_cart'])->name('temp.cart');
 
 Route::get('admin/login', [LoginController::class, 'getlogin'])->name('admin.getlogin');
 Route::post('admin/login', [LoginController::class, 'postlogin'])->name('admin.postlogin');

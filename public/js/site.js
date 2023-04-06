@@ -1,7 +1,9 @@
+
+var user_id = document.getElementById('get_user_ls').value;
 function updateHeartIcons() {
     var badges = document.querySelectorAll(".badge");
-    if (localStorage.getItem('data') != null) {
-        var data = JSON.parse(localStorage.getItem('data'));
+    if (localStorage.getItem('data_wishlist'+user_id) != null) {
+        var data = JSON.parse(localStorage.getItem('data_wishlist'+user_id));
         for (var i = 0; i < badges.length; i++) {
             badges[i].textContent = data.length;
         }
@@ -33,8 +35,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function view(){
-    if(localStorage.getItem('data')!=null){
-        var data = JSON.parse(localStorage.getItem('data'));
+    
+    if(localStorage.getItem('data_wishlist'+user_id)!=null){
+        var data = JSON.parse(localStorage.getItem('data_wishlist'+user_id));
         data.reverse();
         document.getElementById('row_wishlist').style.overflowY ='scroll';
         document.getElementById('row_wishlist').style.overflowX ='hidden';
@@ -48,18 +51,26 @@ function view(){
             $('#row_wishlist,#row_wishlist_2').append('<div class="row  my-2"><i onclick="del_wishlist(this.id)" id="'+id+'" class="fa-solid fa-circle-xmark fa-bounce"></i><div class="col-md-8 fs-6"><p style="color:#2F2F2F  ;" class="fw-bold">'+name+'</p><span style="color:#FFAD03 ;">'+price+'</span><a class="ms-2" style="color:#1BBCEF ;"  href="'+url+'">Xem...</a></div><div class="col-md-4 "><img class="img-fluid" src="'+image+'"></div></div>');
         });
     }
-    
+    else{
+        if(localStorage.getItem('data_wishlist_temporary')!=null){
+            var old_data = JSON.parse(localStorage.getItem('data_wishlist_temporary'));
+                localStorage.setItem('data_wishlist'+user_id, '[]');
+                localStorage.setItem('data_wishlist'+user_id, JSON.stringify(old_data));
+                localStorage.removeItem('data_wishlist_temporary');
+
+    }
+}
    
 }
 view();
 
 function del_wishlist(del_id) {
     var id = del_id;
-    var data = JSON.parse(localStorage.getItem('data'));
+    var data = JSON.parse(localStorage.getItem('data_wishlist'+user_id));
     data = data.filter(function(item) {
         return item.id !== id;
     });
-    localStorage.setItem('data', JSON.stringify(data));
+    localStorage.setItem('data_wishlist'+user_id, JSON.stringify(data));
     location.reload();
 }
 function fill_heart(fill_id){
@@ -72,6 +83,7 @@ function fill_heart(fill_id){
     }, 500);
 }
 function add_wishlist(clicked_id) {
+  
     var id = clicked_id;
     var name = document.getElementById('wishlist_product-name' + id).value;
     var price = document.getElementById('wishlist_product-price' + id).value;
@@ -87,10 +99,10 @@ function add_wishlist(clicked_id) {
         'image': image,
 
     };
-    if (localStorage.getItem('data') == null) {
-        localStorage.setItem('data', '[]');
+    if (localStorage.getItem('data_wishlist'+user_id) == null) {
+        localStorage.setItem('data_wishlist'+user_id, '[]');
     }
-    var old_data = JSON.parse(localStorage.getItem('data'));
+    var old_data = JSON.parse(localStorage.getItem('data_wishlist'+user_id));
     var matches = old_data.filter(function (obj) {
         return obj.id == id;
     });
@@ -108,5 +120,6 @@ function add_wishlist(clicked_id) {
         }
         $('#row_wishlist,#row_wishlist_2').append('<div class="row  py-1"><i onclick="del_wishlist(this.id)" id="'+newItem.id+'" class="fa-solid fa-circle-xmark"></i><div class="col-md-7 fs-6"><p style="color:#2F2F2F  ;" class="fw-bold">'+newItem.name+'</p><span style="color:#FFAD03 ;">'+newItem.price+'</span><a class="ms-2" style="color:#1BBCEF ;"  href="'+url+'">Xem...</a></div><div class="col-md-4 m-1"><img class="img-fluid" src="'+newItem.image+'"></div></div>');
     }
-    localStorage.setItem('data', JSON.stringify(old_data));
+    localStorage.setItem('data_wishlist'+user_id, JSON.stringify(old_data));
 }
+

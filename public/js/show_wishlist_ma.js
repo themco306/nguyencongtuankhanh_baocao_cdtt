@@ -1,7 +1,7 @@
-view();
-function view(){
-    if(localStorage.getItem('data')!=null){
-        var data = JSON.parse(localStorage.getItem('data'));
+view_show_wishlist();
+function view_show_wishlist(){
+    if(localStorage.getItem('data_wishlist'+user_id)!=null){
+        var data = JSON.parse(localStorage.getItem('data_wishlist'+user_id));
         data.reverse();
         
         data.forEach(function(item) {
