@@ -55,8 +55,10 @@ Route::get('tai-khoan', [SiteAccountController::class, 'myaccount'])->middleware
 Route::prefix('tai-khoan')->group(function () {
     Route::get('/don-hang', [SiteAccountController::class, 'order'])->name('account.order');
     Route::get('/chi-tiet', [SiteAccountController::class, 'edit'])->name('account.edit');
+    Route::post('/chi-tiet', [SiteAccountController::class, 'postedit']);
     Route::get('/yeu-thich', [SiteAccountController::class, 'wishlist'])->name('account.wishlist');
     Route::get('/dia-chi', [SiteAccountController::class, 'address'])->name('account.address');
+    Route::post('/dia-chi', [SiteAccountController::class, 'postaddress']);
 });
 // Route::get('tai-khoan', [SiteAccountController::class, 'logout'])->name('site.logout');
 // Route::get('san-pham', [SiteController::class, 'index'])->name('site.lienhe');

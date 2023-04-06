@@ -1,6 +1,6 @@
 $.get("https://vapi.vnappmob.com/api/province/",
     function (data) {
-        
+
         let province = data.results;
         let province_li='<option value="">---Tỉnh/Thành phố---</option>';
         province.forEach(function(item) {
@@ -37,3 +37,40 @@ $('#district').on('change', function() {
         }
     );
 });
+show_address();
+function show_address() {
+    let address = document.getElementById("get-show-address").value;
+    let parts = address.split(", ");
+    let addressfinal = [];
+    
+    $.get("https://vapi.vnappmob.com/api/province/", function (data) {
+        let provinces = data.results;
+        let province = provinces.find(function (item) {
+            return item.province_id == parts[0];
+        });
+        addressfinal.push(province.province_name);
+        $.get(
+            "https://vapi.vnappmob.com/api/province/district/" + parts[0],
+            function (data) {
+                let districts = data.results;
+                let district = districts.find(function (item) {
+                    return item.district_id == parts[1];
+                });
+                addressfinal.push(district.district_name);
+                $.get(
+                    "https://vapi.vnappmob.com/api/province/ward/" + parts[1],
+                    function (data) {
+                        let wards = data.results;
+                        let ward = wards.find(function (item) {
+                            return item.ward_id == parts[2];
+                        });
+                        addressfinal.push(ward.ward_name);
+                        addressfinal.push(parts[3]);
+                        let addressString = addressfinal.join(", ");
+                        document.getElementById("show-address").value = addressString;
+                    }
+                );
+            }
+        );
+    });
+}

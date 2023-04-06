@@ -190,7 +190,7 @@
 
 
 
-
+    @includeIf('backend.message_alert')
     @yield('content')
 
     <footer class="footer-section">
