@@ -59,7 +59,7 @@ class PostController extends Controller
         $post->topic_id = $request->topic_id;
         $post->type = 'post';
         $post->created_at = date('Y-m-d H:i:s');
-        $post->created_by = Auth::user()->id;
+        $post->created_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($request->hasFile('image')) {
@@ -132,7 +132,7 @@ class PostController extends Controller
         $post->status = $request->status;
 
         $post->updated_at = date('Y-m-d H:i:s');
-        $post->updated_by = Auth::user()->id;
+        $post->updated_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($request->hasFile('image')) {
@@ -224,7 +224,7 @@ class PostController extends Controller
                     }
                     $post->status = 2;
                     $post->updated_at = date('Y-m-d H:i:s');
-                    $post->updated_by = Auth::user()->id;
+                    $post->updated_by = Auth::guard('admin')->user()->id;
                     $post->save();
                     $count++;
                 }
@@ -242,7 +242,7 @@ class PostController extends Controller
         }
         $post->status = 0;
         $post->updated_at = date('Y-m-d H:i:s');
-        $post->updated_by = Auth::user()->id;
+        $post->updated_by = Auth::guard('admin')->user()->id;
         $post->save();
         return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
     }
@@ -260,7 +260,7 @@ class PostController extends Controller
                 }
                 $post->status = 0;
                 $post->updated_at = date('Y-m-d H:i:s');
-                $post->updated_by = Auth::user()->id;
+                $post->updated_by = Auth::guard('admin')->user()->id;
                 $post->save();
                 $count++;
             }
@@ -282,7 +282,7 @@ class PostController extends Controller
         }
         $post->status = ($post->status == 1) ? 2 : 1;
         $post->updated_at = date('Y-m-d H:i:s');
-        $post->updated_by = Auth::user()->id;
+        $post->updated_by = Auth::guard('admin')->user()->id;
         $post->save();
         return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
     }
@@ -299,7 +299,7 @@ class PostController extends Controller
         }
         $post->status = 2;
         $post->updated_at = date('Y-m-d H:i:s');
-        $post->updated_by = Auth::user()->id;
+        $post->updated_by = Auth::guard('admin')->user()->id;
         $post->save();
         return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Phục hồi thành công!']);
     }

@@ -56,7 +56,7 @@ class CategoryController extends Controller
         $category->status = ($category->status == 1) ? 2 : 1;
 
         $category->updated_at = date('Y-m-d H:i:s');
-        $category->updated_by = Auth::user()->id;
+        $category->updated_by = Auth::guard('admin')->user()->id;
         if ($category->save()) {
             if ($category->status == 2) {
                 $category->product()->update([
@@ -86,7 +86,7 @@ class CategoryController extends Controller
         $category->level = 1;
         $category->status = $request->status;
         $category->created_at = date('Y-m-d H:i:s');
-        $category->created_by = Auth::user()->id;
+        $category->created_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($category->save()) {
@@ -163,7 +163,7 @@ class CategoryController extends Controller
         $category->level = 1;
         $category->status = $request->status;
         $category->updated_at = date('Y-m-d H:i:s');
-        $category->updated_by = Auth::user()->id;
+        $category->updated_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($category->save()) {
@@ -219,7 +219,7 @@ class CategoryController extends Controller
         }
         $category->status = 0;
         $category->updated_at = date('Y-m-d H:i:s');
-        $category->updated_by = Auth::user()->id;
+        $category->updated_by = Auth::guard('admin')->user()->id;
         if ($category->save()) {
             if ($category->status == 0) {
                 $category->product()->update([
@@ -247,7 +247,7 @@ class CategoryController extends Controller
                 }
                 $category->status = 0;
                 $category->updated_at = date('Y-m-d H:i:s');
-                $category->updated_by = Auth::user()->id;
+                $category->updated_by = Auth::guard('admin')->user()->id;
                 if ($category->save()) {
                     if ($category->status == 0) {
                         $category->product()->update([
@@ -315,7 +315,7 @@ class CategoryController extends Controller
 
                     $category->status = 2;
                     $category->updated_at = date('Y-m-d H:i:s');
-                    $category->updated_by = Auth::user()->id;
+                    $category->updated_by = Auth::guard('admin')->user()->id;
                     $category->save();
                     $count++;
                 }
@@ -335,7 +335,7 @@ class CategoryController extends Controller
 
         $category->status = 2;
         $category->updated_at = date('Y-m-d H:i:s');
-        $category->updated_by = Auth::user()->id;
+        $category->updated_by = Auth::guard('admin')->user()->id;
         $category->save();
         return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Phục hồi thành công!']);
     }

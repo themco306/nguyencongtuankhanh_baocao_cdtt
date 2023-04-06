@@ -54,7 +54,7 @@ class ContactController extends Controller
         $contact = Contact::find($id);
         $contact->replaydetail = $request->replaydetail;
         $contact->updated_at = date('Y-m-d H:i:s');
-        $contact->updated_by = Auth::user()->id;
+        $contact->updated_by = Auth::guard('admin')->user()->id;
         $contact->status = 2;
         if ($contact->save()) {
             return redirect()->route('contact.index')->with('message', ['type' => 'success', 'msg' => 'Trả lời thành công!']);
@@ -120,7 +120,7 @@ class ContactController extends Controller
 
                     $contact->status = 2;
                     $contact->updated_at = date('Y-m-d H:i:s');
-                    $contact->updated_by = Auth::user()->id;
+                    $contact->updated_by = Auth::guard('admin')->user()->id;
                     $contact->save();
                     $count++;
                 }
@@ -139,7 +139,7 @@ class ContactController extends Controller
         }
         $contact->status = 0;
         $contact->updated_at = date('Y-m-d H:i:s');
-        $contact->updated_by = Auth::user()->id;
+        $contact->updated_by = Auth::guard('admin')->user()->id;
         $contact->save();
         return redirect()->route('contact.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
     }
@@ -158,7 +158,7 @@ class ContactController extends Controller
                 }
                 $contact->status = 0;
                 $contact->updated_at = date('Y-m-d H:i:s');
-                $contact->updated_by = Auth::user()->id;
+                $contact->updated_by = Auth::guard('admin')->user()->id;
                 $contact->save();
                 $count++;
             }
@@ -179,7 +179,7 @@ class ContactController extends Controller
 
         $contact->status = 2;
         $contact->updated_at = date('Y-m-d H:i:s');
-        $contact->updated_by = Auth::user()->id;
+        $contact->updated_by = Auth::guard('admin')->user()->id;
         $contact->save();
         return redirect()->route('contact.index')->with('message', ['type' => 'success', 'msg' => 'Phục hồi thành công!']);
     }

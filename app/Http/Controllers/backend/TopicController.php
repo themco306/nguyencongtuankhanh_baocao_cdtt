@@ -50,7 +50,7 @@ class TopicController extends Controller
 
         $topic->status = ($topic->status == 1) ? 2 : 1;
         $topic->updated_at = date('Y-m-d H:i:s');
-        $topic->updated_by = Auth::user()->id;
+        $topic->updated_by = Auth::guard('admin')->user()->id;
         if ($topic->save()) {
             if ($topic->status == 2) {
                 $topic->post()->update([
@@ -80,7 +80,7 @@ class TopicController extends Controller
         // $topic->level = 1;
         $topic->status = $request->status;
         $topic->created_at = date('Y-m-d H:i:s');
-        $topic->created_by = Auth::user()->id;
+        $topic->created_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($topic->save()) {
@@ -158,7 +158,7 @@ class TopicController extends Controller
         // $topic->level = 1;
         $topic->status = $request->status;
         $topic->updated_at = date('Y-m-d H:i:s');
-        $topic->updated_by = Auth::user()->id;
+        $topic->updated_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($topic->save()) {
@@ -214,7 +214,7 @@ class TopicController extends Controller
         }
         $topic->status = 0;
         $topic->updated_at = date('Y-m-d H:i:s');
-        $topic->updated_by = Auth::user()->id;
+        $topic->updated_by = Auth::guard('admin')->user()->id;
         if ($topic->save()) {
             if ($topic->status == 0) {
                 $topic->post()->update([
@@ -244,7 +244,7 @@ class TopicController extends Controller
                 }
                 $topic->status = 0;
                 $topic->updated_at = date('Y-m-d H:i:s');
-                $topic->updated_by = Auth::user()->id;
+                $topic->updated_by = Auth::guard('admin')->user()->id;
                 if ($topic->save()) {
                     if ($topic->status == 0) {
                         $topic->post()->update([
@@ -313,7 +313,7 @@ class TopicController extends Controller
 
                     $topic->status = 2;
                     $topic->updated_at = date('Y-m-d H:i:s');
-                    $topic->updated_by = Auth::user()->id;
+                    $topic->updated_by = Auth::guard('admin')->user()->id;
                     $topic->save();
                     $count++;
                 }
@@ -334,7 +334,7 @@ class TopicController extends Controller
 
         $topic->status = 2;
         $topic->updated_at = date('Y-m-d H:i:s');
-        $topic->updated_by = Auth::user()->id;
+        $topic->updated_by = Auth::guard('admin')->user()->id;
         $topic->save();
         return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Phục hồi thành công!']);
     }

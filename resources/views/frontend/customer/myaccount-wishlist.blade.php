@@ -3,6 +3,9 @@
 @section('header')
     <link rel="stylesheet" href="{{ asset('css/myaccount.css') }}">
 @endsection
+@section('footer')
+    <script src="{{ asset('js/show_wishlist_ma.js') }}"></script>
+@endsection
 @section('content')
 <div class="container myaccount">
     <div><h4>TÀI KHOẢN CỦA TÔI</h4></div>
@@ -40,8 +43,28 @@
     </div>
     <div class="col-9 right-content">
        <div class="m-3">
-        <p> Xin chào <span style="font-weight: bold">{{ $user->name }} </span>(không phải tài khoản  <span style="font-weight: bold">{{ $user->name }} </span>? Hãy  <a title="Bấm vào để đăng xuất ngay lập tức" href="{{ route('site.logout') }}">thoát ra</a> và đăng nhập vào tài khoản của bạn)</p>
-<p>Từ trang quản lý tài khoản bạn có thể xem <a href="{{ route('account.order') }}"> đơn hàng mới</a>, quản lý <a href="{{ route('account.address') }}"> địa chỉ giao hàng và thanh toán</a>, <a href="{{ route('account.edit') }}"> sửa mật khẩu và thông tin tài khoản</a>.</p>
+        <div><h4 class="fs-5">Yêu thích CỦA TÔI <span class="badge fa-bounce" id="badge"></span></h4> </div>
+        <table class="table">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 5%" scope="col"></th>
+                <th style="width: 15%" scope="col"></th>
+                <th style="width: 50%" scope="col">Sản phẩm</th>
+                <th style="width: 20%" scope="col">Giá</th>
+                <th style="width: 10%"  scope="col"></th>
+              </tr>
+            </thead>
+            <tbody id="show_wishlist" >
+              {{-- <tr >
+                <th class="text-center align-middle" ><i onclick="del_wishlist(this.id)" id="'+id+'" class="fa-solid fa-circle-xmark "></i></th>
+                <td class="text-center align-middle"><img class="img-fluid" src="'+image+'"></td>
+                <td class="text-center align-middle"><a href=""  class="fw-200">'+name+'</a></td>
+                <td class="text-center align-middle"><span style="color:#FFAD03 ;">'+price+'</span></td>
+                <td class="text-center align-middle"><a class="btn_addcart" onclick="addCart(this.id)" value="'+id+'" >Thêm vào giỏ</a></td>
+              </tr> --}}
+              
+            </tbody>
+          </table>
          </div>
 
 

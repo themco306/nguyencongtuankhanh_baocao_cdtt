@@ -50,7 +50,7 @@ class CustomerController extends Controller
         // $customer->level = 1;
         $customer->status = $request->status;
         $customer->created_at = date('Y-m-d H:i:s');
-        $customer->created_by = Auth::user()->id;
+        $customer->created_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($request->hasFile('image')) {
@@ -125,7 +125,7 @@ class CustomerController extends Controller
         // $customer->level = 1;
         $customer->status = $request->status;
         $customer->created_at = date('Y-m-d H:i:s');
-        $customer->created_by = Auth::user()->id;
+        $customer->created_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($request->def_image == 1) {
@@ -193,7 +193,7 @@ class CustomerController extends Controller
         }
         $customer->status = 0;
         $customer->updated_at = date('Y-m-d H:i:s');
-        $customer->updated_by = Auth::user()->id;
+        $customer->updated_by = Auth::guard('admin')->user()->id;
         $customer->save();
         return redirect()->route('customer.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
     }
@@ -211,7 +211,7 @@ class CustomerController extends Controller
                 }
                 $customer->status = 0;
                 $customer->updated_at = date('Y-m-d H:i:s');
-                $customer->updated_by = Auth::user()->id;
+                $customer->updated_by = Auth::guard('admin')->user()->id;
                 $customer->save();
                 $count++;
             }
@@ -231,7 +231,7 @@ class CustomerController extends Controller
 
         $customer->status = ($customer->status == 1) ? 2 : 1;
         $customer->updated_at = date('Y-m-d H:i:s');
-        $customer->updated_by = Auth::user()->id;
+        $customer->updated_by = Auth::guard('admin')->user()->id;
         $customer->save();
         return redirect()->route('customer.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
     }
@@ -246,7 +246,7 @@ class CustomerController extends Controller
 
         $customer->status = 2;
         $customer->updated_at = date('Y-m-d H:i:s');
-        $customer->updated_by = Auth::user()->id;
+        $customer->updated_by = Auth::guard('admin')->user()->id;
         $customer->save();
         return redirect()->route('customer.index')->with('message', ['type' => 'success', 'msg' => 'Phục hồi thành công!']);
     }
@@ -289,7 +289,7 @@ class CustomerController extends Controller
 
                     $customer->status = 2;
                     $customer->updated_at = date('Y-m-d H:i:s');
-                    $customer->updated_by = Auth::user()->id;
+                    $customer->updated_by = Auth::guard('admin')->user()->id;
                     $customer->save();
                     $count++;
                 }

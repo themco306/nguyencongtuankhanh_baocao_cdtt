@@ -143,7 +143,7 @@
                         <div class="infor align-self-center">
                             <ul class="m-0 d-flex align-items-center heart-far">
                                 <li class="infor-item heart-icon-box heart-far">
-                                    <a href="">
+                                    <a href="{{ route('account.wishlist') }}">
                                         Yêu thích<i class="fa-solid fa-heart fs-2">
 
                                         </i>
@@ -151,7 +151,7 @@
                                     </a>
                                     <ul class="heart-sub">
                                         <li class="text-end text-decoration-underline fw-light">
-                                            <a href="">Xem Yêu Thích</a>
+                                            <a href="{{ route('account.wishlist') }}">Xem Yêu Thích</a>
                                         </li>
                                         <li>
                                             <div id="row_wishlist_2">

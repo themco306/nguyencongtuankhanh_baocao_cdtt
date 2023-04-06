@@ -56,7 +56,7 @@ class BrandController extends Controller
         // $brand->level = 1;
         $brand->status = $request->status;
         $brand->created_at = date('Y-m-d H:i:s');
-        $brand->created_by = Auth::user()->id;
+        $brand->created_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($request->hasFile('image')) {
@@ -139,7 +139,7 @@ class BrandController extends Controller
         // $brand->level = 1;
         $brand->status = $request->status;
         $brand->updated_at = date('Y-m-d H:i:s');
-        $brand->updated_by = Auth::user()->id;
+        $brand->updated_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($request->hasFile('image')) {
@@ -254,7 +254,7 @@ class BrandController extends Controller
 
                     $brand->status = 2;
                     $brand->updated_at = date('Y-m-d H:i:s');
-                    $brand->updated_by = Auth::user()->id;
+                    $brand->updated_by = Auth::guard('admin')->user()->id;
                     $brand->save();
                     $count++;
                 }
@@ -273,7 +273,7 @@ class BrandController extends Controller
         }
         $brand->status = 0;
         $brand->updated_at = date('Y-m-d H:i:s');
-        $brand->updated_by = Auth::user()->id;
+        $brand->updated_by = Auth::guard('admin')->user()->id;
         if ($brand->save()) {
             if ($brand->status == 0) {
                 $brand->product()->update([
@@ -302,7 +302,7 @@ class BrandController extends Controller
                 }
                 $brand->status = 0;
                 $brand->updated_at = date('Y-m-d H:i:s');
-                $brand->updated_by = Auth::user()->id;
+                $brand->updated_by = Auth::guard('admin')->user()->id;
                 $brand->save();
                 if ($brand->status == 0) {
                     $brand->product()->update([
@@ -332,7 +332,7 @@ class BrandController extends Controller
 
         $brand->status = ($brand->status == 1) ? 2 : 1;
         $brand->updated_at = date('Y-m-d H:i:s');
-        $brand->updated_by = Auth::user()->id;
+        $brand->updated_by = Auth::guard('admin')->user()->id;
         if ($brand->save()) {
             if ($brand->status == 2) {
                 $brand->product()->update([
@@ -358,7 +358,7 @@ class BrandController extends Controller
 
         $brand->status = 2;
         $brand->updated_at = date('Y-m-d H:i:s');
-        $brand->updated_by = Auth::user()->id;
+        $brand->updated_by = Auth::guard('admin')->user()->id;
         $brand->save();
         return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Phục hồi thành công!']);
     }

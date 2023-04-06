@@ -50,7 +50,7 @@ class UserController extends Controller
         // $user->level = 1;
         $user->status = $request->status;
         $user->created_at = date('Y-m-d H:i:s');
-        $user->created_by = Auth::user()->id;
+        $user->created_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($request->hasFile('image')) {
@@ -125,7 +125,7 @@ class UserController extends Controller
         // $user->level = 1;
         $user->status = $request->status;
         $user->created_at = date('Y-m-d H:i:s');
-        $user->created_by = Auth::user()->id;
+        $user->created_by = Auth::guard('admin')->user()->id;
         //upload file
 
         if ($request->def_image == 1) {
@@ -193,7 +193,7 @@ class UserController extends Controller
         }
         $user->status = 0;
         $user->updated_at = date('Y-m-d H:i:s');
-        $user->updated_by = Auth::user()->id;
+        $user->updated_by = Auth::guard('admin')->user()->id;
         $user->save();
         return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
     }
@@ -211,7 +211,7 @@ class UserController extends Controller
                 }
                 $user->status = 0;
                 $user->updated_at = date('Y-m-d H:i:s');
-                $user->updated_by = Auth::user()->id;
+                $user->updated_by = Auth::guard('admin')->user()->id;
                 $user->save();
                 $count++;
             }
@@ -231,7 +231,7 @@ class UserController extends Controller
 
         $user->status = ($user->status == 1) ? 2 : 1;
         $user->updated_at = date('Y-m-d H:i:s');
-        $user->updated_by = Auth::user()->id;
+        $user->updated_by = Auth::guard('admin')->user()->id;
         $user->save();
         return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
     }
@@ -246,7 +246,7 @@ class UserController extends Controller
 
         $user->status = 2;
         $user->updated_at = date('Y-m-d H:i:s');
-        $user->updated_by = Auth::user()->id;
+        $user->updated_by = Auth::guard('admin')->user()->id;
         $user->save();
         return redirect()->route('user.index')->with('message', ['type' => 'success', 'msg' => 'Phục hồi thành công!']);
     }
@@ -290,7 +290,7 @@ class UserController extends Controller
 
                     $user->status = 2;
                     $user->updated_at = date('Y-m-d H:i:s');
-                    $user->updated_by = Auth::user()->id;
+                    $user->updated_by = Auth::guard('admin')->user()->id;
                     $user->save();
                     $count++;
                 }

@@ -36,22 +36,20 @@ function view(){
     if(localStorage.getItem('data')!=null){
         var data = JSON.parse(localStorage.getItem('data'));
         data.reverse();
-
         document.getElementById('row_wishlist').style.overflowY ='scroll';
         document.getElementById('row_wishlist').style.overflowX ='hidden';
         document.getElementById('row_wishlist').style.maxHeight ='350px';
-        for(i=0;i<data.length;i++){
-            var id = data[i].id;
-            var name = data[i].name;
-            var price = data[i].price;
-            var url = data[i].url;
-            var image = data[i].image;
+        data.forEach(function(item) {
+            var id = item.id;
+            var name = item.name;
+            var price = item.price;
+            var url = item.url;
+            var image = item.image;
             $('#row_wishlist,#row_wishlist_2').append('<div class="row  my-2"><i onclick="del_wishlist(this.id)" id="'+id+'" class="fa-solid fa-circle-xmark fa-bounce"></i><div class="col-md-8 fs-6"><p style="color:#2F2F2F  ;" class="fw-bold">'+name+'</p><span style="color:#FFAD03 ;">'+price+'</span><a class="ms-2" style="color:#1BBCEF ;"  href="'+url+'">Xem...</a></div><div class="col-md-4 "><img class="img-fluid" src="'+image+'"></div></div>');
-
-        }
-
-        
+        });
     }
+    
+   
 }
 view();
 

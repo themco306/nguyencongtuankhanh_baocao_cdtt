@@ -126,7 +126,7 @@ class ProductController extends Controller
         }
         $product->status = ($product->status == 1) ? 2 : 1;
         $product->updated_at = date('Y-m-d H:i:s');
-        $product->updated_by = Auth::user()->id;
+        $product->updated_by = Auth::guard('admin')->user()->id;
         $product->save();
         return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
     }
@@ -148,7 +148,7 @@ class ProductController extends Controller
         }
         $product->status = 2;
         $product->updated_at = date('Y-m-d H:i:s');
-        $product->updated_by = Auth::user()->id;
+        $product->updated_by = Auth::guard('admin')->user()->id;
         $product->save();
         return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Phục hồi thành công!']);
     }
@@ -229,7 +229,7 @@ class ProductController extends Controller
                     }
                     $product->status = 2;
                     $product->updated_at = date('Y-m-d H:i:s');
-                    $product->updated_by = Auth::user()->id;
+                    $product->updated_by = Auth::guard('admin')->user()->id;
                     $product->save();
                     $count++;
                 }
@@ -248,7 +248,7 @@ class ProductController extends Controller
         }
         $product->status = 0;
         $product->updated_at = date('Y-m-d H:i:s');
-        $product->updated_by = Auth::user()->id;
+        $product->updated_by = Auth::guard('admin')->user()->id;
         $product->save();
         return redirect()->route('product.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
     }
@@ -267,7 +267,7 @@ class ProductController extends Controller
                 }
                 $product->status = 0;
                 $product->updated_at = date('Y-m-d H:i:s');
-                $product->updated_by = Auth::user()->id;
+                $product->updated_by = Auth::guard('admin')->user()->id;
                 $product->save();
                 $count++;
             }
@@ -292,7 +292,7 @@ class ProductController extends Controller
         // $product->level = 1;
         $product->status = $request->status;
         $product->created_at = date('Y-m-d H:i:s');
-        $product->created_by = Auth::user()->id;
+        $product->created_by = Auth::guard('admin')->user()->id;
         //upload file
         if ($product->save()) {
             $product_sale = new Product_sale();
@@ -350,7 +350,7 @@ class ProductController extends Controller
         // $product->level = 1;
         $product->status = $request->status;
         $product->updated_at = date('Y-m-d H:i:s');
-        $product->updated_by = Auth::user()->id;
+        $product->updated_by = Auth::guard('admin')->user()->id;
         //upload file
 
 
