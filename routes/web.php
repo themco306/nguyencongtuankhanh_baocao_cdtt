@@ -66,6 +66,8 @@ Route::prefix('tai-khoan')->middleware('sitelogin')->group(function () {
 // Route::get('san-pham', [SiteController::class, 'index'])->name('site.lienhe');
 Route::post('them-gio-hang', [SiteCartController::class, 'addcart'])->name('site.addcart');
 Route::get('gio-hang', [SiteCartController::class, 'showcarts'])->middleware('sitelogin')->name('site.cart');
+Route::post('xoa-gio-hang', [SiteCartController::class, 'delcart'])->name('site.delcart');
+
 
 Route::get('admin/login', [LoginController::class, 'getlogin'])->name('admin.getlogin');
 Route::post('admin/login', [LoginController::class, 'postlogin'])->name('admin.postlogin');

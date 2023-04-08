@@ -24,20 +24,20 @@ class SiteCartController extends Controller
             if ($product_check != null) {
                 $cart_check = Carts::where([['product_id', $product_id], ['user_id', Auth::guard('users')->user()->id]])->exists();
                 if ($cart_check) {
-                    return response()->json(['status' => 'Đã thêm ' . $product_check->name . ' trước đó']);
+                    return response()->json(['alert' => 'Đã thêm ' . $product_check->name . ' trước đó']);
                 } else {
                     $cart = new Carts();
                     $cart->user_id = Auth::guard('users')->user()->id;
                     $cart->product_id = $product_id;
                     $cart->qty = $qty;
                     $cart->save();
-                    return response()->json(['status' => 'Đã thêm ' . $product_check->name . ' vào giỏ hàng']);
+                    return response()->json(['success' => 'Đã thêm ' . $product_check->name . ' vào giỏ hàng']);
                 }
             } else {
-                return response()->json(['status' => 'Sản phẩm không tồn tại']);
+                return response()->json(['alert' => 'Sản phẩm không tồn tại']);
             }
         } else {
-            return response()->json(['status' => 'Bạn cần đăng nhập trước']);
+            return response()->json(['alert' => 'Bạn cần đăng nhập trước']);
         }
     }
     public function showcarts()
@@ -45,5 +45,21 @@ class SiteCartController extends Controller
         $title = "Giỏ Hàng";
         $carts = Carts::where('user_id', Auth::guard('users')->user()->id)->orderBy('created_at', 'desc')->get();
         return view('frontend.show_carts', compact('title', 'carts'));
+    }
+    public function delcart(Request $request)
+    {
+
+
+        if (Auth::guard('users')->check()) {
+            $product_id = $request->input('product_id');
+            $cart_check = Carts::where([['product_id', $product_id], ['user_id', Auth::guard('users')->user()->id]])->exists();
+            if ($cart_check) {
+                $cart = Carts::where([['product_id', $product_id], ['user_id', Auth::guard('users')->user()->id]])->first();
+                $cart->delete();
+                return response()->json(['success' => 'Đã xóa sản phẩm khỏi giỏ hàng']);
+            }
+        } else {
+            return response()->json(['alert' => 'Bạn cần đăng nhập trước']);
+        }
     }
 }

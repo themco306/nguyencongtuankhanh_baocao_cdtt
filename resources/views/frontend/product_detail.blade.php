@@ -11,7 +11,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script src="{{ asset('js/slider_bar.js') }}"></script>
-    <script src="{{ asset('js/buy-amount.js') }}"></script>
+    <script src="{{ asset('js/amountcart.js') }}"></script>
     <script src="{{ asset('js/add2cart.js') }}"></script>
 @endsection
 @section('content')
@@ -96,16 +96,16 @@
 
                 <div class="text-info my-2">
                 </div>
-                <div class="ms-4" id="buy-amount">
-                    <input type="hidden" value="{{ $product->qty }} " id="qty_input">
-                    <button class="minus-btn" onclick="handleMinus()">
+                <div class="ms-4 buy-amount" >
+                    <input type="hidden" value="{{ $product->qty }} " class="qty_max">
+                    <button class="minus-btn" >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
                         </svg>
                     </button>
-                    <input type="text" name="amount" id="amount" value="1">
-                    <button class="plus-btn" onclick="handlePlus()">
+                    <input type="text" class="amount" name="amount" value="1">
+                    <button class="plus-btn" >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />

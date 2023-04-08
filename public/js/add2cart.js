@@ -20,7 +20,16 @@ function add2cart(id){
         'qty':cart_qty
     },
     success: function (response) {
-        alert(response.status);
+        if(response.success){
+            swal("Thành công!!", response.success, "success", { timer: 10000 });
+
+        }
+        else{
+            swal("Thông báo!!", response.alert, { timer: 10000 });
+
+        }
+
+
     }
    });
 
