@@ -30,7 +30,7 @@ function updateHeartIcons() {
 document.addEventListener('DOMContentLoaded', function () {
     // Thay đổi mảng này để chứa id của tất cả các sản phẩm
     updateHeartIcons();
-
+    view();
 });
 
 
@@ -62,7 +62,7 @@ function view(){
 }
    
 }
-view();
+
 
 function del_wishlist(del_id) {
     var id = del_id;
@@ -119,6 +119,7 @@ function add_wishlist(clicked_id) {
             badges[i].textContent = currentValue + 1;
         }
         $('#row_wishlist,#row_wishlist_2').append('<div class="row  py-1"><i onclick="del_wishlist(this.id)" id="'+newItem.id+'" class="fa-solid fa-circle-xmark"></i><div class="col-md-7 fs-6"><p style="color:#2F2F2F  ;" class="fw-bold">'+newItem.name+'</p><span style="color:#FFAD03 ;">'+newItem.price+'</span><a class="ms-2" style="color:#1BBCEF ;"  href="'+url+'">Xem...</a></div><div class="col-md-4 m-1"><img class="img-fluid" src="'+newItem.image+'"></div></div>');
+      
     }
     localStorage.setItem('data_wishlist'+user_id, JSON.stringify(old_data));
 }

@@ -1,6 +1,6 @@
 let amountElement = document.getElementById('amount');
 let amount = amountElement.value;
-let qty = document.getElementById('qty').value;
+let qty = document.getElementById('qty_input').value;
 let reander = (amount) => {
     amountElement.value = amount
 }

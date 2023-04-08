@@ -104,11 +104,13 @@ class SiteController extends Controller
         if ($product == null) {
             return view('frontend.error_404');
         }
-        $same_products = Product::where([
+        $same_products = Product::with(['sale' => function ($query) {
+            $query->whereRaw('? between date_begin and date_end', [now()]);
+        }])->where([
             ['status', '=', '1'],
             ['category_id', '=', $product->category_id],
             ['id', '!=', $product->id]
-        ])->take(4)->get();
+        ])->orderBy('created_at', 'desc')->take(4)->get();
         return view('frontend.product_detail', compact('product', 'same_products'));
     }
     protected function post_detail($post)

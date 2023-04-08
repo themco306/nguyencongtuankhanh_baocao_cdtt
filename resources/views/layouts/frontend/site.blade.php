@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
         integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
@@ -62,7 +63,7 @@
                         </div>
                         <div class="infor d-md-none d-block  p-2">
                             <a href="">
-                                <i class="fa-solid fa-cart-shopping me-1"></i>
+                              <i class="fa-solid fa-cart-shopping me-1"></i>
                             </a>
                         </div>
                         <div class="infor align-self-center">
@@ -88,8 +89,8 @@
                                     </ul>
                                 </li>
                                 <li class="infor-item heart-far">
-                                    <a href="">
-                                        {{-- {{ route('site.cart') }} --}}
+                                    <a href="{{ route('site.cart') }}">
+                                        
                                         Giỏ hàng<i class="fa-solid fa-cart-shopping fs-3 me-1">
                                         </i>
                                     </a>
@@ -97,11 +98,13 @@
                                 </li>
                                 <li class="infor-item heart-far">
                                  <a href="{{ route('site.myaccount') }}">Tài khoản<i class="fa-solid fa-user fs-3"></i></a>
-                                </li>
                                  @php
-                                     $user_ls=Auth::guard('users')->user()->id;
-                                 @endphp
+                                 $user_ls=Auth::guard('users')->user()->id;
+                             @endphp
                                  <input type="hidden" id="get_user_ls" value="{{ $user_ls }}">
+                                </li>
+                                
+                                 
                                 @else
                                 <li class="infor-item heart-icon-box heart-far">
                                     <a href="{{ route('temp.wishlist') }}">
@@ -123,7 +126,7 @@
                                     </ul>
                                 </li>
                                 <li class="infor-item heart-far">
-                                    <a href="{{ route('temp.cart') }}">
+                                    <a href="{{ route('site.cart') }}">
                                         Giỏ hàng<i class="fa-solid fa-cart-shopping fs-3 me-1">
                                         </i>
                                     </a>
@@ -176,6 +179,7 @@
                         </div>
                         <div class="infor align-self-center">
                             <ul class="m-0 d-flex align-items-center heart-far">
+                                @if (Auth::guard('users')->check())
                                 <li class="infor-item heart-icon-box heart-far">
                                     <a href="{{ route('account.wishlist') }}">
                                         Yêu thích<i class="fa-solid fa-heart fs-2">
@@ -188,24 +192,72 @@
                                             <a href="{{ route('account.wishlist') }}">Xem Yêu Thích</a>
                                         </li>
                                         <li>
-                                            <div id="row_wishlist_2">
+                                            <div id="row_wishlist">
 
                                             </div>
                                         </li>
+
                                     </ul>
                                 </li>
                                 <li class="infor-item heart-far">
                                     <a href="">
-                                        Giỏ hàng<i class="fa-solid fa-cart-shopping fs-3 me-1"></i>
+                                        {{-- {{ route('site.cart') }} --}}
+                                        Giỏ hàng<i class="fa-solid fa-cart-shopping fs-3 me-1">
+                                        </i>
                                     </a>
-                                </li>
 
+                                </li>
                                 <li class="infor-item heart-far">
+                                 <a href="{{ route('site.myaccount') }}">Tài khoản<i class="fa-solid fa-user fs-3"></i></a>
+                                 @php
+                                 $user_ls=Auth::guard('users')->user()->id;
+                             @endphp
+                             <input type="hidden" id="get_user_ls" value="{{ $user_ls }}">
+                                </li>
+                                
+                                @else
+                                <li class="infor-item heart-icon-box heart-far">
+                                    <a href="{{ route('temp.wishlist') }}">
+                                        Yêu thích<i class="fa-solid fa-heart fs-2">
 
-                                    <a href="">Đăng ký/Đăng nhập</a>
+                                        </i>
+                                        <span class="badge fa-bounce" id="badge"></span>
+                                    </a>
+                                    <ul class="heart-sub">
+                                        <li class="text-end text-decoration-underline fw-light">
+                                            <a href="{{ route('temp.wishlist') }}">Xem Yêu Thích</a>
+                                        </li>
+                                        <li>
+                                            <div id="row_wishlist">
+
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="infor-item heart-far">
+                                    <a href="{{ route('site.cart') }}">
+                                        Giỏ hàng<i class="fa-solid fa-cart-shopping fs-3 me-1">
+                                        </i>
+                                    </a>
 
                                 </li>
-
+                                <li class="infor-item heart-far">
+                                <a href="" data-bs-toggle="modal" data-bs-target="#myModal">
+                                    Đăng nhập/Đăng ký
+                                </a>
+                                <input type="hidden" id="get_user_ls" value="_temporary">
+                                <div class="modal fade" id="myModal">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                @includeIf('frontend.modal-login')
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                                @endif
 
                             </ul>
                         </div>

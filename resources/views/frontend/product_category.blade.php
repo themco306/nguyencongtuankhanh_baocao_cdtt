@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/form_filter.css') }}">
 @endsection
 @section('footer')
+<script src="{{ asset('js/add2cart.js') }}"></script>
 <script src="{{ asset('js/form_filter.js') }}"></script>
 @endsection
 @section('content')

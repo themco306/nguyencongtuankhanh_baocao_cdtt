@@ -1,5 +1,8 @@
 @extends('layouts.frontend.site')
 @section('title',$title??'Trang chủ')
+@section('footer')
+<script src="{{ asset('js/add2cart.js') }}"></script>
+@endsection
 @section('content')
 <div class="">
 <x-slider-show/>
