@@ -1,15 +1,20 @@
+
 $.get("https://vapi.vnappmob.com/api/province/",
     function (data) {
-
         let province = data.results;
         let province_li='<option value="">---Tỉnh/Thành phố---</option>';
         province.forEach(function(item) {
             province_li+=' <option value="'+item.province_id+'">'+item.province_name +'</option>';
         });
         $('#province').html(province_li).trigger('change');
-
+        let selected_province  = document.getElementById('get_province').value;
+        if (selected_province  !== null) {
+            $('#province').val(selected_province ).trigger('change');
+        }
+        
     }
 );
+
 
 $('#province').on('change', function() {
     let province_id = $(this).val();
@@ -21,6 +26,11 @@ $('#province').on('change', function() {
                 district_li+=' <option value="'+item.district_id+'">'+item.district_name +'</option>';
             });
             $('#district').html(district_li).trigger('change');
+            let selected_district  = document.getElementById('get_district').value;
+            if (selected_district  !== null) {
+                $('#district').val(selected_district ).trigger('change');
+            }
+           
         }
     );
 });
@@ -34,43 +44,27 @@ $('#district').on('change', function() {
                 ward_li+=' <option value="'+item.ward_id+'">'+item.ward_name +'</option>';
             });
             $('#ward').html(ward_li).trigger('change');
+            let selected_ward  = document.getElementById('get_ward').value;
+            if (selected_ward  !== null) {
+                $('#ward').val(selected_ward ).trigger('change');
+            }
+            
         }
     );
 });
-show_address();
-function show_address() {
-    let address = document.getElementById("get-show-address").value;
-    let parts = address.split(", ");
-    let addressfinal = [];
-    
-    $.get("https://vapi.vnappmob.com/api/province/", function (data) {
-        let provinces = data.results;
-        let province = provinces.find(function (item) {
-            return item.province_id == parts[0];
-        });
-        addressfinal.push(province.province_name);
-        $.get(
-            "https://vapi.vnappmob.com/api/province/district/" + parts[0],
-            function (data) {
-                let districts = data.results;
-                let district = districts.find(function (item) {
-                    return item.district_id == parts[1];
-                });
-                addressfinal.push(district.district_name);
-                $.get(
-                    "https://vapi.vnappmob.com/api/province/ward/" + parts[1],
-                    function (data) {
-                        let wards = data.results;
-                        let ward = wards.find(function (item) {
-                            return item.ward_id == parts[2];
-                        });
-                        addressfinal.push(ward.ward_name);
-                        addressfinal.push(parts[3]);
-                        let addressString = addressfinal.join(", ");
-                        document.getElementById("show-address").value = addressString;
-                    }
-                );
-            }
-        );
-    });
-}
+$('#ward').on('change', function() {
+    let province_name = $("#province :selected").text();
+    let district_name = $("#district :selected").text();
+    let ward_name = $("#ward :selected").text();
+    let address = $('#address').val();
+    $('#show-address').val(province_name + ', ' + district_name + ', ' + ward_name + ', ' + address);
+});
+$('#address').on('change', function() {
+    let province_name = $("#province :selected").text();
+    let district_name = $("#district :selected").text();
+    let ward_name = $("#ward :selected").text();
+    let address = $('#address').val();
+    $('#show-address').val(province_name + ', ' + district_name + ', ' + ward_name + ', ' + address);
+});
+
+

@@ -125,8 +125,10 @@ class SiteAccountController extends Controller
 
         ]);
         $user = User::find(Auth::guard('users')->user()->id);
-        $address = $request->get('province') . ', ' . $request->get('district') . ', ' . $request->get('ward') . ', ' . $request->get('address');
-        $user->address = $address;
+        $user->province = $request->province;
+        $user->district = $request->district;
+        $user->ward = $request->ward;
+        $user->address = $request->address;
         $user->updated_at = date('Y-m-d H:i:s');
         $user->updated_by = Auth::guard('users')->user()->id;
         $user->save();

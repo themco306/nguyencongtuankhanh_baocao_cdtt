@@ -61,7 +61,7 @@
             <div class="col-9 right-content">
                 <div class="m-3">
                     <label for="show-address">Địa chỉ giao hàng</label>
-                    <input type="hidden" name="get-show-address" id="get-show-address" value="{{ $user->address }}">
+                    
                     <input class="form-control" type="text" name="show-address" id="show-address" value="" readonly>
                 </div>
                 <div class="m-3">
@@ -70,15 +70,18 @@
                         @csrf
                         <label class="my-3" for="country">Quốc gia/Khu vực*</label>
                         <p id="country">Việt Nam</p>
+                        <input type="hidden" value="{{ $user->province }}" id="get_province">
                         <label class="my-3" for="province">Tỉnh/Thành phố*</label>
                         <select class="form-control " name="province" id="province">
                             <option value="">---Tỉnh/Thành phố---</option>
                         </select>
+                        
                         @if ($errors->has('province'))
                             <div class="text-danger">
                                 {{ $errors->first('province') }}
                             </div>
                         @endif
+                        <input type="hidden" value="{{ $user->district }}" id="get_district">
                         <label class="my-3" for="district">Quận/Huyện*</label>
                         <select class="form-control" name="district" id="district">
                             <option value="">---Quận/Huyện---</option>
@@ -88,6 +91,7 @@
                                 {{ $errors->first('district') }}
                             </div>
                         @endif
+                        <input type="hidden" value="{{ $user->ward }}" id="get_ward">
                         <label class="my-3" for="ward">Phường/Xã*</label>
                         <select class=" form-control" name="ward" id="ward">
                             <option value="">---Phường/Xã---</option>
@@ -99,7 +103,8 @@
                         @endif
                         <label class="my-3" for="address">Địa chỉ*</label>
                         <input class="form-control" type="text" name="address" id="address"
-                            placeholder="Ấp Giá Trên, Đường số 2, số nhà 334,...">
+                            placeholder="Ấp Giá Trên, Đường số 2, số nhà 334,..."
+                            value="{{ old('address',$user->address) }}">
                         @if ($errors->has('address'))
                             <div class="text-danger">
                                 {{ $errors->first('address') }}

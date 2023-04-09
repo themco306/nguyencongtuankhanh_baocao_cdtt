@@ -21,6 +21,7 @@ use App\Http\Controllers\frontend\SiteContactController;
 use App\Http\Controllers\frontend\SiteLoginController;
 use App\Http\Controllers\frontend\SiteCartController;
 use App\Http\Controllers\frontend\SiteAccountController;
+use App\Http\Controllers\frontend\SiteCheckoutController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,8 +67,15 @@ Route::prefix('tai-khoan')->middleware('sitelogin')->group(function () {
 // Route::get('san-pham', [SiteController::class, 'index'])->name('site.lienhe');
 Route::post('them-gio-hang', [SiteCartController::class, 'addcart'])->name('site.addcart');
 Route::get('gio-hang', [SiteCartController::class, 'showcarts'])->middleware('sitelogin')->name('site.cart');
+Route::post('cap-nhat-gio-hang', [SiteCartController::class, 'updatecart'])->name('site.updatecart');
+
 Route::post('xoa-gio-hang', [SiteCartController::class, 'delcart'])->name('site.delcart');
 
+Route::middleware('sitelogin')->group(function () {
+    Route::get('thu-tuc-thanh-toan', [SiteCheckoutController::class, 'index'])->name('site.checkout');
+    Route::post('dat-hang', [SiteCheckoutController::class, 'placeorder'])->name('site.placeorder');
+    Route::get('thong-tin-thanh-toan', [SiteCheckoutController::class, 'ordercomplete'])->name('site.ordercomplete');
+});
 
 Route::get('admin/login', [LoginController::class, 'getlogin'])->name('admin.getlogin');
 Route::post('admin/login', [LoginController::class, 'postlogin'])->name('admin.postlogin');

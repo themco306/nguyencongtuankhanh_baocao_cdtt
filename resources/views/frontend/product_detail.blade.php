@@ -96,7 +96,7 @@
 
                 <div class="text-info my-2">
                 </div>
-                <div class="ms-4 buy-amount" >
+                <div class="ms-4 buy-amount form-qty" >
                     <input type="hidden" value="{{ $product->qty }} " class="qty_max">
                     <button class="minus-btn" >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -104,7 +104,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
                         </svg>
                     </button>
-                    <input type="text" class="amount" name="amount" value="1">
+                    <input type="text" class="amount" id="amount" name="amount" value="1">
                     <button class="plus-btn" >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                             stroke="currentColor" class="w-6 h-6">
@@ -112,7 +112,8 @@
                         </svg>
                     </button>
                 </div>
-                <div class="call-buy color-white text-center rounded py-2">
+                <div class="row call-buy color-white text-center rounded py-2">
+                    <div class="col-12">
                     <input type="hidden" value="{{ route('site.addcart') }}" id='addcart_url'>
                     @if ($product->qty > 0)
                         <button class="btn btn-success" onclick="add2cart(this.value)" value="{{ $product->id }}">
@@ -120,10 +121,24 @@
                         </button>
                     @else
                     <button class="btn btn-success" @disabled(true)>
-                        <p class="my-auto fs-4">Thêm vào giỏ hàng</p>
+                        <p class="my-auto ">Thêm vào giỏ hàng</p>
                     </button>
                     @endif
+                </div>
+                <div class="col-12 mt-3">
+                    <a class="d-none" id="wishlist_product-url{{ $product->id }}" href="{{ route('slug.index',['slug'=>$product->slug]) }}">
+                    </a>
+                        <input type="hidden" id="wishlist_product-name{{ $product->id }}" value="{{ $product->name }}">
+                       <input type="hidden" id="wishlist_product-price{{ $product->id }}" value="{{ number_format($product->price) }}đ">
+                       <img class="img-change d-none img-product img-fluid" src="{{ asset('images/product/'.$product->images[0]->image) }} " id="wishlist_product-image{{ $product->id }}"/>
 
+                    <div class="icon heart btn_wishlist" >
+                        <button class="btn btn-danger " onclick="add_wishlist(this.value)" value="{{ $product->id }}">
+                            Thêm vào yêu thích
+                         </button>
+                          
+                    </div>
+                </div>
 
 
                 </div>

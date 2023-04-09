@@ -1,3 +1,11 @@
+.myaccount .checkout-breadcrumbs a{
+  color: #BCB6B2!important ;
+  transition: color .4s;
+}
+.myaccount .checkout-breadcrumbs a:hover{
+  color: #46423E!important  ;
+  transition: color .4s;
+}
 .myaccount .left-content img{
     border-radius: 50% ;
 }

@@ -31,7 +31,7 @@ class SiteCartController extends Controller
                     $cart->product_id = $product_id;
                     $cart->qty = $qty;
                     $cart->save();
-                    return response()->json(['success' => 'Đã thêm ' . $product_check->name . ' vào giỏ hàng']);
+                    return response()->json(['success' => 'Đã thêm ' . $qty . ' ' . $product_check->name . ' vào giỏ hàng']);
                 }
             } else {
                 return response()->json(['alert' => 'Sản phẩm không tồn tại']);
@@ -40,9 +40,31 @@ class SiteCartController extends Controller
             return response()->json(['alert' => 'Bạn cần đăng nhập trước']);
         }
     }
+    public function updatecart(Request $request)
+    {
+        $product_id = $request->input('product_id');
+        $qty = $request->input('qty');
+
+        if (Auth::guard('users')->check()) {
+            $cart_check = Carts::where([['product_id', $product_id], ['user_id', Auth::guard('users')->user()->id]])->exists();
+            if ($cart_check) {
+                $cart = Carts::where([['product_id', $product_id], ['user_id', Auth::guard('users')->user()->id]])->first();
+                if ($cart->qty == $qty) {
+                    return response()->json(['alert' => 'Số lượng sản phẩm trong kho có hạn']);
+                }
+                $cart->qty = $qty;
+                $cart->updated_at = date('Y-m-d H:i:s');
+                $cart->save();
+                return response()->json(['success' => 'Cập nhật giỏ hàng thành công']);
+            }
+        } else {
+            return response()->json(['alert' => 'Bạn cần đăng nhập trước']);
+        }
+    }
     public function showcarts()
     {
         $title = "Giỏ Hàng";
+
         $carts = Carts::where('user_id', Auth::guard('users')->user()->id)->orderBy('created_at', 'desc')->get();
         return view('frontend.show_carts', compact('title', 'carts'));
     }

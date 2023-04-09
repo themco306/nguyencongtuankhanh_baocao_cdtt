@@ -1,10 +1,5 @@
 function add2cart(id){
-    let cart_qty;
-    if (typeof amount === "undefined") {
-         cart_qty=1;
-    } else {
-        cart_qty=amount;
-    }
+    let cart_qty=document.getElementById('amount').value;
   
    let addcart_url=document.getElementById('addcart_url').value;
    $.ajaxSetup({

@@ -200,8 +200,8 @@
                                     </ul>
                                 </li>
                                 <li class="infor-item heart-far">
-                                    <a href="">
-                                        {{-- {{ route('site.cart') }} --}}
+                                    <a href="{{ route('site.cart') }}">
+                                        
                                         Giỏ hàng<i class="fa-solid fa-cart-shopping fs-3 me-1">
                                         </i>
                                     </a>
@@ -404,10 +404,15 @@
     </script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     @if (session('alert'))
-        <script>
-            swal("Thành công!!",{{ session('alert') }},"success",{ timer: 10000 });
-        </script>
-    @endif
+    <script>
+        swal("Thành công!!","{{ session('alert') }}","success",{ timer: 10000 });
+    </script>
+@endif
+@if (session('status'))
+<script>
+    swal("{{ session('status') }}",{ timer: 10000 });
+</script>
+@endif
     <script src="{{ asset('js/site.js') }}"></script>
     @yield('footer')
 </body>

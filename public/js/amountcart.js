@@ -56,4 +56,30 @@ $(document).ready(function () {
         }
        });
     });
+    $('.changeqty').click(function (e) { 
+        e.preventDefault();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+        });
+        var product_id = $(this).closest(".form-qty").find(".product_id").val();
+        var qty = $(this).closest(".form-qty").find(".amount").val();
+        $.ajax({
+            type: "POST",
+            url: "cap-nhat-gio-hang",
+            data: {
+                'product_id':product_id,
+                'qty':qty,
+            },
+          
+            success: function (response) {
+                
+                window.location.reload();
+
+                
+            }
+        });
+        
+    });
 });
