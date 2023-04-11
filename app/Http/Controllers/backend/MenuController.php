@@ -265,19 +265,20 @@ class MenuController extends Controller
      */
     public function update(MenuUpdateRequest $request, $id)
     {
+        $menu = Menu::find($id);
         $request->validate([
             'name' => [
-                Rule::unique('brand', 'name'),
-                Rule::unique('product', 'name'),
-                Rule::unique('category', 'name'),
-                Rule::unique('topic', 'name'),
-                Rule::unique('post', 'title'),
+                Rule::unique('brand', 'name')->ignore($menu->table_id),
+                Rule::unique('product', 'name')->ignore($menu->table_id),
+                Rule::unique('category', 'name')->ignore($menu->table_id),
+                Rule::unique('topic', 'name')->ignore($menu->table_id),
+                Rule::unique('post', 'title')->ignore($menu->table_id),
                 Rule::unique('menu', 'name')->ignore($id),
             ]
         ], [
             'name.unique' => 'Tên đã được sử dụng. Vui lòng chọn tên khác.'
         ]);
-        $menu = Menu::find($id);
+
         $menu->name = $request->name;
         $menu->link = $request->link;
         $menu->sort_order = $request->sort_order;
@@ -386,6 +387,23 @@ class MenuController extends Controller
         }
 
         $menu->status = 2;
+        $list_type = $this->list_type;
+        $list_type = $list_type[$menu->type];
+        if ($menu->type == 'custom') {
+            $menu->status =  2;
+        } else {
+            $typeTable = Str::studly($menu->type); // Chuyển đổi tên bảng sang dạng StudlyCase
+            if ($typeTable == "Page") {
+                $typeTable = 'Post';
+            }
+
+            $type = DB::table($typeTable)->where('id', $menu->table_id)->first();
+            if (($type->status == 2) || ($type->status == 1)) {
+                $menu->status = 2;
+            } else {
+                return redirect()->route('menu.trash')->with('message', ['type' => 'warning', 'msg' => " $list_type này đang trong thùng rác!!!"]);
+            }
+        }
         $menu->updated_at = date('Y-m-d H:i:s');
         $menu->updated_by = Auth::guard('admin')->user()->id;
         $menu->save();
@@ -404,6 +422,10 @@ class MenuController extends Controller
             $menu->status = ($menu->status == 1) ? 2 : 1;
         } else {
             $typeTable = Str::studly($menu->type); // Chuyển đổi tên bảng sang dạng StudlyCase
+            if ($typeTable == "Page") {
+                $typeTable = 'Post';
+            }
+
             $type = DB::table($typeTable)->where('id', $menu->table_id)->first();
             if (($type->status == 1)) {
                 $menu->status = ($menu->status == 1) ? 2 : 1;

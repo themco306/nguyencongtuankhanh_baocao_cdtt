@@ -60,14 +60,14 @@ class PageController extends Controller
             $filename = $page->slug . '.' . $extension;
             $file->move($path, $filename);
             $page->image = $filename;
-            if ($page->save()) {
-                $link = new Link();
-                $link->slug = $page->slug;
-                $link->table_id = $page->id;
-                $link->type = 'page';
-                $link->save();
-                return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Thêm thành công!']);
-            }
+        }
+        if ($page->save()) {
+            $link = new Link();
+            $link->slug = $page->slug;
+            $link->table_id = $page->id;
+            $link->type = 'page';
+            $link->save();
+            return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Thêm thành công!']);
         }
         return redirect()->route('page.create')->with('message', ['type' => 'danger', 'msg' => 'Thêm thất bại!!']);
     }
@@ -141,7 +141,7 @@ class PageController extends Controller
             if ($page->status == 2) {
                 $page->menu()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             $page->link()->update([
@@ -151,7 +151,7 @@ class PageController extends Controller
                 'name' => $page->title,
 
                 'link' => $page->slug,
-                'updated_by' => Auth::user()->id
+                'updated_by' => Auth::guard('admin')->user()->id
             ]);
             return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Cập nhật thành công!']);
         }
@@ -254,7 +254,7 @@ class PageController extends Controller
             if ($page->status == 0) {
                 $page->menu()->update([
                     'status' => 0,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
@@ -278,7 +278,7 @@ class PageController extends Controller
                     if ($page->status == 0) {
                         $page->menu()->update([
                             'status' => 0,
-                            'updated_by' => Auth::user()->id
+                            'updated_by' => Auth::guard('admin')->user()->id
                         ]);
                     }
                 }
@@ -305,7 +305,7 @@ class PageController extends Controller
             if ($page->status == 2) {
                 $page->menu()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             return redirect()->route('page.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);

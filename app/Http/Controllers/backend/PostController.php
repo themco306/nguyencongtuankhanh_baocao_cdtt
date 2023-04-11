@@ -69,9 +69,9 @@ class PostController extends Controller
             $filename = $post->slug . '.' . $extension;
             $file->move($path, $filename);
             $post->image = $filename;
-            if ($post->save()) {
-                return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Thêm thành công!']);
-            }
+        }
+        if ($post->save()) {
+            return redirect()->route('post.index')->with('message', ['type' => 'success', 'msg' => 'Thêm thành công!']);
         }
         return redirect()->route('post.create')->with('message', ['type' => 'danger', 'msg' => 'Thêm thất bại!!']);
     }

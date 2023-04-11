@@ -8,6 +8,7 @@ use App\Models\Contact;
 use Illuminate\Http\Request;
 
 use App\Http\Requests\ContactStoreRequest;
+use App\Models\Config;
 
 class SiteContactController extends Controller
 {
@@ -18,7 +19,9 @@ class SiteContactController extends Controller
         $list = ['Bạn cần được hỗ trợ?', 'Bạn có ý tưởng?', 'Bộ phận bán hàng'];
         foreach ($list as $l)
             $list_option .= "<option value='" . $l . "'>" . $l . "</option>";
-        return view('frontend.contact', compact('title', 'list_option', 'list'));
+        $config = Config::first();
+
+        return view('frontend.contact', compact('title', 'list_option', 'list', 'config'));
     }
     public function store(ContactStoreRequest $request)
     {

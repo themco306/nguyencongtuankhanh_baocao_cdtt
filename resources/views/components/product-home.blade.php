@@ -8,7 +8,9 @@
             <div class="product my-3">
                 <div class="row">
                     @foreach($list_product as $product)
+                    <div class="col-6 col-md-3">
                             <x-product-item :productitem="$product"/>
+                            </div>
                     @endforeach
                 </div>
             </div>

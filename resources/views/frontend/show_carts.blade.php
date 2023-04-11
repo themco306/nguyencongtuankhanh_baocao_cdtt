@@ -109,7 +109,7 @@
                         <div class="col-4 align-middle ">Giao hàng</div>
                         <div class="col-8">
                             <div class="row text-end">
-                                <p>Đồng giá: <span class="fw-semibold">35K VND</span> </p>
+                                <p>Đồng giá: <span class="fw-semibold">0K VND</span> </p>
                                 <p style="font-size: 80%">Vận chuyển đến <span class="fw-bold">y, Huyện Ba Bể, Bắc
                                         Kạn.</span> </p>
                                 <p style="font-size: 73%; color:#64F111 ">chọn tiến hành thanh toán để đổi địa chỉ</p>
@@ -119,7 +119,7 @@
                     <div style="border-bottom: 2.5px solid #dee2e6 " class="row   py-2">
 
                         <div class="col-4">Tổng</div>
-                        <div class="col-8 text-end fw-bold">{{ number_format($total + 35000) }} VND
+                        <div class="col-8 text-end fw-bold">{{ number_format($total) }} VND
                         </div>
                     </div>
                 </div>

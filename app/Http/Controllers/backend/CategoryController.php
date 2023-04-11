@@ -61,11 +61,11 @@ class CategoryController extends Controller
             if ($category->status == 2) {
                 $category->product()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
                 $category->menu()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
@@ -170,11 +170,11 @@ class CategoryController extends Controller
             if ($category->status == 2) {
                 $category->product()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
                 $category->menu()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             $category->link()->update([
@@ -184,7 +184,7 @@ class CategoryController extends Controller
                 'name' => $category->name,
 
                 'link' => $category->slug,
-                'updated_by' => Auth::user()->id
+                'updated_by' => Auth::guard('admin')->user()->id
             ]);
             return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Cập nhật thành công!']);
         }
@@ -203,7 +203,7 @@ class CategoryController extends Controller
         if ($category->delete()) {
             $category->product()->update([
                 'status' => 0,
-                'updated_by' => Auth::user()->id
+                'updated_by' => Auth::guard('admin')->user()->id
             ]);
             $category->menu()->delete();
             $category->link()->delete();
@@ -224,11 +224,11 @@ class CategoryController extends Controller
             if ($category->status == 0) {
                 $category->product()->update([
                     'status' => 0,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
                 $category->menu()->update([
                     'status' => 0,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             return redirect()->route('category.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
@@ -252,11 +252,11 @@ class CategoryController extends Controller
                     if ($category->status == 0) {
                         $category->product()->update([
                             'status' => 0,
-                            'updated_by' => Auth::user()->id
+                            'updated_by' => Auth::guard('admin')->user()->id
                         ]);
                         $category->menu()->update([
                             'status' => 0,
-                            'updated_by' => Auth::user()->id
+                            'updated_by' => Auth::guard('admin')->user()->id
                         ]);
                     }
                 }
@@ -290,7 +290,7 @@ class CategoryController extends Controller
                     if ($category->delete()) {
                         $category->product()->update([
                             'status' => 0,
-                            'updated_by' => Auth::user()->id
+                            'updated_by' => Auth::guard('admin')->user()->id
                         ]);
                         $category->menu()->delete();
                         $category->link()->delete();

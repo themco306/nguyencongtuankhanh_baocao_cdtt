@@ -55,11 +55,11 @@ class TopicController extends Controller
             if ($topic->status == 2) {
                 $topic->post()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
                 $topic->menu()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
@@ -165,11 +165,11 @@ class TopicController extends Controller
             if ($topic->status == 2) {
                 $topic->post()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
                 $topic->menu()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             $topic->link()->update([
@@ -179,7 +179,7 @@ class TopicController extends Controller
                 'name' => $topic->name,
 
                 'link' => $topic->slug,
-                'updated_by' => Auth::user()->id
+                'updated_by' => Auth::guard('admin')->user()->id
             ]);
             return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Cập nhật thành công!']);
         }
@@ -198,7 +198,7 @@ class TopicController extends Controller
         if ($topic->delete()) {
             $topic->post()->update([
                 'status' => 0,
-                'updated_by' => Auth::user()->id
+                'updated_by' => Auth::guard('admin')->user()->id
             ]);
             $topic->menu()->delete();
             $topic->link()->delete();
@@ -219,11 +219,11 @@ class TopicController extends Controller
             if ($topic->status == 0) {
                 $topic->post()->update([
                     'status' => 0,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
                 $topic->menu()->update([
                     'status' => 0,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             return redirect()->route('topic.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
@@ -249,11 +249,11 @@ class TopicController extends Controller
                     if ($topic->status == 0) {
                         $topic->post()->update([
                             'status' => 0,
-                            'updated_by' => Auth::user()->id
+                            'updated_by' => Auth::guard('admin')->user()->id
                         ]);
                         $topic->menu()->update([
                             'status' => 0,
-                            'updated_by' => Auth::user()->id
+                            'updated_by' => Auth::guard('admin')->user()->id
                         ]);
                     }
                 }
@@ -287,7 +287,7 @@ class TopicController extends Controller
                     if ($topic->delete()) {
                         $topic->post()->update([
                             'status' => 0,
-                            'updated_by' => Auth::user()->id
+                            'updated_by' => Auth::guard('admin')->user()->id
                         ]);
                         $topic->menu()->delete();
                         $topic->link()->delete();

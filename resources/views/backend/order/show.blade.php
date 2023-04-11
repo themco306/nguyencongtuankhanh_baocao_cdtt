@@ -51,13 +51,25 @@
                                 </button>
                             </div>
                             <div class="d-inline-block">
+                                <button class="btn btn-sm btn-success"
+                                name="status"
+                                type="submit" value="thanhtoan" @if (($order->status!=2)&&($order->status!=1))
+                                    @disabled(true)
+                                @endif>
+                                <i class="fa-brands fa-cc-amazon-pay"></i>Đã thanh toán
+                                    @if ($order->status==2)
+                                    <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                    @endif
+                                </button>
+                            </div>
+                            <div class="d-inline-block">
                                 <button class="btn btn-sm btn-info"
                                 name="status"
-                                type="submit" value="donggoi"  @if (($order->status!=2)&&($order->status!=1))
+                                type="submit" value="donggoi"  @if (($order->status!=3)&&($order->status!=2))
                                 @disabled(true)
                             @endif>
                                     <i class="fa-solid fa-box"></i> Đóng gói
-                                    @if ($order->status==2)
+                                    @if ($order->status==3)
                                     <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
                                     @endif
                                 </button>
@@ -65,11 +77,11 @@
                             <div class="d-inline-block">
                                 <button class="btn btn-sm btn-warning"
                                 name="status"
-                                type="submit" value="vanchuyen"  @if (($order->status!=3)&&($order->status!=2))
+                                type="submit" value="vanchuyen"  @if (($order->status!=4)&&($order->status!=3))
                                 @disabled(true)
                             @endif>
                                     <i class="fa-solid fa-plane-up"></i> Vận chuyển
-                                    @if ($order->status==3)
+                                    @if ($order->status==4)
                                     <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
                                     @endif
                                 </button>
@@ -78,22 +90,22 @@
 
                                 <button class="btn btn-sm btn-success"
                                 name="status"
-                                type="submit" value="dagiao"  @if (($order->status!=4)&&($order->status!=3))
+                                type="submit" value="dagiao"  @if (($order->status!=5)&&($order->status!=4))
                                 @disabled(true)
                             @endif>
                                     <i class="fa-solid fa-plane-circle-check"></i>Đã giao
-                                    @if ($order->status==4 )
+                                    @if ($order->status==5 )
                                     <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
                                     @endif
                                 </button>
                             </div>
                             <div class="d-inline-block">
                                 <button class="btn btn-sm btn-danger" name="status"
-                                     type="submit" value="huy"  @if ($order->status==4)
+                                     type="submit" value="huy"  @if ($order->status>=4)
                                      @disabled(true)
                                  @endif>
                                     <i class="fas fa-trash"></i> Hủy
-                                    @if ($order->status==5)
+                                    @if ($order->status==6)
                                     <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
                                     @endif
                                 </button>
@@ -208,13 +220,25 @@
                                 </button>
                             </div>
                             <div class="d-inline-block">
+                                <button class="btn btn-sm btn-success"
+                                name="status"
+                                type="submit" value="thanhtoan" @if (($order->status!=2)&&($order->status!=1))
+                                    @disabled(true)
+                                @endif>
+                                <i class="fa-brands fa-cc-amazon-pay"></i>Đã thanh toán
+                                    @if ($order->status==2)
+                                    <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
+                                    @endif
+                                </button>
+                            </div>
+                            <div class="d-inline-block">
                                 <button class="btn btn-sm btn-info"
                                 name="status"
-                                type="submit" value="donggoi"  @if (($order->status!=2)&&($order->status!=1))
+                                type="submit" value="donggoi"  @if (($order->status!=3)&&($order->status!=2))
                                 @disabled(true)
                             @endif>
                                     <i class="fa-solid fa-box"></i> Đóng gói
-                                    @if ($order->status==2)
+                                    @if ($order->status==3)
                                     <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
                                     @endif
                                 </button>
@@ -222,11 +246,11 @@
                             <div class="d-inline-block">
                                 <button class="btn btn-sm btn-warning"
                                 name="status"
-                                type="submit" value="vanchuyen"  @if (($order->status!=3)&&($order->status!=2))
+                                type="submit" value="vanchuyen"  @if (($order->status!=4)&&($order->status!=3))
                                 @disabled(true)
                             @endif>
                                     <i class="fa-solid fa-plane-up"></i> Vận chuyển
-                                    @if ($order->status==3)
+                                    @if ($order->status==4)
                                     <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
                                     @endif
                                 </button>
@@ -235,22 +259,22 @@
 
                                 <button class="btn btn-sm btn-success"
                                 name="status"
-                                type="submit" value="dagiao"  @if (($order->status!=4)&&($order->status!=3))
+                                type="submit" value="dagiao"  @if (($order->status!=5)&&($order->status!=4))
                                 @disabled(true)
                             @endif>
                                     <i class="fa-solid fa-plane-circle-check"></i>Đã giao
-                                    @if ($order->status==4 )
+                                    @if ($order->status==5 )
                                     <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
                                     @endif
                                 </button>
                             </div>
                             <div class="d-inline-block">
                                 <button class="btn btn-sm btn-danger" name="status"
-                                     type="submit" value="huy"  @if ($order->status==4)
+                                     type="submit" value="huy"  @if ($order->status>=4)
                                      @disabled(true)
                                  @endif>
                                     <i class="fas fa-trash"></i> Hủy
-                                    @if ($order->status==5)
+                                    @if ($order->status==6)
                                     <i class="fa-solid fa-circle-check fa-beat" style="color: #07e921;"></i>
                                     @endif
                                 </button>

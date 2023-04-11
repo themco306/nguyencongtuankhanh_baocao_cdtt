@@ -40,8 +40,35 @@
     </div>
     <div class="col-9 right-content">
        <div class="m-3">
-        <p> Xin chào <span style="font-weight: bold">{{ $user->name }} </span>(không phải tài khoản  <span style="font-weight: bold">{{ $user->name }} </span>? Hãy  <a title="Bấm vào để đăng xuất ngay lập tức" href="{{ route('site.logout') }}">thoát ra</a> và đăng nhập vào tài khoản của bạn)</p>
-<p>Từ trang quản lý tài khoản bạn có thể xem <a href="{{ route('account.order') }}"> đơn hàng mới</a>, quản lý <a href="{{ route('account.address') }}"> địa chỉ giao hàng và thanh toán</a>, <a href="{{ route('account.edit') }}"> sửa mật khẩu và thông tin tài khoản</a>.</p>
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 15%;" scope="col">Đơn hàng</th>
+                    <th style="width: 15%;" scope="col">Ngày</th>
+                    <th style="width: 25%;" scope="col">Tình trạng</th>
+                    <th style="width: 35%;" scope="col">Tổng</th>
+                    <th style="width: 10%;" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($order as $item)
+                    <tr>
+                        <td style="color:#777573" class="text-start ">#{{ $item->code }}</td>
+                        <td>{{ $item->exportdate }}</td>
+                        <td>
+                            <a href="{{ route('site.ordercomplete',['code'=>$item->code]) }}" class='text-{{   $list_status[$item->status]['type'] }}'>
+                                {{   $list_status[$item->status]['text'] }}
+                            </a>
+                        </td>
+                        <td><span class="fw-bold">{{ number_format($item->a_total_price) }} VND</span> cho {{ $item->a_total_qty }} mục</td>
+                        <td class="text-center"><a href="" class="">Xem</a></td>
+                    </tr>
+                @endforeach
+                
+
+
+            </tbody>
+        </table>
          </div>
 
 

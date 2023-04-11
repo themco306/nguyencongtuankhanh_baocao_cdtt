@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Orderdetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -25,6 +26,7 @@ class OrderController extends Controller
         $list_status = [
             ['type' => 'secondary', 'text' => 'Đơn hàng mới'],
             ['type' => 'primary', 'text' => 'Đã xác nhận'],
+            ['type' => 'success', 'text' => 'Đã thanh toán'],
             ['type' => 'info', 'text' => 'Đóng gói'],
             ['type' => 'warning', 'text' => 'Vận chuyển'],
             ['type' => 'success', 'text' => 'Đã giao'],
@@ -50,25 +52,29 @@ class OrderController extends Controller
                         $order->status = 1;
                         break;
                     }
-                case 'donggoi': {
+                case 'thanhtoan': {
                         $order->status = 2;
                         break;
                     }
-                case 'vanchuyen': {
+                case 'donggoi': {
                         $order->status = 3;
                         break;
                     }
-                case 'dagiao': {
+                case 'vanchuyen': {
                         $order->status = 4;
                         break;
                     }
-                case 'huy': {
+                case 'dagiao': {
                         $order->status = 5;
+                        break;
+                    }
+                case 'huy': {
+                        $order->status = 6;
                         break;
                     }
             }
             $order->updated_at = date('Y-m-d H:i:m');
-            $order->updated_by = 1;
+            $order->updated_by = Auth::guard('admin')->user()->id;
             $order->save();
             return redirect()->route('order.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công']);
         }
@@ -104,27 +110,46 @@ class OrderController extends Controller
         return view('backend.order.show', compact('order',  'title', 'list_orderdetail', 'total', 'user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    // public function destroy($id)
+    // {
+    //     $order = Order::find($id);
+    //     if ($order == null) {
+    //         return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại!']);
+    //     }
+    //     if ($order->status != 6) {
+    //         return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Bạn cần hủy đơn hàng trước khi xóa']);
+    //     }
+    //     if ($order->delete()) {
+    //         $order->orderdetail()->delete();
+    //         return redirect()->route('order.index')->with('message', ['type' => 'success', 'msg' => 'Xóa vĩnh viễn thành công!']);
+    //     }
+    //     return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Xóa thất bại!']);
+    // }
+    public function trash_multi(Request $request)
     {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        if (isset($request['DELETE_ALL'])) {
+            if (isset($request->checkId)) {
+                $list_id = $request->input('checkId');
+                $count_max = sizeof($list_id);
+                $count = 0;
+                foreach ($list_id as $id) {
+                    $order = Order::find($id);
+                    if ($order == null) {
+                        return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => "Có mẫu tin không tồn tại!&&Đã xóa $count/$count_max !"]);
+                    }
+                    $order->status = 6;
+                    $order->updated_at = date('Y-m-d H:i:m');
+                    $order->updated_by = Auth::guard('admin')->user()->id;
+                    if ($order->save()) {
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
+                        $count++;
+                    }
+                }
+                return redirect()->route('order.index')->with('message', ['type' => 'success', 'msg' => "Xóa thành công $count/$count_max !"]);
+            } else {
+                return redirect()->route('order.index')->with('message', ['type' => 'danger', 'msg' => 'Chưa chọn mẫu tin!']);
+            }
+        }
     }
 }

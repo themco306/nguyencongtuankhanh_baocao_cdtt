@@ -25,7 +25,7 @@ class PostUpdateRequest extends FormRequest
             'title' => 'required|string|max:255',
             'metadesc' => 'required|string|max:255',
             'metakey' => 'required|string|max:255',
-            'detail' => 'required|string|max:1500',
+            'detail' => 'required|string|max:25000',
             'topic_id' => 'required',
             'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
 

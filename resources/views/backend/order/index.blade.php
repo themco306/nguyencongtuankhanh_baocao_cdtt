@@ -26,7 +26,7 @@
     <section class="content">
 
       <!-- Default box -->
-        <form action="{{ route('product.delete_multi') }}" name="form1" method="post"  >
+        <form action="{{ route('order.trash_multi') }}" name="form1" method="post"  >
             @csrf
         
             <!-- Default box -->
@@ -35,7 +35,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                <i class="fas fa-trash"></i> Hủy đã chọn
+                                <i class="fas fa-trash"></i> Xóa đã chọn
                             </button>
                         </div>
                         
@@ -62,7 +62,7 @@
                         </thead>
                         <tbody>
                            @foreach ($order as $row)
-                            @if ($row->status != 6)
+                            @if ($row->status <6)
                                 
                             
                            
@@ -102,10 +102,6 @@
                                         href="{{ route('order.show',['order'=> $row->id]) }}">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a class="btn btn-sm btn-danger"
-                                        href="{{ route('product.delete',['product'=> $row->id]) }}">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
                                 </td>
                                 <td class="text-center" style="width:20px">
                                     {{ $row->id }}
@@ -121,7 +117,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <button class="btn btn-sm btn-danger" type="submit" name="DELETE_ALL">
-                                <i class="fas fa-trash"></i> Hủy đã chọn
+                                <i class="fas fa-trash"></i> Xóa đã chọn
                             </button>
                         </div>
                         

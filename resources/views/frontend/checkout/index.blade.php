@@ -38,6 +38,7 @@
                 <div class="p-3 ">
                     <h4 class="fs-6"> Thông tin thanh toán</h4>
                     <div class="row">
+                        <p class="text-warning m-1">Nếu bạn đặt hàng cho chính mình thì không cần phải thay đổi thông tin</p>
                         <div class="col-12 my-2">
                             <label for="name">Họ và tên( <span style="font-weight: 100">bạn nên chọn tên gọi dễ đọc để
                                     người vận chuyển gọi bạn khi cần</span> )</label>
@@ -164,12 +165,12 @@
                         </tr>
                         <tr>
                             <td class="align-middle text-start">Giao hàng</td>
-                            <td class="text-end">Đồng giá: <span class="fw-bold text-end"> {{ number_format(35000) }} VNĐ
+                            <td class="text-end">Đồng giá: <span class="fw-bold text-end"> {{ number_format(0) }} VNĐ
                                 </span></td>
                         </tr>
                         <tr>
                             <td class="text-start">Tổng</td>
-                            <td class="fw-bold text-end">{{ number_format($total + 35000) }} VNĐ</td>
+                            <td class="fw-bold text-end">{{ number_format($total ) }} VNĐ</td>
                         </tr>
 
 

@@ -18,7 +18,7 @@
     <div class=" layout-product container body">
         <div class="row mb-3">
             <div class="col-12">
-                Trang chu
+                <h4>{{ $product->name }}</h4>
             </div>
             <div class="col-md-5 my-2">
                 <section id="main-carousel" class="splide"
@@ -169,7 +169,9 @@
             <div class="product my-3">
                 <div class="row">
                     @foreach ($same_products as $product)
+                    <div class="col-6 col-md-3">
                         <x-product-item :productitem="$product" />
+                    </div>
                     @endforeach
                 </div>
             </div>

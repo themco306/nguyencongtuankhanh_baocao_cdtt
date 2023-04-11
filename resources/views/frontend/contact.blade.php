@@ -69,10 +69,9 @@
     <div class="row mt-5">
         <div class="col-md-6">
             <h4>Shop Chuyên Bán Mô Hình Figure</h4>
-
-            <p>Địa chỉ: </p>
-            <p>Đường dây nóng: </p>
-            <p>Email: </p>
+            <p>Đường dây nóng:{{ $config->phone  }} </p>
+            <p>Email:{{ $config->email  }} </p>
+            <p><a href="{{ $config->facebook }}">Facebook</a></p>
         </div>
         <div class="col-md-6">
             <iframe

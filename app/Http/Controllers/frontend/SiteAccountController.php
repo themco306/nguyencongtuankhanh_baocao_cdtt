@@ -102,7 +102,40 @@ class SiteAccountController extends Controller
     public function order()
     {
         $user = Auth::guard('users')->user();
-        return view('frontend.customer.myaccount-order', compact('user'));
+        $order = $user->order;
+
+        $orderdetail = array();
+        foreach ($order as $item) {
+            $orderdetail[] = $item->orderdetail;
+        }
+
+        $a_total_price = array();
+        $a_total_qty = array();
+        foreach ($orderdetail as $items) {
+            $total_price = 0;
+            $total_qty = 0;
+            foreach ($items as $item) {
+                $total_price += $item->amount;
+                $total_qty += $item->qty;
+            }
+            $a_total_price[] = $total_price;
+            $a_total_qty[] = $total_qty;
+        }
+        $i = 0;
+        foreach ($order as $item) {
+            $item['a_total_price'] = $a_total_price[$i];
+            $item['a_total_qty'] = $a_total_qty[$i++];
+        }
+        $list_status = [
+            ['type' => 'secondary', 'text' => 'Chưa xác nhận'],
+            ['type' => 'primary', 'text' => 'Đã xác nhận, chưa thanh toán'],
+            ['type' => 'success', 'text' => 'Đã thanh toán'],
+            ['type' => 'info', 'text' => 'Đóng gói'],
+            ['type' => 'warning', 'text' => 'Vận chuyển'],
+            ['type' => 'success', 'text' => 'Đã giao'],
+            ['type' => 'danger', 'text' => 'Đã hủy'],
+        ];
+        return view('frontend.customer.myaccount-order', compact('user', 'order', 'list_status'));
     }
     public function address()
     {

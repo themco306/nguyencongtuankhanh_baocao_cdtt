@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\Product;
 use App\Models\Product_sale;
 use App\Models\Category;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -25,9 +26,9 @@ class SiteController extends Controller
                 if ($product != null) {
                     return $this->product_detail($product);
                 } else {
-                    $post = Post::where([['status', '=', '1'], ['slug', '=', $slug], ['type', '=', 'post']])->first();
-                    if ($post != null) {
-                        return $this->post_detail($post);
+                    $post_single = Post::where([['status', '=', '1'], ['slug', '=', $slug], ['type', '=', 'post']])->first();
+                    if ($post_single != null) {
+                        return $this->post_detail($post_single);
                     } else {
                         return $this->error_404($slug);
                     }
@@ -58,13 +59,25 @@ class SiteController extends Controller
             ['parent_id', '=', 0],
             ['status', '=', 1]
         ])->orderBy('sort_order', 'desc')->get();
-        return view('frontend.home', compact('list_category', 'title'));
+        $new_product = Product::with(['sale' => function ($query) {
+            $query->whereRaw('? between date_begin and date_end', [now()]);
+        }])->where('status', '1')->Orderby('created_at', 'desc')->take(4)->get();
+        return view('frontend.home', compact('list_category', 'title', 'new_product'));
+    }
+    public function all_product()
+    {
+        $list_category = Category::where('status', '1')->orderBy('created_at', 'desc')->get();
+        $list_brand = Brand::where('status', '1')->orderBy('created_at', 'desc')->get();
+        $list_product = Product::with(['sale' => function ($query) {
+            $query->whereRaw('? between date_begin and date_end', [now()]);
+        }])->where('status', '1')->Orderby('created_at', 'desc')->paginate(1);
+        return view('frontend.all_product', compact('list_product', 'list_category', 'list_brand'));
     }
     protected function product_category($slug)
     {
         $cat = Category::where([['status', '=', '1'], ['slug', '=', $slug]])->first();
-        $list_category = Category::where('status', '1')->orderBy('created_at', 'desc')->get();
-        $list_brand = Brand::where('status', '1')->orderBy('created_at', 'desc')->get();
+        // $list_category = Category::where('status', '1')->orderBy('created_at', 'desc')->get();
+        // $list_brand = Brand::where('status', '1')->orderBy('created_at', 'desc')->get();
         $min_price = 0;
         $max_price = 1000000;
         $list_product = Product::with(['sale' => function ($query) {
@@ -77,27 +90,48 @@ class SiteController extends Controller
                 })->orWhereBetween('price', [$min_price, $max_price]);
             })
             ->orderBy('created_at', 'desc')
-            ->take(12)
-            ->get();
-        return view('frontend.product_category', compact('list_product', 'cat', 'list_category', 'list_brand', 'min_price', 'max_price'));
+            ->paginate(1);
+        return view('frontend.product_category', compact('list_product', 'cat', 'min_price', 'max_price'));
     }
     protected function product_brand($slug)
     {
         $brand = Brand::where([['status', '=', '1'], ['slug', '=', $slug]])->first();
-        $list_category = Category::where('status', '1')->orderBy('created_at', 'desc')->get();
-        $list_brand = Brand::where('status', '1')->orderBy('created_at', 'desc')->get();
+        // $list_category = Category::where('status', '1')->orderBy('created_at', 'desc')->get();
+        // $list_brand = Brand::where('status', '1')->orderBy('created_at', 'desc')->get();
         $list_product = Product::with(['sale' => function ($query) {
             $query->whereRaw('? between date_begin and date_end', [now()]);
-        }])->where('status', '=', '1')->whereIn('brand_id', [$brand->id])->orderBy('created_at', 'desc')->take(24)->paginate(12);
-        return view('frontend.product_brand', compact('list_product', 'brand', 'list_category', 'list_brand'));
+        }])->where('status', '=', '1')->whereIn('brand_id', [$brand->id])->orderBy('created_at', 'desc')->paginate(1);
+        return view('frontend.product_brand', compact('list_product', 'brand'));
+    }
+    public function all_post()
+    {
+        $list_post = Post::where([
+            ['type', '=', 'post'],
+            ['status', '=', '1']
+        ])->orderBy('created_at', 'desc')->paginate(1);
+        return view('frontend.all_post', compact('list_post'));
     }
     protected function post_topic($slug)
     {
-        return view('frontend.post_topic');
+
+        $topic = Topic::where([['status', '1'], ['slug', $slug]])->first();
+        $list_post = Post::where([
+            ['type', '=', 'post'],
+            ['status', '=', '1'],
+            ['topic_id', '=', $topic->id]
+        ])->orderBy('created_at', 'desc')->paginate(1);
+        return view('frontend.post_topic', compact('list_post', 'topic'));
+    }
+    protected function post_detail($post_single)
+    {
+        $topic = $post_single->topic;
+        $list_post = Post::where([['status', '1'], ['topic_id', $topic->id], ['id', '!=', $post_single->id]])->Orderby('created_at', 'desc')->take(4)->get();
+        return view('frontend.post_detail', compact('list_post', 'post_single'));
     }
     protected function post_page($slug)
     {
-        return view('frontend.post_page');
+        $page = Post::where([['slug', '=', $slug], ['status', '=', 1]])->first();
+        return view('frontend.post_page', compact('page'));
     }
     protected function product_detail($product)
     {
@@ -113,10 +147,7 @@ class SiteController extends Controller
         ])->orderBy('created_at', 'desc')->take(4)->get();
         return view('frontend.product_detail', compact('product', 'same_products'));
     }
-    protected function post_detail($post)
-    {
-        return view('frontend.post_detail');
-    }
+
     protected function error_404($slug)
     {
         return view('errors.404', compact('slug'));

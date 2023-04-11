@@ -38,7 +38,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [SiteController::class, 'index'])->name('site.index');
 Route::get('lien-he', [SiteContactController::class, 'index'])->name('site.lienhe');
 Route::post('lien-he', [SiteContactController::class, 'store'])->name('site.postlienhe');
-
+Route::get('san-pham', [SiteController::class, 'all_product'])->name('site.all_product');
+Route::get('bai-viet', [SiteController::class, 'all_post'])->name('site.all_post');
 Route::post('dang-ky', [SiteLoginController::class, 'register'])->name('site.register');
 Route::get('dang-nhap', [SiteLoginController::class, 'getlogin'])->name('site.getlogin');
 Route::post('dang-nhap', [SiteLoginController::class, 'postlogin'])->name('site.postlogin');
@@ -57,6 +58,7 @@ Route::get('yeu-thich', [SiteAccountController::class, 'temp_wishlist'])->name('
 Route::get('tai-khoan', [SiteAccountController::class, 'myaccount'])->middleware('sitelogin')->name('site.myaccount');
 Route::prefix('tai-khoan')->middleware('sitelogin')->group(function () {
     Route::get('/don-hang', [SiteAccountController::class, 'order'])->name('account.order');
+    Route::get('/xem-don-hang', [SiteAccountController::class, 'orderdetail'])->name('account.orderdetail');
     Route::get('/chi-tiet', [SiteAccountController::class, 'edit'])->name('account.edit');
     Route::post('/chi-tiet', [SiteAccountController::class, 'postedit']);
     Route::get('/yeu-thich', [SiteAccountController::class, 'wishlist'])->name('account.wishlist');
@@ -64,7 +66,7 @@ Route::prefix('tai-khoan')->middleware('sitelogin')->group(function () {
     Route::post('/dia-chi', [SiteAccountController::class, 'postaddress']);
 });
 // Route::get('tai-khoan', [SiteAccountController::class, 'logout'])->name('site.logout');
-// Route::get('san-pham', [SiteController::class, 'index'])->name('site.lienhe');
+
 Route::post('them-gio-hang', [SiteCartController::class, 'addcart'])->name('site.addcart');
 Route::get('gio-hang', [SiteCartController::class, 'showcarts'])->middleware('sitelogin')->name('site.cart');
 Route::post('cap-nhat-gio-hang', [SiteCartController::class, 'updatecart'])->name('site.updatecart');
@@ -74,7 +76,11 @@ Route::post('xoa-gio-hang', [SiteCartController::class, 'delcart'])->name('site.
 Route::middleware('sitelogin')->group(function () {
     Route::get('thu-tuc-thanh-toan', [SiteCheckoutController::class, 'index'])->name('site.checkout');
     Route::post('dat-hang', [SiteCheckoutController::class, 'placeorder'])->name('site.placeorder');
-    Route::get('thong-tin-thanh-toan', [SiteCheckoutController::class, 'ordercomplete'])->name('site.ordercomplete');
+    Route::get('thong-tin-thanh-toan/{code}', [SiteCheckoutController::class, 'ordercomplete'])->name('site.ordercomplete');
+    Route::get('xac-nhan-don-hang/{id}/{accept_token}', [SiteCheckoutController::class, 'orderaccept'])->name('site.orderaccept');
+    Route::post('thanh-toan-momo-atm', [SiteCheckoutController::class, 'momo_payment'])->name('site.momo_payment');
+    Route::post('thanh-toan-vnpay', [SiteCheckoutController::class, 'vnpay_payment'])->name('site.vnpay_payment');
+    Route::get('thanh-toan-thanh-cong/{code}', [SiteCheckoutController::class, 'success_payment'])->name('site.success_payment');
 });
 
 Route::get('admin/login', [LoginController::class, 'getlogin'])->name('admin.getlogin');
@@ -133,11 +139,8 @@ Route::prefix('admin')->middleware('adminlogin')->group(function () {
 
     Route::prefix('order')->group(function () {
         Route::get('status/{order}', [OrderController::class, 'status'])->name('order.status');
-        Route::get('delete/{order}', [OrderController::class, 'delete'])->name('order.delete');
-        Route::get('restore/{order}', [OrderController::class, 'restore'])->name('order.restore');
         Route::get('destroy/{order}', [OrderController::class, 'destroy'])->name('order.destroy');
         Route::post('trash_multi', [OrderController::class, 'trash_multi'])->name('order.trash_multi');
-        Route::post('delete_multi', [OrderController::class, 'delete_multi'])->name('order.delete_multi');
     });
     //
     //PostController================================================================================================

@@ -21,6 +21,6 @@ class Brand extends Model
     }
     public function link(): HasOne
     {
-        return $this->hasMany(Link::class, 'table_id')->where('type', '=', 'brand');
+        return $this->hasOne(Link::class, 'table_id')->where('type', '=', 'brand');
     }
 }

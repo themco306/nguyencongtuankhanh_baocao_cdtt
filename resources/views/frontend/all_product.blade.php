@@ -11,12 +11,12 @@
     <section class="body container mt-4 ">
         <div class="row ">
         <div class="col-md-3 form_filter">
-            <x-site-filter :slugselect="$cat->slug"/>
+            <x-site-filter :slugselect="1"/>
         </div>
         <div class="product_cate col-md-9 ">
 
             <div id="" class="h4 pb-2 mb-4  border-bottom border-danger fst-italic">
-                <a class="title" href=""> {{ $cat->name }}</a>
+                <a class="title" > Tất Cả Sản Phẩm</a>
             </div>
     
             <div class="product my-3">
@@ -31,7 +31,7 @@
             <div class="text-center">  {!! $list_product->onEachSide(5)->links() !!}</div>
     </div>
 </div>
-
+        
 
     </section>
 

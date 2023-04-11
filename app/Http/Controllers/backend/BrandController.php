@@ -157,18 +157,18 @@ class BrandController extends Controller
             if ($brand->status == 2) {
                 $brand->product()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
                 $brand->menu()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             $brand->link()->update(['slug' => $brand->slug]);
             $brand->menu()->update([
                 'name' => $brand->name,
                 'link' => $brand->slug,
-                'updated_by' => Auth::user()->id
+                'updated_by' => Auth::guard('admin')->user()->id
             ]);
             return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Cập nhật thành công!']);
         }
@@ -188,7 +188,7 @@ class BrandController extends Controller
 
             $brand->product()->update([
                 'status' => 0,
-                'updated_by' => Auth::user()->id
+                'updated_by' => Auth::guard('admin')->user()->id
             ]);
             $brand->menu()->delete();
             $brand->link()->delete();
@@ -229,7 +229,7 @@ class BrandController extends Controller
                         }
                         $brand->product()->update([
                             'status' => 0,
-                            'updated_by' => Auth::user()->id
+                            'updated_by' => Auth::guard('admin')->user()->id
                         ]);
                         $brand->menu()->delete();
                         $brand->link()->delete();
@@ -278,11 +278,11 @@ class BrandController extends Controller
             if ($brand->status == 0) {
                 $brand->product()->update([
                     'status' => 0,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
                 $brand->menu()->update([
                     'status' => 0,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Xóa thành công!&& vào thùng rác để xem!!!']);
@@ -307,11 +307,11 @@ class BrandController extends Controller
                 if ($brand->status == 0) {
                     $brand->product()->update([
                         'status' => 0,
-                        'updated_by' => Auth::user()->id
+                        'updated_by' => Auth::guard('admin')->user()->id
                     ]);
                     $brand->menu()->update([
                         'status' => 0,
-                        'updated_by' => Auth::user()->id
+                        'updated_by' => Auth::guard('admin')->user()->id
                     ]);
                 }
                 $count++;
@@ -337,11 +337,11 @@ class BrandController extends Controller
             if ($brand->status == 2) {
                 $brand->product()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
                 $brand->menu()->update([
                     'status' => 2,
-                    'updated_by' => Auth::user()->id
+                    'updated_by' => Auth::guard('admin')->user()->id
                 ]);
             }
             return redirect()->route('brand.index')->with('message', ['type' => 'success', 'msg' => 'Thay đổi trạng thái thành công!']);
