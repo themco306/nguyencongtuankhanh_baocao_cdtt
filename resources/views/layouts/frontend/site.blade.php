@@ -43,8 +43,8 @@
                             <img src="{{ asset('images/logo_web2.jpg') }}" alt="logo_web.jpg">
                         </div>
                         <div class="search align-self-center mr-3 ">
-                            <form class="search-form">
-                                <input type="text" placeholder="Tìm kiếm.......">
+                            <form class="search-form" action="">
+                                <input type="text" name="q" placeholder="Tìm kiếm.......">
                                 <input type="submit" value="Tìm">
                             </form>
                         </div>
@@ -311,6 +311,30 @@
 </script>
 @endif
     <script src="{{ asset('js/site.js') }}"></script>
+    <script type="text/javascript">
+   function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : '?' + name + '=' + decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+    $(document).ready(function () {
+    var active = getParameterByName('ten') || getParameterByName('gia');
+
+    $('#select-sort option[value="' + active + '"]').attr('selected', 'selected');
+});
+    $('.select-sort').change(function (e) { 
+        e.preventDefault();
+        var value= $(this).find(':selected').val();
+        // alert(value);
+        if(value!=0){
+            var url=value;
+            window.location.replace(url);
+        }else{
+            window.location.replace("#");
+        }
+    });
+    </script>
     @yield('footer')
 </body>
 

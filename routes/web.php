@@ -22,6 +22,7 @@ use App\Http\Controllers\frontend\SiteLoginController;
 use App\Http\Controllers\frontend\SiteCartController;
 use App\Http\Controllers\frontend\SiteAccountController;
 use App\Http\Controllers\frontend\SiteCheckoutController;
+use App\View\Components\SiteSearch;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,6 +41,7 @@ Route::get('lien-he', [SiteContactController::class, 'index'])->name('site.lienh
 Route::post('lien-he', [SiteContactController::class, 'store'])->name('site.postlienhe');
 Route::get('san-pham', [SiteController::class, 'all_product'])->name('site.all_product');
 Route::get('bai-viet', [SiteController::class, 'all_post'])->name('site.all_post');
+
 Route::post('dang-ky', [SiteLoginController::class, 'register'])->name('site.register');
 Route::get('dang-nhap', [SiteLoginController::class, 'getlogin'])->name('site.getlogin');
 Route::post('dang-nhap', [SiteLoginController::class, 'postlogin'])->name('site.postlogin');

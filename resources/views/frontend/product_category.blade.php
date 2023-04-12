@@ -15,8 +15,13 @@
         </div>
         <div class="product_cate col-md-9 ">
 
-            <div id="" class="h4 pb-2 mb-4  border-bottom border-danger fst-italic">
+            <div id="" class="h4 row pb-2 mb-4  border-bottom border-danger fst-italic">
+                <div class="col-9">
                 <a class="title" href=""> {{ $cat->name }}</a>
+            </div>
+                <div class="col-3 text-end">
+                    @includeIf('frontend.select-sort')
+                </div>
             </div>
     
             <div class="product my-3">
@@ -28,7 +33,7 @@
                     @endforeach
                 </div>
             </div>
-            <div class="text-center">  {!! $list_product->onEachSide(5)->links() !!}</div>
+            <div class="text-center">  {!! $list_product->appends(['gia' => request('gia'), 'ten' => request('ten')])->onEachSide(5)->links() !!}</div>
     </div>
 </div>
 
