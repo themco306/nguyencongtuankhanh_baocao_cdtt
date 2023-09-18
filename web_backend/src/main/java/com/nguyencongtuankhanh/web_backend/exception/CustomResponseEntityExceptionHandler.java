@@ -16,4 +16,21 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         CategoryExceptionResponse exceptionResponse = new CategoryExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
     }
+
+     @ExceptionHandler(FileNotFoundException.class)
+    public final ResponseEntity<Object> handlefileNotFoundException(FileNotFoundException ex,WebRequest request){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+    }
+
+     @ExceptionHandler(FileStorageException.class)
+    public final ResponseEntity<Object> handlefileStorageException(FileStorageException ex,WebRequest request){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(BrandException.class)
+    public final ResponseEntity<Object> handlebrandException(BrandException ex,WebRequest request){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+    }
 }

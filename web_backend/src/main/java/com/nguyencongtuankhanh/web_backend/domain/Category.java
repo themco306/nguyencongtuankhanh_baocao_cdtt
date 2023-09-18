@@ -28,38 +28,38 @@ public class Category {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "slug", nullable = false)
-    private String slug;
+    // @Column(name = "slug", nullable = false)
+    // private String slug;
 
-    @Column(name = "parent_id", nullable = false, columnDefinition = "int default 0")
-    private int parentId;
+    // @Column(name = "parent_id", nullable = false, columnDefinition = "int default 0")
+    // private int parentId;
 
-    @Column(name = "sort_order", nullable = false)
-    private int sortOrder;
+    // @Column(name = "sort_order", nullable = false)
+    // private int sortOrder;
 
-    @Column(name = "level")
-    private Integer level;
+    // @Column(name = "level")
+    // private Integer level;
 
-    @Column(name = "image")
-    private String image;
+    // @Column(name = "image")
+    // private String image;
 
-    @Column(name = "metakey", nullable = false)
-    private String metaKey;
+    // @Column(name = "metakey", nullable = false)
+    // private String metaKey;
 
-    @Column(name = "metadesc", nullable = false)
-    private String metaDesc;
+    // @Column(name = "metadesc", nullable = false)
+    // private String metaDesc;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    // @Column(name = "created_at", nullable = false)
+    // private LocalDateTime createdAt;
 
-    @Column(name = "created_by", nullable = false, columnDefinition = "tinyint default 0")
-    private int createdBy;
+    // @Column(name = "created_by", nullable = false, columnDefinition = "tinyint default 0")
+    // private int createdBy;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    // @Column(name = "updated_at")
+    // private LocalDateTime updatedAt;
 
-    @Column(name = "updated_by", columnDefinition = "tinyint default 0")
-    private int updatedBy;
+    // @Column(name = "updated_by", columnDefinition = "tinyint default 0")
+    // private int updatedBy;
 
     @Column(name = "status", nullable = false, columnDefinition = "tinyint default 2")
     private int status;

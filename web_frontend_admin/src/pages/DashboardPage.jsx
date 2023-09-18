@@ -4,7 +4,7 @@ import { MdOutlineCategory } from "react-icons/md";
 import { AiOutlineHome } from "react-icons/ai"; 
 
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './DashboardPage.css';
 import {
   MenuFoldOutlined,
@@ -13,11 +13,13 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme, Row, Col, Avatar } from 'antd';
+import { Layout, Menu, Button, theme, Row, Col, Avatar, message } from 'antd';
 import { BrowserRouter, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "../components/home/Home";
 import AddOrEditCategory from "../components/categories/AddOrEditCategory";
 import ListCategory from "../components/categories/ListCategory";
+import { useDispatch, useSelector } from "react-redux";
+import { setError, setMessage } from "../redux/actions/commonAction";
 const { Header, Sider, Content } = Layout;
 
 // const App: React.FC = () => {
@@ -29,6 +31,19 @@ function DashboardPage() {
     const [collapsed, setCollapsed] = useState(false);
 
     const navigate=useNavigate();
+    const msg=useSelector((state)=>state.commonReducer.message)
+    const err=useSelector((state)=>state.commonReducer.error)
+    const dispatch=useDispatch();
+    useEffect(()=>{
+      if(msg){
+        dispatch(setMessage(""))
+        message.success(msg)
+      }
+      if(err){
+        dispatch(setError(""))
+        message.error(err)
+      }
+    },[msg,err])
   return (
   
       <Layout>
@@ -114,9 +129,9 @@ function DashboardPage() {
           <div className="content-panel">
           <Routes>
             <Route path='/' element={<Home />}></Route>
-            <Route path='/categories/add' element={<AddOrEditCategory />}></Route>
+            <Route path='/categories/add' element={<AddOrEditCategory key='add'/>}></Route>
             <Route path='/categories/list' element={<ListCategory />}></Route>
-            
+            <Route path='/categories/update/:id' element={<AddOrEditCategory key='upd' />}></Route>
             
           </Routes>
           <Outlet>

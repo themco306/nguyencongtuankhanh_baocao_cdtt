@@ -8,6 +8,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,12 +22,14 @@ import org.springframework.data.domain.Sort;
 
 import com.nguyencongtuankhanh.web_backend.domain.Category;
 import com.nguyencongtuankhanh.web_backend.dto.CategoryDto;
+import com.nguyencongtuankhanh.web_backend.exception.CategoryException;
 import com.nguyencongtuankhanh.web_backend.service.CategoryService;
 import com.nguyencongtuankhanh.web_backend.service.MapValidationErrorService;
 
 import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/v1/categories")
 public class CategoryController {
     @Autowired

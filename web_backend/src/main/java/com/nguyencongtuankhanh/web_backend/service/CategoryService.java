@@ -33,17 +33,17 @@ public class CategoryService {
             
             // Update fields
             existedCategory.setName(entity.getName());
-            existedCategory.setSlug(entity.getSlug());
-            existedCategory.setParentId(entity.getParentId());
-            existedCategory.setSortOrder(entity.getSortOrder());
-            existedCategory.setLevel(entity.getLevel());
-            existedCategory.setImage(entity.getImage());
-            existedCategory.setMetaKey(entity.getMetaKey());
-            existedCategory.setMetaDesc(entity.getMetaDesc());
-            existedCategory.setCreatedAt(entity.getCreatedAt());
-            existedCategory.setCreatedBy(entity.getCreatedBy());
-            existedCategory.setUpdatedAt(entity.getUpdatedAt());
-            existedCategory.setUpdatedBy(entity.getUpdatedBy());
+            // existedCategory.setSlug(entity.getSlug());
+            // existedCategory.setParentId(entity.getParentId());
+            // existedCategory.setSortOrder(entity.getSortOrder());
+            // existedCategory.setLevel(entity.getLevel());
+            // existedCategory.setImage(entity.getImage());
+            // existedCategory.setMetaKey(entity.getMetaKey());
+            // existedCategory.setMetaDesc(entity.getMetaDesc());
+            // existedCategory.setCreatedAt(entity.getCreatedAt());
+            // existedCategory.setCreatedBy(entity.getCreatedBy());
+            // existedCategory.setUpdatedAt(entity.getUpdatedAt());
+            // existedCategory.setUpdatedBy(entity.getUpdatedBy());
             existedCategory.setStatus(entity.getStatus());
         
             return categoryRepository.save(existedCategory);
