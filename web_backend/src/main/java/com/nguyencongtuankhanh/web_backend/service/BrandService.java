@@ -1,5 +1,7 @@
 package com.nguyencongtuankhanh.web_backend.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.JpaSort.Path;
 import org.springframework.stereotype.Service;
 
 import com.nguyencongtuankhanh.web_backend.domain.Brand;
@@ -39,8 +42,26 @@ public class BrandService {
         return brandRepository.save(entity);
     }
 
-     public Brand updateBrand(int id,BrandDto dto) {
-        var  found= brandRepository.findById(id);
+    //  public Brand updateBrand(int id,BrandDto dto) {
+    //     var  found= brandRepository.findById(id);
+    //     if (found.isEmpty()) {
+    //         throw new BrandException("Thương hiệu không tồn tại!!");
+    //     }
+    
+    //     Brand entity = new Brand();
+    //     BeanUtils.copyProperties(dto, entity);
+    
+    //     if (dto.getLogoFile() != null) {
+    //         String fileName = fileStorageService.storeLogoFile(dto.getLogoFile());
+    //         entity.setLogo(fileName);
+    //     } else {
+    //         entity.setLogo(found.get().getLogo()); // Gán lại giá trị logo từ thực thể ban đầu
+    //     }
+    
+    //     return brandRepository.save(entity);
+    // }
+    public Brand updateBrand(int id, BrandDto dto) {
+        Optional<Brand> found = brandRepository.findById(id);
         if (found.isEmpty()) {
             throw new BrandException("Thương hiệu không tồn tại!!");
         }
@@ -49,13 +70,23 @@ public class BrandService {
         BeanUtils.copyProperties(dto, entity);
     
         if (dto.getLogoFile() != null) {
+            // Xóa tập tin logo cũ nếu tồn tại
+            if (found.get().getLogo() != null) {
+                fileStorageService.deleteLogoFile(found.get().getLogo());
+            }
+    
+            // Lưu tập tin logo mới
             String fileName = fileStorageService.storeLogoFile(dto.getLogoFile());
             entity.setLogo(fileName);
-            dto.setLogoFile(null);
+        } else {
+            entity.setLogo(found.get().getLogo()); // Gán lại giá trị logo từ thực thể ban đầu
         }
     
         return brandRepository.save(entity);
     }
+
+
+
 
     public List<?> findAll(){
         return brandRepository.findAll();
@@ -64,7 +95,7 @@ public class BrandService {
         return brandRepository.findAll(pageable);
     }
     public Page<Brand> findByName(String name,org.springframework.data.domain.Pageable pageable){
-        return brandRepository.findByNameContainsIgnoreCase(name,pageable);
+        return brandRepository.findByNameContainsIgnoreCase(pageable,name);
     }
     public Brand findById(int id){
         Optional<Brand> found=brandRepository.findById(id);

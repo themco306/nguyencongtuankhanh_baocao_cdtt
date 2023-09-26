@@ -4,6 +4,7 @@ import com.nguyencongtuankhanh.web_backend.config.FileStorageProperties;
 import com.nguyencongtuankhanh.web_backend.exception.FileNotFoundException;
 import com.nguyencongtuankhanh.web_backend.exception.FileStorageException;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,11 +20,17 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileStorageService {
 
   private final Path fileLogoStorageLocation;
+  private final Path fileProductImagesStorageLocation;
 
   public FileStorageService(FileStorageProperties fileStorageProperties) {
     this.fileLogoStorageLocation =
       Paths
         .get(fileStorageProperties.getUploadLogoDir())
+        .toAbsolutePath()
+        .normalize();
+        this.fileProductImagesStorageLocation =
+      Paths
+        .get(fileStorageProperties.getUploadProductImagesDir())
         .toAbsolutePath()
         .normalize();
     try {
@@ -37,6 +44,9 @@ public class FileStorageService {
   
   public String storeLogoFile(MultipartFile file) {
     return storeFile(fileLogoStorageLocation, file);
+  }
+   public String storeProductImagesFile(MultipartFile file) {
+    return storeFile(fileProductImagesStorageLocation, file);
   }
 
   private String storeFile(Path location, MultipartFile file) {
@@ -68,6 +78,9 @@ public class FileStorageService {
   public Resource loadLogoFileAsResource(String fileName) {
     return loadFileAsResource(fileLogoStorageLocation, fileName);
   }
+  public Resource loadProductImagesFileAsResource(String fileName) {
+    return loadFileAsResource(fileProductImagesStorageLocation, fileName);
+  }
 
   private Resource loadFileAsResource(Path location, String fileName) {
     try {
@@ -83,9 +96,12 @@ public class FileStorageService {
     }
   }
 
-  public void deleteLogoFile(String fileName){
-        deleteFile(fileLogoStorageLocation, fileName);
-  }
+  public void deleteLogoFile(String fileName) {
+    deleteFile(fileLogoStorageLocation, fileName);
+}
+  public void deleteProductImagesFile(String fileName) {
+    deleteFile(fileProductImagesStorageLocation, fileName);
+}
 
   private void deleteFile(Path location, String fileName) {
     try {

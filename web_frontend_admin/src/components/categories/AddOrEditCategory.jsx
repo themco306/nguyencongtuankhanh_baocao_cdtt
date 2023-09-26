@@ -119,7 +119,7 @@ class AddOrEditCategory extends Component {
               {!category.id && (
                 <Button
                   htmlType="submit"
-                  type="primay"
+                  type="primary"
                   style={{ float: "right" }}
                   loading={isLoading}
                 >
@@ -134,7 +134,7 @@ class AddOrEditCategory extends Component {
                 >
                   <Button
                     
-                    type="primay"
+                    type="primary"
                     style={{ float: "right" }}
                     loading={isLoading}
                   >

@@ -13,5 +13,5 @@ import lombok.Setter;
 public class FileStorageProperties {
     private String uploadLogoDir;
 
-    // private String uploadProductImageDir;
+    private String uploadProductImagesDir;
 }

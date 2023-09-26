@@ -1,29 +1,22 @@
 package com.nguyencongtuankhanh.web_backend.domain;
 
-
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Entity
-@Table(name = "nctk_brand")
-public class Brand extends AbstractEntity {
-   
-    
-    @Column(name = "name",nullable = false)
-    private String name;
-
-    @Column(name = "logo",length = 80)
-    private String logo;
+@MappedSuperclass
+public class AbstractEntity {
+     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id",nullable =false )
+    private int id ;
 }

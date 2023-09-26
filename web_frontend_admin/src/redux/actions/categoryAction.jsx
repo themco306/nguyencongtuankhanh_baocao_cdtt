@@ -90,7 +90,7 @@ export const getCategories=()=>async(dispatch)=>{
             type:COMMON_LOADING_SET,
             payload:true
           })
-        const res=await service.getCategories() 
+    
         const response = await service.getCategories()
         console.log(response)
         if(response.status===200){

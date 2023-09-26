@@ -19,11 +19,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "nctk_category")
-public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private int id;
+public class Category extends AbstractEntity{
 
     @Column(name = "name", nullable = false)
     private String name;

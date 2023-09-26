@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,7 +37,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/brand")
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/api/v1/brands")
 public class BrandController {
     @Autowired
     private BrandService brandService;
@@ -111,7 +114,7 @@ public class BrandController {
     }
 
     @GetMapping("/page")
-    public ResponseEntity<?> getBrand(@PageableDefault(size = 5,sort = "name",direction=Sort.Direction.ASC ) Pageable pageable ){
+    public ResponseEntity<?> getBrand(@PageableDefault(sort = "name",direction=Sort.Direction.ASC ) Pageable pageable ){
         var list =brandService.findAll(pageable);
         var newList = list.map(item -> {
             BrandDto dto = new BrandDto();

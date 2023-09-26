@@ -20,6 +20,7 @@ import AddOrEditCategory from "../components/categories/AddOrEditCategory";
 import ListCategory from "../components/categories/ListCategory";
 import { useDispatch, useSelector } from "react-redux";
 import { setError, setMessage } from "../redux/actions/commonAction";
+import ListBrands from "../components/brand/ListBrands";
 const { Header, Sider, Content } = Layout;
 
 // const App: React.FC = () => {
@@ -84,10 +85,30 @@ function DashboardPage() {
               },
             ]
             },
+
             {
               key: '3',
               icon: <UploadOutlined />,
               label: 'Sản phẩm',
+            },
+            {
+              key: '4',
+              icon: <MdOutlineCategory />,
+              label: 'Thương hiệu',
+              children:[{
+                key: '41',
+                icon: <AiOutlinePlus />,
+                label: 'Thêm thương hiệu',
+                onClick:()=>navigate("/brands/add"),
+              },
+              {
+                key: '42',
+                icon: <BsList />,
+                label: 'Tất cả thương hiệu',
+                onClick:()=>navigate("/brands/list"),
+
+              },
+            ]
             },
           ]}
         />
@@ -132,7 +153,8 @@ function DashboardPage() {
             <Route path='/categories/add' element={<AddOrEditCategory key='add'/>}></Route>
             <Route path='/categories/list' element={<ListCategory />}></Route>
             <Route path='/categories/update/:id' element={<AddOrEditCategory key='upd' />}></Route>
-            
+
+            <Route path='/brands/list' element={<ListBrands />}></Route>
           </Routes>
           <Outlet>
               
