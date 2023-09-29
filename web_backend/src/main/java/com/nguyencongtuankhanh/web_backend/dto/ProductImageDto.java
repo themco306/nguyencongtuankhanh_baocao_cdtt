@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class ProductImageDto  implements Serializable{
-    private int id;
+    private Integer id;
     private String uid;//tương thích với upload của antd
     private String name;
     private String fileName;

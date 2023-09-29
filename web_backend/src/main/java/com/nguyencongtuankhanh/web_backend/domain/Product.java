@@ -79,5 +79,5 @@ public class Product extends AbstractEntity{
     @JoinColumn(name = "prduct_image_id")
     private ProductImage image;
     @Column(name = "status")
-    private ProductStatus status;
+    private Integer status;
 }

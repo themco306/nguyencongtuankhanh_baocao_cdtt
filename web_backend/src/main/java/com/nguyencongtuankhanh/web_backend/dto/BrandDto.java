@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 public class BrandDto implements Serializable {
-    private  int id;
+    private  Integer id;
     
     @NotEmpty(message = "Tên danh mục không được để trống")
     private String name;

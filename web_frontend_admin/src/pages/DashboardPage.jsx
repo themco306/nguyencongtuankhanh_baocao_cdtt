@@ -21,6 +21,9 @@ import ListCategory from "../components/categories/ListCategory";
 import { useDispatch, useSelector } from "react-redux";
 import { setError, setMessage } from "../redux/actions/commonAction";
 import ListBrands from "../components/brand/ListBrands";
+import UploadImage from "../components/pruducts/UploadImage";
+import AddOrEditProduct from "../components/pruducts/AddOrEditProduct";
+import ListProduct from "../components/pruducts/ListProduct";
 const { Header, Sider, Content } = Layout;
 
 // const App: React.FC = () => {
@@ -90,6 +93,20 @@ function DashboardPage() {
               key: '3',
               icon: <UploadOutlined />,
               label: 'Sản phẩm',
+              children:[{
+                key: '31',
+                icon: <AiOutlinePlus />,
+                label: 'Tất cả sản phẩm',
+                onClick:()=>navigate("/products/list"),
+              },
+              {
+                key: '32',
+                icon: <BsList />,
+                label: 'Thêm sản phẩm',
+                onClick:()=>navigate("/products/add"),
+
+              },
+            ]
             },
             {
               key: '4',
@@ -155,6 +172,9 @@ function DashboardPage() {
             <Route path='/categories/update/:id' element={<AddOrEditCategory key='upd' />}></Route>
 
             <Route path='/brands/list' element={<ListBrands />}></Route>
+            <Route path='/products/upload' element={<UploadImage />}></Route>
+            <Route path='/products/add' element={<AddOrEditProduct />}></Route>
+            <Route path='/products/list' element={<ListProduct />}></Route>
           </Routes>
           <Outlet>
               

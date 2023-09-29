@@ -7,12 +7,13 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nguyencongtuankhanh.web_backend.domain.ProductStatus;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 @Data
 public class ProductDto implements Serializable {
-    private int id;
+    private Integer  id;
     @NotEmpty(message = "Tên không được để trống")
     private String name;
     @Min(value = 0)
@@ -20,7 +21,7 @@ public class ProductDto implements Serializable {
     @Min(value = 0)
     private Double price;
     @Min(value = 0)
-    @Min(value = 100)
+    @Max(value = 100)
     private Float discount;
     private Long viewCount;
     private Boolean isFeatured;
@@ -28,7 +29,7 @@ public class ProductDto implements Serializable {
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date manufactureDate;
-    private ProductStatus status;
+    private Integer status;
 
     private Integer categoryId;   
     private Integer brandId;

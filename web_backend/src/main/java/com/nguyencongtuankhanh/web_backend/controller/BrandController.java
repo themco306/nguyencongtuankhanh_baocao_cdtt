@@ -39,7 +39,7 @@ import jakarta.validation.Valid;
 @RestController
 
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/api/v1/brands")
+@RequestMapping("/api/brands")
 public class BrandController {
     @Autowired
     private BrandService brandService;

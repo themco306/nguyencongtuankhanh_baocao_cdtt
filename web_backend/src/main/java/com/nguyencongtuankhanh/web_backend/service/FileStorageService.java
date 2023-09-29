@@ -1,6 +1,7 @@
 package com.nguyencongtuankhanh.web_backend.service;
 
 import com.nguyencongtuankhanh.web_backend.config.FileStorageProperties;
+import com.nguyencongtuankhanh.web_backend.dto.UploadedFileInfo;
 import com.nguyencongtuankhanh.web_backend.exception.FileNotFoundException;
 import com.nguyencongtuankhanh.web_backend.exception.FileStorageException;
 import java.io.File;
@@ -35,6 +36,7 @@ public class FileStorageService {
         .normalize();
     try {
       Files.createDirectories(fileLogoStorageLocation);
+      Files.createDirectories(fileProductImagesStorageLocation);
     } catch (Exception e) {
       throw new FileStorageException("Không thể tìm thấy đường dẫn !!", e);
     }
@@ -47,6 +49,9 @@ public class FileStorageService {
   }
    public String storeProductImagesFile(MultipartFile file) {
     return storeFile(fileProductImagesStorageLocation, file);
+  }
+  public UploadedFileInfo storeUploadedProductImagesFile(MultipartFile file) {
+    return storeUploadFile(fileProductImagesStorageLocation, file);
   }
 
   private String storeFile(Path location, MultipartFile file) {
@@ -67,6 +72,35 @@ public class FileStorageService {
         StandardCopyOption.REPLACE_EXISTING
       );
       return fileName;
+    } catch (Exception e) {
+      throw new FileStorageException(
+        "Không thể lưu file " + fileName + ". Hãy thử lại!! ",
+        e
+      );
+    }
+  }
+  private UploadedFileInfo storeUploadFile(Path location, MultipartFile file) {
+    UUID uuid = UUID.randomUUID();
+
+    String ext = StringUtils.getFilenameExtension(file.getOriginalFilename());
+    String fileName = uuid.toString() + "." + ext;
+    try {
+      if (fileName.contains("..")) {
+        throw new FileStorageException(
+          "Xin lỗi tên file có vấn đề " + fileName
+        );
+      }
+      Path targetLocation = location.resolve(fileName);
+      Files.copy(
+        file.getInputStream(),
+        targetLocation,
+        StandardCopyOption.REPLACE_EXISTING
+      );
+      UploadedFileInfo info= new UploadedFileInfo();
+      info.setFileName(fileName);
+      info.setUid(uuid.toString());
+      info.setName(StringUtils.getFilename(file.getOriginalFilename()));
+      return info;
     } catch (Exception e) {
       throw new FileStorageException(
         "Không thể lưu file " + fileName + ". Hãy thử lại!! ",

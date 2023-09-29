@@ -58,5 +58,5 @@ public class Category extends AbstractEntity{
     // private int updatedBy;
 
     @Column(name = "status", nullable = false, columnDefinition = "tinyint default 2")
-    private int status;
+    private Integer status;
 }

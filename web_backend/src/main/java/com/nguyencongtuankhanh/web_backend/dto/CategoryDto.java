@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class CategoryDto implements Serializable {
-    private  int id;
+    private  Integer id;
     @NotEmpty(message = "Tên danh mục không được để trống")
     private String name;
     // private String slug;
@@ -22,7 +22,7 @@ public class CategoryDto implements Serializable {
     // private int createdBy;
     // private LocalDateTime updatedAt;
     // private int updatedBy;
-    private int status;
+    private Integer status;
 
     // Lombok will generate getters and setters
 }

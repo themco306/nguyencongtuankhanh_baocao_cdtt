@@ -17,7 +17,9 @@ import { connect } from "react-redux";
 import {
   clearCategory,
   getCategory,
+
   insertCategory,
+
   updateCategory,
 } from "../../redux/actions/categoryAction";
 import { setTitle } from "../../redux/actions/titleAction";

@@ -15,7 +15,8 @@ class BrandList extends Component {
         dataSource={dataSource}
         size="small"
         rowKey="id"
-        pagination={false}
+        // pagination={true}
+        scroll={true}
       >
         <Column
           title="Mã"
@@ -33,7 +34,7 @@ class BrandList extends Component {
           align="center"
           render={(_,record)=>(
             <Space size={'middle'}>
-                <Image width={'100%'} src={BrandService.getBrandLogoUrl(record.logo)}></Image>
+                <Image width={'50px'} src={BrandService.getBrandLogoUrl(record.logo)}></Image>
             </Space>
           )}
         ></Column>

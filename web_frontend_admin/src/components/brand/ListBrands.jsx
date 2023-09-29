@@ -56,6 +56,7 @@ class ListBrands extends Component {
   deleteBrand = () => {
     this.props.deleteBrand(this.state.brand.id);
     console.log("delete brand");
+    this.onCancel()
   };
   onDeleteConfirm = (brand) => {
     this.setState({ ...this.state, brand: brand });
