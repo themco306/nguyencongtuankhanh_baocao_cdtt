@@ -27,23 +27,11 @@ class BrandList extends Component {
           align="center"
           sorter={(a, b) => a.id - b.id}
         ></Column>
-         <Column
-          title="Logo"
-          key="logo"
-          dataIndex={"logo"}
-          width={"20%"}
-          align="center"
-          render={(_,record)=>(
-            <Space size={'middle'}>
-                <Image width={'50px'} src={BrandService.getBrandLogoUrl(record.logo)}></Image>
-            </Space>
-          )}
-        ></Column>
         <Column
-          title="Tên thương hiệu"
+          title="Tên danh mục"
           key="name"
           dataIndex={"name"}
-          width={"25%"}
+          width={"30%"}
           align="center"
           sorter={(a,b)=>a.name.localeCompare(b.name) }
         ></Column>
@@ -51,7 +39,7 @@ class BrandList extends Component {
           title="Từ khóa SEO"
           key="metakey"
           dataIndex={"metakey"}
-          width={"15%"}
+          width={"25%"}
           align="center"
           sorter={(a,b)=>a.metakey.localeCompare(b.metakey) }
         ></Column>

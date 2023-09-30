@@ -2,79 +2,73 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import ContentHeader from "../common/ContentHeader";
-import BrandList from "./BrandList";
+import BrandList from "./CategoryList";
 import withRouter from "../../helpers/withRouter";
-import BrandForm from "./BrandForm";
+import BrandForm from "./CategoryForm";
 import { Button, Col, Form, Input, Modal, Pagination, Row } from "antd";
 import { connect } from "react-redux";
-import {
-  deleteBrand,
-  getBrand,
-  getBrands,
-  getBrandsByName,
-  insertBrand,
-  updateBrand,
-  updateBrandStatus,
-} from "../../redux/actions/brandAction";
-import { current } from "@reduxjs/toolkit";
-import FormItem from "antd/lib/form/FormItem";
 import { setTitle } from "../../redux/actions/titleAction";
+import { deleteCategory, getCategories, getCategoriesByName, getCategory, insertCategory, updateCategory, updateCategoryStatus } from "../../redux/actions/categoryAction";
+import CategoryList from "./CategoryList";
+import CategoryForm from "./CategoryForm";
 
-class ListBrands extends Component {
+class ListCategory extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       open: false,
-      brand: {
+      category: {
         id: "",
         name: "",
+        parent_id:0,
+        level:0,
         metakey: "",
         metadesc: "",
         sortOrder: 0,
         status: 0,
-        logo: "",
+        
       },
     };
   }
   componentDidMount = () => {
-    this.props.getBrands();
+    this.props.getCategories();
     this.props.setTitle("Xem Thương Hiệu")
     console.log("did mount");
   };
   onEdit = (values) => {
     console.log("onEdit", values);
-    this.setState({ ...this.state, brand: values, open: true });
+    this.setState({ ...this.state, category: values, open: true });
   };
   onCancel = () => {
-    this.setState({ ...this.state, brand: {} });
+    this.setState({ ...this.state, category: {} });
   };
   onCreate = (values) => {
     console.log("onCreat", values);
     if (values.id) {
-      this.props.updateBrand(values);
+      this.props.updateCategory(values);
     } else {
-      this.props.insertBrand(values);
+      this.props.insertCategory(values);
     }
 
-    this.setState({ ...this.state, brand: {}, open: false });
+    this.setState({ ...this.state, category: {}, open: false });
   };
-  deleteBrand = () => {
-    this.props.deleteBrand(this.state.brand.id);
+  deleteCategory = () => {
+    this.props.deleteCategory(this.state.category.id);
     console.log("delete brand");
     this.onCancel()
   };
   handleChangeStatus=(id)=>{
-    this.props.updateBrandStatus(id)
+    this.props.updateCategoryStatus(id)
   }
-  onDeleteConfirm = (brand) => {
-    this.setState({ ...this.state, brand: brand });
-    const message = "Bạn có thật sự muốn xóa " + brand.name;
+  onDeleteConfirm = (category) => {
+    this.setState({ ...this.state, category: category });
+    const message = "Bạn có thật sự muốn xóa " + category.name;
     Modal.confirm({
       title: "Xác nhận!",
       content: `${message}`,
       icon: "",
-      onOk: this.deleteBrand,
+      onOk: this.deleteCategory,
       okText: "Xóa",
       cancelText: "Trở lại",
       onCancel: this.onCancel,
@@ -106,7 +100,7 @@ class ListBrands extends Component {
       page:pageNumber-1,
       size:pageSize
       }
-      this.props.getBrandsByName(params)
+      this.props.getCategoriesByName(params)
   }
   handleSearch=(value)=>{
     console.log("page",value)
@@ -115,12 +109,12 @@ class ListBrands extends Component {
       query:value.query,
       size:pagination.size
       }
-      this.props.getBrandsByName(params)
+      this.props.getCategoriesByName(params)
   }
   render() {
     const { navigate } = this.props.router;
     const { open } = this.state;
-    const { brands,pagination,title } = this.props;
+    const { categories,pagination,title } = this.props;
     
     return (
       <>
@@ -148,12 +142,12 @@ class ListBrands extends Component {
                 this.setState({ ...this.state, open: true });
               }}
             >
-              Thêm thương hiệu
+              Thêm danh mục
             </Button>
           </Col>
         </Row>
-        <BrandList
-          dataSource={brands}
+        <CategoryList
+          dataSource={categories}
           onDeleteConfirm={this.onDeleteConfirm}
           onEdit={this.onEdit}
           handleChangeStatus={this.handleChangeStatus}
@@ -175,13 +169,13 @@ class ListBrands extends Component {
         </Row>
         
 
-        <BrandForm
-          brand={this.state.brand}
-          brands={brands}
+        <CategoryForm
+          category={this.state.category}
+          categories={categories}
           open={open}
           onCreate={this.onCreate}
           onCancel={() => {
-            this.setState({ ...this.state, brand: {}, open: false });
+            this.setState({ ...this.state, category: {}, open: false });
           }}
         />
       </>
@@ -190,23 +184,23 @@ class ListBrands extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  brands: state.brandReducer.brands,
-  pagination:state.brandReducer.pagination,
+  categories: state.categoryReducer.categories,
+  pagination:state.categoryReducer.pagination,
   title:state.titleReducer.title,
 });
 
 const mapDispatchToProps = {
   setTitle:setTitle,
-  insertBrand: insertBrand,
-  getBrands: getBrands,
-  getBrand: getBrand,
-  deleteBrand: deleteBrand,
-  updateBrand: updateBrand,
-  getBrandsByName:getBrandsByName,
-  updateBrandStatus:updateBrandStatus,
+  insertCategory: insertCategory,
+  getCategories: getCategories,
+  getCategory: getCategory,
+  deleteCategory: deleteCategory,
+  updateCategory: updateCategory,
+  getCategoriesByName:getCategoriesByName,
+  updateCategoryStatus:updateCategoryStatus,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(ListBrands));
+)(withRouter(ListCategory));

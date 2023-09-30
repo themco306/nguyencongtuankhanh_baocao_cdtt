@@ -1,5 +1,5 @@
 import CategoryService from "../../services/categoryService"
-import { CATEGORY_SET, CATEGORIES_SET, CATEGORY_STATE_CLEAR, COMMON_MESSAGE_SET, COMMON_EROR_SET, COMMON_LOADING_SET, CATEGORY_DELETE, TITLE_SET } from "./actionTypes";
+import { CATEGORY_SET, CATEGORIES_SET, CATEGORY_STATE_CLEAR, COMMON_MESSAGE_SET, COMMON_EROR_SET, COMMON_LOADING_SET, CATEGORY_DELETE, TITLE_SET, CATEGORY_UPDATE, CATEGORY_SET_PAGEABLE } from "./actionTypes";
 
 export const insertCategory = (category, navigate) => async (dispatch) => {
     const service = new CategoryService();
@@ -118,7 +118,84 @@ export const getCategories=()=>async(dispatch)=>{
         payload:false
       })
 }
+export const getCategoriesByName = (params) => async (dispatch) => {
+  const service = new CategoryService();
+  try {
+    console.log("list brand");
 
+    dispatch({
+      type: COMMON_LOADING_SET,
+      payload: true,
+    });
+    const response = await service.getCategoriesByName(params);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch({
+        type: CATEGORIES_SET,
+        payload: response.data.content,
+      });
+      const { size, totalPages, totalElements, pageable } = response.data;
+      const pagination = {
+        size: size,
+        page: pageable.pagenumber,
+        query: params.query,
+        totalPages: totalPages,
+        totalElements: totalElements,
+      };
+      dispatch({
+        type: CATEGORY_SET_PAGEABLE,
+        payload: pagination,
+      });
+    } else {
+      dispatch({
+        type: COMMON_EROR_SET,
+        payload: response.message,
+      });
+    }
+  } catch (e) {
+    dispatch({
+      type: COMMON_EROR_SET,
+      payload: e.response.data ? e.response.data.message : e.message,
+    });
+  }
+  dispatch({
+    type: COMMON_LOADING_SET,
+    payload: false,
+  });
+};
+export const updateCategoryStatus = (id) => async (dispatch) => {
+  const service = new CategoryService();
+  try {
+    console.log("sửa changeStatus", id);
+    const response = await service.updateCategoryStatus(id);
+    console.log("response", response);
+    if (response.status === 200) {
+      dispatch({
+        type: CATEGORY_SET,
+        payload: response.data,
+      });
+      dispatch({
+        type: CATEGORY_UPDATE,
+        payload: response.data,
+      });
+      dispatch({
+        type: COMMON_MESSAGE_SET,
+        payload: "Thay đổi thành công",
+      });
+    } else {
+      dispatch({
+        type: COMMON_EROR_SET,
+        payload: response.message ,
+      });
+    }
+  } catch (e) {
+    console.log("error: " + e);
+    dispatch({
+      type: COMMON_EROR_SET,
+      payload: e.response.data ? e.response.data.message : e.message,
+    });
+  }
+};
 export const deleteCategory=(id)=>async(dispatch)=>{
     const service=new CategoryService()
     console.log(id)
@@ -169,7 +246,7 @@ export const getCategory=(id)=>async(dispatch)=>{
           payload:true
         })
       const response = await service.getCategory(id)
-      console.log("get"+ response)
+      console.log("get",response)
       if(response.status===200){
           dispatch({
               type:CATEGORY_SET,

@@ -79,6 +79,7 @@ class AddOrEditCategory extends Component {
     const { navigate } = this.props.router;
     const { isLoading,title } = this.props;
     const { category } = this.state;
+    console.log("c",category)
     return (
       <>
         <ContentHeader
@@ -124,6 +125,7 @@ class AddOrEditCategory extends Component {
                   type="primary"
                   style={{ float: "right" }}
                   loading={isLoading}
+                  
                 >
                   Lưu
                 </Button>

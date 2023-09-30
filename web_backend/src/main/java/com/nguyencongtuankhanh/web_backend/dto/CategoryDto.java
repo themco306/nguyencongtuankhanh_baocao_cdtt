@@ -3,6 +3,8 @@ package com.nguyencongtuankhanh.web_backend.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
@@ -11,17 +13,17 @@ public class CategoryDto implements Serializable {
     private  Integer id;
     @NotEmpty(message = "Tên danh mục không được để trống")
     private String name;
-    // private String slug;
-    // private int parentId;
-    // private int sortOrder;
-    // private Integer level;
-    // private String image;
-    // private String metaKey;
-    // private String metaDesc;
-    // private LocalDateTime createdAt;
-    // private int createdBy;
-    // private LocalDateTime updatedAt;
-    // private int updatedBy;
+    private Integer parent_id;
+    private Integer sortOrder;
+    private Integer level;
+    private String metakey;
+    private String metadesc;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime created_at;
+    private Integer created_by;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updated_at;
+    private Integer updated_by;
     private Integer status;
 
     // Lombok will generate getters and setters

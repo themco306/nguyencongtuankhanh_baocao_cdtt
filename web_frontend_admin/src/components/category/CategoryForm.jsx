@@ -15,35 +15,27 @@ import Upload from "antd/es/upload/Upload";
 import React, { Component, createRef } from "react";
 import BrandService from "../../services/brandService";
 
-class BrandForm extends Component {
+class CategoryForm extends Component {
   form = createRef();
   constructor(props) {
     super(props);
 
     this.state = {
-      brand: {
+      category: {
         id: "",
         name: "",
+        parent_id:0,
+        level:0,
         metakey: "",
         metadesc: "",
         sortOrder: 0,
         status: 0,
-        logo: "",
+        
       },
       previewImage: "",
       previewVisible: false,
     };
   }
-  handelPreview = (file) => {
-    console.log(file);
-    if (file.thumbUrl) {
-      this.state({
-        ...this.state,
-        previewImage: file.thumbUrl,
-        previewVisible: true,
-      });
-    }
-  };
   handelRemove = (value) => {
     console.log(value);
   };
@@ -58,20 +50,14 @@ class BrandForm extends Component {
   };
 
   render() {
-    const { open, onCreate, onCancel,brands } = this.props;
-    const { brand } = this.props;
-    const logoUrl = brand.logo
-      ? BrandService.getBrandLogoUrl(brand.logo)
-      : null;
-    const initialLogo = brand.logo ? { url: logoUrl, uid: brand.logo } : null;
-    console.log("brand", brand);
-
-    const shouldShowUpload = !brand.logo;
-
+    const { open, onCreate, onCancel,categories } = this.props;
+    const { category } = this.props;
+   
+    console.log("category", category);
     return (
       <Modal
         open={open}
-        title="Thêm Thương Hiệu"
+        title="Thêm Danh Mục"
         okText="Thêm"
         cancelText="Hủy"
         onCancel={onCancel}
@@ -95,17 +81,17 @@ class BrandForm extends Component {
           initialValues={{
             modifier: "public",
           }}
-          key={"f" + brand.id + brand.name + brand.logo +brand.metakey+brand.metadesc+brand.sortOrder+brand.status}
+          key={"f" + category.id + category.name  +category.metakey+category.metadesc+category.sortOrder+category.status+category.parent_id+category.level}
         >
           <Row>
             <Col md={15}>
-            <Form.Item label="Mã" name="id" initialValue={brand.id} hidden>
+            <Form.Item label="Mã" name="id" initialValue={category.id} hidden>
                 <Input readOnly></Input>
               </Form.Item>
               <Form.Item
                 name="name"
-                label="Tên thương hiệu"
-                initialValue={brand.name}
+                label="Tên danh mục"
+                initialValue={category.name}
                 rules={null}
               >
                 <Input />
@@ -113,7 +99,7 @@ class BrandForm extends Component {
               <Form.Item
                 name="metakey"
                 label="Từ khóa SEO"
-                initialValue={brand.metakey}
+                initialValue={category.metakey}
                 rules={null}
               >
                 
@@ -122,7 +108,7 @@ class BrandForm extends Component {
               <Form.Item
                   name="metadesc"
                   label="Mô tả SEO"
-                  initialValue={brand.metadesc}
+                  initialValue={category.metadesc}
                   rules={null}
                 >
                   <Input.TextArea rows={3} />
@@ -136,14 +122,14 @@ class BrandForm extends Component {
             <Form.Item
                 label="Trạng thái"
                 name="status"
-                initialValue={brand.status}
+                initialValue={category.status}
               >
                 <Select defaultValue={0}>
                   <Select.Option value={0}>Hiển thị</Select.Option>
                   <Select.Option value={1}>Ẩn đi</Select.Option>
                 </Select>
               </Form.Item>
-              <Form.Item label="Sắp xếp" name={'sortOrder'} initialValue={brand.sortOrder}>
+              <Form.Item label="Sắp xếp" name={'sortOrder'} initialValue={category.sortOrder}>
                         <Select placeholder="Chọn thứ tự"
                         suffixIcon={<BsSortDownAlt /> }
                         defaultValue={0}
@@ -153,7 +139,7 @@ class BrandForm extends Component {
                             >
                                 Không sắp xếp
                             </Select.Option>
-                          {brands&&brands.map((item)=>(
+                          {categories&&categories.map((item)=>(
                             <Select.Option value={item.id}
                                 key={'brand_order'+item.id}
                             >
@@ -162,37 +148,25 @@ class BrandForm extends Component {
                           ))}
                         </Select>
                     </Form.Item>
-              <Form.Item
-                  name="logoFile"
-                  label="Logo"
-                  initialValue={initialLogo ? [initialLogo] : null}
-                  rules={null}
-                  valuePropName="fileList"
-                  getValueFromEvent={this.normFile}
-                >
-                  <Upload
-                    listType="picture"
-                    onPreview={this.handelPreview}
-                    onRemove={this.handelRemove}
-                    accept=".jpg,.png,.gif"
-                    maxCount={1}
-                    beforeUpload={() => false}
-                  >
-                    <Button type="primary">Chọn Logo</Button>
-                  </Upload>
-                </Form.Item>
-              {!shouldShowUpload && (
-                <>
-                  <Divider></Divider>
-                  {this.state.previewVisible && (
-                    <Image
-                      src={this.state.previewImage}
-                      style={{ width: 200 }}
-                      preview={{ visible: false }}
-                    ></Image>
-                  )}
-                </>
-              )}
+                    <Form.Item label="Cấp cha" name={'parent_id'} initialValue={category.parent_id}>
+                        <Select placeholder="Chọn cấp cha"
+                        suffixIcon={<BsSortDownAlt /> }
+                        defaultValue={0}
+                        > 
+                          <Select.Option value={0}
+                                key={'brand_parent0'}
+                            >
+                                Không sắp xếp
+                            </Select.Option>
+                          {categories&&categories.map((item)=>(
+                            <Select.Option value={item.id}
+                                key={'brand_parent'+item.id}
+                            >
+                                Sau: {item.name}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                    </Form.Item>
             </Col>
           </Row>
         </Form>
@@ -201,4 +175,4 @@ class BrandForm extends Component {
   }
 }
 
-export default BrandForm;
+export default CategoryForm;

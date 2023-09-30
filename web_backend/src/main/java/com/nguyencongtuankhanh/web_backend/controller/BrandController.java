@@ -56,6 +56,7 @@ public class BrandController {
         Brand entity=brandService.insertBrand(dto);
         dto.setId(entity.getId());
         dto.setLogo(entity.getLogo());
+        
 
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
@@ -71,6 +72,14 @@ public class BrandController {
 
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
+    @PatchMapping("/{id}/status")
+public ResponseEntity<?> updateBrandStatus(@PathVariable("id") int id) {
+    Brand entity=brandService.updateBrandStatus(id);
+    BrandDto dto= new BrandDto();
+    BeanUtils.copyProperties(entity, dto);
+
+    return new ResponseEntity<>(dto,HttpStatus.OK);
+}
     
     @GetMapping("/logo/{filename:.+}")
     public ResponseEntity<?> downloadFile(@PathVariable("filename") String fileName,HttpServletRequest request){

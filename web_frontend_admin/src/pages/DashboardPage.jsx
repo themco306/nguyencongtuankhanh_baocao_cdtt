@@ -17,13 +17,15 @@ import { Layout, Menu, Button, theme, Row, Col, Avatar, message } from 'antd';
 import { BrowserRouter, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "../components/home/Home";
 import AddOrEditCategory from "../components/categories/AddOrEditCategory";
-import ListCategory from "../components/categories/ListCategory";
+
 import { useDispatch, useSelector } from "react-redux";
 import { setError, setMessage } from "../redux/actions/commonAction";
 import ListBrands from "../components/brand/ListBrands";
 import UploadImage from "../components/pruducts/UploadImage";
 import AddOrEditProduct from "../components/pruducts/AddOrEditProduct";
 import ListProduct from "../components/pruducts/ListProduct";
+import ShowBrands from "../components/brand/ShowBrands";
+import ListCategory from "../components/category/ListCategory";
 const { Header, Sider, Content } = Layout;
 
 // const App: React.FC = () => {
@@ -112,12 +114,7 @@ function DashboardPage() {
               key: '4',
               icon: <MdOutlineCategory />,
               label: 'Thương hiệu',
-              children:[{
-                key: '41',
-                icon: <AiOutlinePlus />,
-                label: 'Thêm thương hiệu',
-                onClick:()=>navigate("/brands/add"),
-              },
+              children:[
               {
                 key: '42',
                 icon: <BsList />,
@@ -172,6 +169,7 @@ function DashboardPage() {
             <Route path='/categories/update/:id' element={<AddOrEditCategory key='upd' />}></Route>
 
             <Route path='/brands/list' element={<ListBrands />}></Route>
+            <Route path='/brands/show/:id' element={<ShowBrands />}></Route>
             <Route path='/products/upload' element={<UploadImage />}></Route>
             <Route path='/products/add' element={<AddOrEditProduct />}></Route>
             <Route path='/products/list' element={<ListProduct />}></Route>

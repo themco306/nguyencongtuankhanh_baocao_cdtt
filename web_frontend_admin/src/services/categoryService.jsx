@@ -17,4 +17,10 @@ export default class CategoryService{
     updateCategory=async(id,category)=>{
         return  await axios.patch(API_CATEGORY+"/"+id,category)
     }
+    updateCategoryStatus=async(id)=>{
+        return  await axios.patch(API_CATEGORY+"/"+id+"/status")
+    }
+    getCategoriesByName=async(params)=>{
+        return  await axios.get(API_CATEGORY+'/find',{params})
+    }
 }
