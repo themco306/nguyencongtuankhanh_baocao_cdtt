@@ -32,14 +32,12 @@ public class Category extends AbstractEntity{
     @Column(name = "slug", nullable = false)
     private String slug;
 
-    @Column(name = "parent_id", nullable = false, columnDefinition = "int default 0")
+    @Column(name = "parent_id", columnDefinition = "int default 0")
     private Integer parent_id;
 
-    @Column(name = "sort_order", nullable = false)
+    @Column(name = "sort_order",  columnDefinition = "int default 0")
     private Integer sortOrder;
 
-    @Column(name = "level")
-    private Integer level;
 
     @Column(name = "metakey", nullable = false)
     private String metakey;

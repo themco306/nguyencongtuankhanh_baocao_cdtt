@@ -14,6 +14,9 @@ import {
 import Upload from "antd/es/upload/Upload";
 import React, { Component, createRef } from "react";
 import BrandService from "../../services/brandService";
+import validateBrand from "../../helpers/validate/validateBrand";
+import ValidateBrand from "../../helpers/validate/validateBrand";
+import { min } from "moment";
 
 class BrandForm extends Component {
   form = createRef();
@@ -106,7 +109,10 @@ class BrandForm extends Component {
                 name="name"
                 label="Tên thương hiệu"
                 initialValue={brand.name}
-                rules={null}
+                hasFeedback
+                rules={
+                  ValidateBrand.name
+                }
               >
                 <Input />
               </Form.Item>
@@ -114,7 +120,10 @@ class BrandForm extends Component {
                 name="metakey"
                 label="Từ khóa SEO"
                 initialValue={brand.metakey}
-                rules={null}
+                hasFeedback
+                rules={
+                  ValidateBrand.metakey
+                }
               >
                 
                 <Input.TextArea  />
@@ -123,7 +132,8 @@ class BrandForm extends Component {
                   name="metadesc"
                   label="Mô tả SEO"
                   initialValue={brand.metadesc}
-                  rules={null}
+                  hasFeedback
+                  rules={ValidateBrand.metadesc}
                 >
                   <Input.TextArea rows={3} />
                 </Form.Item>
@@ -137,6 +147,7 @@ class BrandForm extends Component {
                 label="Trạng thái"
                 name="status"
                 initialValue={brand.status}
+                
               >
                 <Select defaultValue={0}>
                   <Select.Option value={0}>Hiển thị</Select.Option>
@@ -166,15 +177,17 @@ class BrandForm extends Component {
                   name="logoFile"
                   label="Logo"
                   initialValue={initialLogo ? [initialLogo] : null}
-                  rules={null}
+                  rules={
+                    ValidateBrand.logo
+                  }
                   valuePropName="fileList"
                   getValueFromEvent={this.normFile}
+                  hasFeedback
                 >
                   <Upload
                     listType="picture"
                     onPreview={this.handelPreview}
                     onRemove={this.handelRemove}
-                    accept=".jpg,.png,.gif"
                     maxCount={1}
                     beforeUpload={() => false}
                   >

@@ -15,7 +15,6 @@ public class CategoryDto implements Serializable {
     private String name;
     private Integer parent_id;
     private Integer sortOrder;
-    private Integer level;
     private String metakey;
     private String metadesc;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

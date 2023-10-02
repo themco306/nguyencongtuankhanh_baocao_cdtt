@@ -1,4 +1,4 @@
-import { COMMON_EROR_SET, COMMON_MESSAGE_SET } from "./actionTypes"
+import { COMMON_EROR_SET, COMMON_MESSAGE_SET, COMMON_MODAL_SET } from "./actionTypes"
 
 export const setMessage=(message)=>(dispatch)=>{
     dispatch({
@@ -16,5 +16,12 @@ export const setLoading=(loading)=>(dispatch)=>{
     dispatch({
         type:COMMON_EROR_SET,
         payload:loading
+    })
+
+}
+export const setModal=(modal)=>(dispatch)=>{
+    dispatch({
+        type:COMMON_MODAL_SET,
+        payload:modal
     })
 }

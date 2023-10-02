@@ -6,6 +6,7 @@ import { BiTrashAlt } from 'react-icons/bi';
 import Column from 'antd/es/table/Column';
 import BrandService from '../../services/brandService';
 import withRouter from '../../helpers/withRouter';
+import "../../css/CustomButton.css";
 class BrandList extends Component {
   
   render() {
@@ -92,7 +93,7 @@ class BrandList extends Component {
                 key={record.key}
                 size="small"
                 className="custom-button-show"
-                onClick={()=>navigate("/brands/show/"+record.id)}
+                onClick={()=>navigate("/categories/show/"+record.id)}
               >
                 <TbMathGreater />
               </Button>

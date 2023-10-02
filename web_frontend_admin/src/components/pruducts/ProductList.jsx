@@ -36,12 +36,12 @@ import withRouter from '../../helpers/withRouter';
           align="center"
           render={(_,record)=>(
             <Space size={'middle'}>
-                <Image width={'50px'} src={ProductService.getProductImageUrl(record.imageFileName)}></Image>
+                <Image width={'50px'} src={ProductService.getProductImageUrl(record.image.fileName)}></Image>
             </Space>
           )}
         ></Column>
         <Column
-          title="Tên danh mục"
+          title="Tên sản phẩm"
           key="name"
           dataIndex={"name"}
           width={"20%"}
@@ -57,12 +57,12 @@ import withRouter from '../../helpers/withRouter';
           sorter={(a,b)=>a.name.localeCompare(b.name) }
         ></Column>
         <Column
-          title="Giảm giá"
-          key="discount"
-          dataIndex={"discount"}
+          title="Số lượng"
+          key="quantity"
+          dataIndex={"quantity"}
           width={"10%"}
           align="center"
-          sorter={(a,b)=>a.name.localeCompare(b.name) }
+          sorter={(a,b)=>a.quantity.localeCompare(b.quantity) }
         ></Column>
         <Column
           title="Trạng thái"

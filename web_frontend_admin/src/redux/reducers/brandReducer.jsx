@@ -25,9 +25,15 @@ const brandReducer = (state = initialState, { type, payload }) => {
       return { ...state, brand: payload };
     case BRANDS_SET:
       return { ...state, brands: payload };
-    case BRAND_UPDATE:
-      const newBrands = state.brands.filter((item) => item.id !== payload.id);
-      return { ...state, brands: [ payload, ...newBrands ] };
+      case BRAND_UPDATE:
+        const updatedBrand = payload;
+        const updatedBrands = state.brands.map((brand) => {
+          if (brand.id === updatedBrand.id) {
+            return updatedBrand;
+          }
+          return brand;
+        });
+        return { ...state, brands: updatedBrands };
     case BRAND_DELETE:
       return {
         ...state,

@@ -6,9 +6,9 @@ import BrandList from "./CategoryList";
 import withRouter from "../../helpers/withRouter";
 import BrandForm from "./CategoryForm";
 import { Button, Col, Form, Input, Modal, Pagination, Row } from "antd";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { setTitle } from "../../redux/actions/titleAction";
-import { deleteCategory, getCategories, getCategoriesByName, getCategory, insertCategory, updateCategory, updateCategoryStatus } from "../../redux/actions/categoryAction";
+import { clearCategory, deleteCategory, getCategories, getCategoriesByName, getCategory, insertCategory, updateCategory, updateCategoryStatus } from "../../redux/actions/categoryAction";
 import CategoryList from "./CategoryList";
 import CategoryForm from "./CategoryForm";
 
@@ -17,12 +17,10 @@ class ListCategory extends Component {
     super(props);
 
     this.state = {
-      open: false,
       category: {
         id: "",
         name: "",
         parent_id:0,
-        level:0,
         metakey: "",
         metadesc: "",
         sortOrder: 0,
@@ -38,20 +36,32 @@ class ListCategory extends Component {
   };
   onEdit = (values) => {
     console.log("onEdit", values);
-    this.setState({ ...this.state, category: values, open: true });
+    this.setState({ ...this.state, category: values,open:true });
   };
   onCancel = () => {
-    this.setState({ ...this.state, category: {} });
+    this.setState({ ...this.state, category: {},open:false });
   };
   onCreate = (values) => {
-    console.log("onCreat", values);
+    
     if (values.id) {
+      console.log("onUpdate", values);
       this.props.updateCategory(values);
     } else {
+      console.log("onCreat", values);
       this.props.insertCategory(values);
     }
 
-    this.setState({ ...this.state, category: {}, open: false });
+    this.setState({ ...this.state, category: {
+        id: "",
+        name: "",
+        parent_id:0,
+        metakey: "",
+        metadesc: "",
+        sortOrder: 0,
+        status: 0,
+        
+      },});
+
   };
   deleteCategory = () => {
     this.props.deleteCategory(this.state.category.id);
@@ -113,9 +123,18 @@ class ListCategory extends Component {
   }
   render() {
     const { navigate } = this.props.router;
-    const { open } = this.state;
-    const { categories,pagination,title } = this.props;
-    
+    const { category,open} = this.state;
+    const { categories,pagination,title} = this.props;
+    // Bước 1: Sao chép danh sách categories để không ảnh hưởng đến đối tượng gốc
+    const modifiedCategories = [...categories];
+
+    // Bước 2: Nếu category đã được chỉ định, loại bỏ category này khỏi danh sách modifiedCategories
+    if (category) {
+      const categoryIndex = modifiedCategories.findIndex((item) => item.id === category.id);
+    if (categoryIndex !== -1) {
+        modifiedCategories.splice(categoryIndex, 1);
+      } 
+}
     return (
       <>
         <ContentHeader
@@ -139,7 +158,7 @@ class ListCategory extends Component {
             <Button
               type="primary"
               onClick={() => {
-                this.setState({ ...this.state, open: true });
+                this.setState({ ...this.state ,open:true});
               }}
             >
               Thêm danh mục
@@ -170,8 +189,8 @@ class ListCategory extends Component {
         
 
         <CategoryForm
-          category={this.state.category}
-          categories={categories}
+          category={category}
+          categories={modifiedCategories}
           open={open}
           onCreate={this.onCreate}
           onCancel={() => {
@@ -198,6 +217,7 @@ const mapDispatchToProps = {
   updateCategory: updateCategory,
   getCategoriesByName:getCategoriesByName,
   updateCategoryStatus:updateCategoryStatus,
+  clearCategory:clearCategory
 };
 
 export default connect(

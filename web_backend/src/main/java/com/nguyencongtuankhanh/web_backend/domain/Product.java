@@ -2,6 +2,7 @@ package com.nguyencongtuankhanh.web_backend.domain;
 
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -12,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -32,42 +34,37 @@ import lombok.Setter;
 public class Product extends AbstractEntity{
     @Column(name = "name",nullable = false)
     private String name;
+    @Column(name = "slug",nullable = false)
+    private String slug;
+    @Column(name = "metakey",nullable = false)
+    private String metakey;
+    @Column(name = "metadesc",nullable = false)
+    private String metadesc;
     @Column(name = "quantity",nullable = false)
     private Integer quantity;
     @Column(name = "price",nullable = false)
     private Double price;
-    @Column(name = "discount",nullable = false)
-    private Float discount;
      @Column(name = "view_count",nullable = false)
-    private Long viewCount;
+    private Long view_count;
      @Column(name = "is_featured",nullable = false)
-    private Boolean isFeatured;
-    @Temporal(TemporalType.DATE)
+    private Boolean is_featured;
+    @Column(name = "updated_by")
+    private Integer updated_by;
+    @Column(name = "created_by")
+    private Integer created_by;
     @Column(name = "created_at")
-    private Date createdAt;
-    @Temporal(TemporalType.DATE)
+    private LocalDateTime created_at;
+
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private LocalDateTime updated_at;
     @Column(name = "detail",nullable = false,length = 2000)
     private String detail;
     @Column(name = "description",nullable = false,length = 200)
     private String description;
-    @Temporal(TemporalType.DATE)
-    @Column(name = "manufacture_date")
-    private Date manufactureDate;
 
-    @PrePersist
-    public void prePersist(){
-        createdAt=new Date();
-        if(isFeatured==null){
-            isFeatured=false;
-        }
-        viewCount=0L;
-    }
-    @PreUpdate
-    public void preUpdate(){
-        updatedAt= new Date();
-    }
+    @Column(name = "manufacture_date")
+    private String manufacture_date;
+
     @ManyToOne
     private Category category;
     @ManyToOne
@@ -80,4 +77,11 @@ public class Product extends AbstractEntity{
     private ProductImage image;
     @Column(name = "status")
     private Integer status;
+
+    @OneToMany(mappedBy = "product")
+    private Set<ProductIncoming> product_incoming = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "product")
+    private Set<ProductOutgoing> product_outgoing = new LinkedHashSet<>();
+    @OneToOne(mappedBy = "product")
+    private ProductSale product_sale;
 }

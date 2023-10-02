@@ -6,6 +6,7 @@ import { BiTrashAlt } from 'react-icons/bi';
 import Column from 'antd/es/table/Column';
 import BrandService from '../../services/brandService';
 import withRouter from '../../helpers/withRouter';
+import "../../css/CustomButton.css";
 class BrandList extends Component {
   
   render() {

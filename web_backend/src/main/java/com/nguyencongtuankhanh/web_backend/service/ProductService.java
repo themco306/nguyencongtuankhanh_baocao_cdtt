@@ -7,18 +7,17 @@ import com.nguyencongtuankhanh.web_backend.domain.ProductImage;
 import com.nguyencongtuankhanh.web_backend.dto.ProductBriefDto;
 import com.nguyencongtuankhanh.web_backend.dto.ProductDto;
 import com.nguyencongtuankhanh.web_backend.dto.ProductImageDto;
+import com.nguyencongtuankhanh.web_backend.exception.BrandException;
 import com.nguyencongtuankhanh.web_backend.exception.ProductException;
 import com.nguyencongtuankhanh.web_backend.repository.ProductImageRepository;
 import com.nguyencongtuankhanh.web_backend.repository.ProductRepository;
-
-import lombok.var;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+import lombok.var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,16 +38,35 @@ public class ProductService {
   @Autowired
   private FileStorageService fileStorageService;
 
+  private String createSlugFromName(String name) {
+    String sanitized = name.trim().toLowerCase();
+    String[] words = sanitized.split("\\s+");
+    return String.join("-", words);
+  }
+
   @Transactional(rollbackFor = Exception.class)
   public ProductDto insertProduct(ProductDto dto) {
+    List<Product> existing = productRepository.findByNameContainsIgnoreCase(
+      dto.getName()
+    );
+    if (!existing.isEmpty()) {
+      throw new BrandException("Tên sản phẩm đã tồn tại!!");
+    }
     Product entity = new Product();
+    LocalDateTime date = LocalDateTime.now();
+    dto.setCreated_at(date);
+    dto.setCreated_by(1);
+    dto.setView_count(0L);
+    dto.setQuantity(0);
     BeanUtils.copyProperties(dto, entity);
+    String slug = createSlugFromName(dto.getName());
+    entity.setSlug(slug);
     var brand = new Brand();
-    brand.setId(dto.getBrandId());
+    brand.setId(dto.getBrand_id());
     entity.setBrand(brand);
 
     var category = new Category();
-    category.setId(dto.getCategoryId());
+    category.setId(dto.getCategory_id());
     entity.setCategory(category);
 
     if (dto.getImage() != null) {
@@ -78,7 +96,8 @@ public class ProductService {
       "viewCount",
     };
     BeanUtils.copyProperties(dto, found, ignoreFields);
-    if (dto.getImage().getId()!=null&&
+    if (
+      dto.getImage().getId() != null &&
       found.getImage().getId() != dto.getImage().getId()
     ) {
       fileStorageService.deleteProductImagesFile(
@@ -91,55 +110,75 @@ public class ProductService {
       found.setImage(img);
     }
     var brand = new Brand();
-    brand.setId(dto.getBrandId());
+    brand.setId(dto.getBrand_id());
     found.setBrand(brand);
 
     var category = new Category();
-    category.setId(dto.getCategoryId());
+    category.setId(dto.getCategory_id());
     found.setCategory(category);
 
-    if(dto.getImages().size()>0){
-        var toDeleteFile=new ArrayList<ProductImage>();
+    if (dto.getImages().size() > 0) {
+      var toDeleteFile = new ArrayList<ProductImage>();
 
-        found.getImages().stream().forEach(item->{
-            var existed=dto.getImages().stream().anyMatch(img->img.getId()==item.getId());
-            if(!existed){
-                toDeleteFile.add(item);
-            }
+      found
+        .getImages()
+        .stream()
+        .forEach(item -> {
+          var existed = dto
+            .getImages()
+            .stream()
+            .anyMatch(img -> img.getId() == item.getId());
+          if (!existed) {
+            toDeleteFile.add(item);
+          }
         });
-        if(toDeleteFile.size()>0){
-            toDeleteFile.stream().forEach(item->{
-                fileStorageService.deleteProductImagesFile(item.getFileName());
-                productImageRepository.delete(item);
-            });
-        }
-        var imgList=dto.getImages().stream().map(item->{
-            ProductImage img = new ProductImage();
-            BeanUtils.copyProperties(item,img);
-            return img;
-        }).collect(Collectors.toSet());
-        found.setImages(imgList);
-
+      if (toDeleteFile.size() > 0) {
+        toDeleteFile
+          .stream()
+          .forEach(item -> {
+            fileStorageService.deleteProductImagesFile(item.getFileName());
+            productImageRepository.delete(item);
+          });
+      }
+      var imgList = dto
+        .getImages()
+        .stream()
+        .map(item -> {
+          ProductImage img = new ProductImage();
+          BeanUtils.copyProperties(item, img);
+          return img;
+        })
+        .collect(Collectors.toSet());
+      found.setImages(imgList);
     }
-    var savedEntity=productRepository.save(found);
+    var savedEntity = productRepository.save(found);
     dto.setId(savedEntity.getId());
     return dto;
   }
+
   @Transactional(rollbackFor = Exception.class)
-  public void deleteProductById(int id){
-    var found=productRepository.findById(id).orElseThrow(()->new ProductException("Sản phẩm không tồ"));
-    if(found.getImage()!=null){
-      fileStorageService.deleteProductImagesFile(found.getImage().getFileName());
+  public void deleteProductById(int id) {
+    var found = productRepository
+      .findById(id)
+      .orElseThrow(() -> new ProductException("Sản phẩm không tồ"));
+    if (found.getImage() != null) {
+      fileStorageService.deleteProductImagesFile(
+        found.getImage().getFileName()
+      );
       productImageRepository.delete(found.getImage());
     }
-    if(found.getImages().size()>0){
-      found.getImages().stream().forEach(item->{
-        fileStorageService.deleteProductImagesFile(item.getFileName());
-        productImageRepository.delete(item);
-      });
+    if (found.getImages().size() > 0) {
+      found
+        .getImages()
+        .stream()
+        .forEach(item -> {
+          fileStorageService.deleteProductImagesFile(item.getFileName());
+          productImageRepository.delete(item);
+        });
     }
     productRepository.delete(found);
   }
+
   public ProductDto getEditedProductById(int id) {
     var found = productRepository
       .findById(id)
@@ -147,8 +186,8 @@ public class ProductService {
     ProductDto dto = new ProductDto();
     BeanUtils.copyProperties(found, dto);
 
-    dto.setBrandId(found.getBrand().getId());
-    dto.setCategoryId(found.getCategory().getId());
+    dto.setBrand_id(found.getBrand().getId());
+    dto.setCategory_id(found.getCategory().getId());
 
     var images = found
       .getImages()
@@ -214,4 +253,10 @@ public class ProductService {
     dto.setImages(newList);
     return entityList;
   }
+  public List<Product> findAll(){
+    return productRepository.findAll();
+}
+public Page<Product> findAll(org.springframework.data.domain.Pageable pageable){
+    return productRepository.findAll(pageable);
+}
 }

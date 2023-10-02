@@ -1,3 +1,6 @@
+import { GiEarthAfricaEurope } from "react-icons/gi"; 
+import { IoEarth } from "react-icons/io"; 
+
 import { BsList } from "react-icons/bs"; 
 import { AiOutlinePlus } from "react-icons/ai"; 
 import { MdOutlineCategory } from "react-icons/md"; 
@@ -26,6 +29,7 @@ import AddOrEditProduct from "../components/pruducts/AddOrEditProduct";
 import ListProduct from "../components/pruducts/ListProduct";
 import ShowBrands from "../components/brand/ShowBrands";
 import ListCategory from "../components/category/ListCategory";
+import ShowCategory from "../components/category/ShowCategory";
 const { Header, Sider, Content } = Layout;
 
 // const App: React.FC = () => {
@@ -75,14 +79,9 @@ function DashboardPage() {
               key: '2',
               icon: <MdOutlineCategory />,
               label: 'Danh mục',
-              children:[{
-                key: '21',
-                icon: <AiOutlinePlus />,
-                label: 'Thêm danh mục',
-                onClick:()=>navigate("/categories/add"),
-              },
+              children:[
               {
-                key: '22',
+                key: '21',
                 icon: <BsList />,
                 label: 'Tất cả danh mục',
                 onClick:()=>navigate("/categories/list"),
@@ -97,13 +96,14 @@ function DashboardPage() {
               label: 'Sản phẩm',
               children:[{
                 key: '31',
-                icon: <AiOutlinePlus />,
+                icon: <BsList />,
                 label: 'Tất cả sản phẩm',
                 onClick:()=>navigate("/products/list"),
               },
               {
                 key: '32',
-                icon: <BsList />,
+                
+                icon: <AiOutlinePlus />,
                 label: 'Thêm sản phẩm',
                 onClick:()=>navigate("/products/add"),
 
@@ -112,7 +112,7 @@ function DashboardPage() {
             },
             {
               key: '4',
-              icon: <MdOutlineCategory />,
+              icon: <GiEarthAfricaEurope />,
               label: 'Thương hiệu',
               children:[
               {
@@ -167,9 +167,11 @@ function DashboardPage() {
             <Route path='/categories/add' element={<AddOrEditCategory key='add'/>}></Route>
             <Route path='/categories/list' element={<ListCategory />}></Route>
             <Route path='/categories/update/:id' element={<AddOrEditCategory key='upd' />}></Route>
+            <Route path='/categories/show/:id' element={<ShowCategory key='show' />}></Route>
 
             <Route path='/brands/list' element={<ListBrands />}></Route>
             <Route path='/brands/show/:id' element={<ShowBrands />}></Route>
+
             <Route path='/products/upload' element={<UploadImage />}></Route>
             <Route path='/products/add' element={<AddOrEditProduct />}></Route>
             <Route path='/products/list' element={<ListProduct />}></Route>

@@ -1,9 +1,10 @@
-import { COMMON_EROR_SET, COMMON_LOADING_SET, COMMON_MESSAGE_SET } from "../actions/actionTypes";
+import { COMMON_EROR_SET, COMMON_LOADING_SET, COMMON_MESSAGE_SET, COMMON_MODAL_SET } from "../actions/actionTypes";
 
 const initialState = {
   message: "",
   error: "",
   isLoading: false,
+  open:false
 };
 
 const commonReducer = (state = initialState, { type, payload }) => {
@@ -14,6 +15,8 @@ const commonReducer = (state = initialState, { type, payload }) => {
       return { ...state, error: payload };
     case COMMON_LOADING_SET:
       return { ...state, isLoading: payload };
+      case COMMON_MODAL_SET:
+        return { ...state, open: payload };
     default:
       return state;
   }

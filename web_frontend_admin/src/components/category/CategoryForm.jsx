@@ -14,6 +14,7 @@ import {
 import Upload from "antd/es/upload/Upload";
 import React, { Component, createRef } from "react";
 import BrandService from "../../services/brandService";
+import ValidateCategory from "../../helpers/validate/validateCategory";
 
 class CategoryForm extends Component {
   form = createRef();
@@ -25,7 +26,6 @@ class CategoryForm extends Component {
         id: "",
         name: "",
         parent_id:0,
-        level:0,
         metakey: "",
         metadesc: "",
         sortOrder: 0,
@@ -38,15 +38,6 @@ class CategoryForm extends Component {
   }
   handelRemove = (value) => {
     console.log(value);
-  };
-  normFile = (e) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    if (e.fileList.length > 1) {
-      return [e.fileList[1]];
-    }
-    return e && e.fileList;
   };
 
   render() {
@@ -92,7 +83,8 @@ class CategoryForm extends Component {
                 name="name"
                 label="Tên danh mục"
                 initialValue={category.name}
-                rules={null}
+                rules={ValidateCategory.name}
+                hasFeedback
               >
                 <Input />
               </Form.Item>
@@ -100,7 +92,8 @@ class CategoryForm extends Component {
                 name="metakey"
                 label="Từ khóa SEO"
                 initialValue={category.metakey}
-                rules={null}
+                rules={ValidateCategory.metakey}
+                hasFeedback
               >
                 
                 <Input.TextArea  />
@@ -109,7 +102,8 @@ class CategoryForm extends Component {
                   name="metadesc"
                   label="Mô tả SEO"
                   initialValue={category.metadesc}
-                  rules={null}
+                  rules={ValidateCategory.metadesc}
+                  hasFeedback
                 >
                   <Input.TextArea rows={3} />
                 </Form.Item>
@@ -125,14 +119,14 @@ class CategoryForm extends Component {
                 initialValue={category.status}
               >
                 <Select defaultValue={0}>
-                  <Select.Option value={0}>Hiển thị</Select.Option>
+                  <Select.Option  value={0}>Hiển thị</Select.Option>
                   <Select.Option value={1}>Ẩn đi</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item label="Sắp xếp" name={'sortOrder'} initialValue={category.sortOrder}>
                         <Select placeholder="Chọn thứ tự"
                         suffixIcon={<BsSortDownAlt /> }
-                        defaultValue={0}
+                      defaultValue={0}
                         > 
                           <Select.Option value={0}
                                 key={'brand_order0'}
@@ -156,13 +150,13 @@ class CategoryForm extends Component {
                           <Select.Option value={0}
                                 key={'brand_parent0'}
                             >
-                                Không sắp xếp
+                                Không có cấp cha
                             </Select.Option>
                           {categories&&categories.map((item)=>(
                             <Select.Option value={item.id}
                                 key={'brand_parent'+item.id}
                             >
-                                Sau: {item.name}
+                                Thuộc: {item.name}
                             </Select.Option>
                           ))}
                         </Select>

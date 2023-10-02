@@ -41,6 +41,24 @@ public class CategoryService {
         BeanUtils.copyProperties(dto, entity);
         String slug = createSlugFromName(dto.getName());
         entity.setSlug(slug);
+        if (dto.getSortOrder() != null&&dto.getSortOrder() !=0) {
+            Optional<Category> targetBrandOptional = categoryRepository.findById(dto.getSortOrder());
+            if (targetBrandOptional.isPresent()) {
+                Category targetBrand = targetBrandOptional.get();
+                entity.setSortOrder(targetBrand.getId());
+            } else {
+                throw new CategoryException("Danh mục mục tiêu không tồn tại!!");
+            }
+        }
+        if (dto.getParent_id() != null&&dto.getParent_id() !=0) {
+            Optional<Category> targetBrandOptional = categoryRepository.findById(dto.getParent_id());
+            if (targetBrandOptional.isPresent()) {
+                Category targetBrand = targetBrandOptional.get();
+                entity.setParent_id(targetBrand.getId());
+            } else {
+                throw new CategoryException("Danh mục cha không tồn tại!!");
+            }
+        }
         return categoryRepository.save(entity);
     }
     public Category updateCategory(int id,CategoryDto dto){
@@ -57,6 +75,24 @@ public class CategoryService {
             BeanUtils.copyProperties(dto, entity,ignoreFields);
             String slug = createSlugFromName(dto.getName());
             entity.setSlug(slug);
+            if (dto.getSortOrder() != null&&dto.getSortOrder() !=0) {
+            Optional<Category> targetBrandOptional = categoryRepository.findById(dto.getSortOrder());
+            if (targetBrandOptional.isPresent()) {
+                Category targetBrand = targetBrandOptional.get();
+                entity.setSortOrder(targetBrand.getId());
+            } else {
+                throw new CategoryException("Danh mục mục tiêu không tồn tại!!");
+            }
+        }
+        if (dto.getParent_id() != null&&dto.getParent_id() !=0) {
+            Optional<Category> targetBrandOptional = categoryRepository.findById(dto.getParent_id());
+            if (targetBrandOptional.isPresent()) {
+                Category targetBrand = targetBrandOptional.get();
+                entity.setParent_id(targetBrand.getId());
+            } else {
+                throw new CategoryException("Danh mục cha không tồn tại!!");
+            }
+        }
             return categoryRepository.save(entity);
         } catch (Exception e) {
             throw new CategoryException("Cập nhật danh mục thất bại.");

@@ -4,15 +4,17 @@ import withRouter from '../../helpers/withRouter'
 import { connect } from 'react-redux';
 import { setTitle } from '../../redux/actions/titleAction';
 import { Badge, Descriptions, Image } from 'antd';
-import { getBrand } from '../../redux/actions/brandAction';
-import BrandService from '../../services/brandService';
 
- class ShowBrands extends Component {
+import CategoryService from '../../services/categoryService';
+import { getCategory } from '../../redux/actions/categoryAction';
+
+ class ShowCatgory extends Component {
     componentDidMount=()=>{
-        this.props.setTitle("Chi Tiết Thương Hiệu")
+        this.props.setTitle("Chi Tiết Danh mục")
         const { id } = this.props.router.params;
       
-      this.props.getBrand(id);
+        this.props.getCategory(id);
+        
     }
     constructor(props) {
         super(props);
@@ -22,8 +24,8 @@ import BrandService from '../../services/brandService';
     }
     
   render() {
-    const {brand} = this.props
-    console.log("brandshow",brand)
+    const {category} = this.props
+    console.log("categoryshow",category)
     const {navigate}=this.props.router
     const {title } = this.props
    
@@ -35,77 +37,79 @@ import BrandService from '../../services/brandService';
           className="site-page-header"
         ></ContentHeader>
         
-        <Descriptions title="Thông tin thương hiệu" bordered
+        <Descriptions title="Thông tin danh mục" bordered
                             labelStyle={{ width: '15%' }}
-
+                            column={24}
         >
             <Descriptions.Item label="ID"
-                span={2}
+                span={8}
                 
             >
-                {brand.id}
+                {category.id}
             </Descriptions.Item>
             <Descriptions.Item label="Tên"
-                span={2}
+                span={16}
                 
             >
-                {brand.name}
+                {category.name}
             </Descriptions.Item>
             <Descriptions.Item label="Trạng thái"
-            span={2}
+            span={8}
           
 
             >
-                {brand.status&&brand.status===0?'Hiển thị':'Ẩn đi'}
+                {category.status&&category.status===0?'Hiển thị':'Ẩn đi'}
             </Descriptions.Item>
-            
-            <Descriptions.Item label="Từ khóa SEO"
-            span={2}
-           
-
-            >
-                {brand.metakey}
-            </Descriptions.Item>
-            <Descriptions.Item label="Logo"
-                 span={2}
+            <Descriptions.Item label="Danh mục cha"
+                 span={8}
                 style={{ width:"15%" }}
             >
-                <Image src={BrandService.getBrandLogoUrl(brand.logo)} style={{ width:"100px" }}></Image>
-            </Descriptions.Item>
-            <Descriptions.Item label="Mô tả SEO"
-            span={3}
-           
-
-            >
-                {brand.metadesc}
-            </Descriptions.Item>
-            <Descriptions.Item label="ID người tạo"
-            span={2}
-            >
-                {brand.created_by??"Không có"}
-            </Descriptions.Item>
-            <Descriptions.Item label="Tạo vào ngày"
-            span={2}
-           
-
-            >
-                {brand.created_at??"Không có"}
-            </Descriptions.Item>
-            <Descriptions.Item label="ID người sửa"
-            span={2}
-            >
-                {brand.updated_by??"Không có"}
-            </Descriptions.Item>
-            <Descriptions.Item label="Sửa vào ngày"
-            span={2}
-            >
-                {brand.updated_at??"Không có"}
+              {category.parentName!==""?category.parentName:"Không có"}
             </Descriptions.Item>
             <Descriptions.Item label="Sắp xếp"
-            span={2}
+            span={8}
             >
-                {brand.sortOrder??"Không có"}
+                Sau: {category.sortOrderName!==""?category.sortOrderName:"Không có"}
             </Descriptions.Item>
+            <Descriptions.Item label="Từ khóa SEO"
+            span={24}
+           
+
+            >
+                {category.metakey}
+            </Descriptions.Item>
+            
+            
+            <Descriptions.Item label="Mô tả SEO"
+            span={24}
+           
+
+            >
+                {category.metadesc}
+            </Descriptions.Item>
+            <Descriptions.Item label="ID người tạo"
+            span={4}
+            >
+                {category.created_by??"Không có"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Tạo vào ngày"
+            span={20}
+           
+
+            >
+                {category.created_at??"Không có"}
+            </Descriptions.Item>
+            <Descriptions.Item label="ID người sửa"
+            span={4}
+            >
+                {category.updated_by??"Không có"}
+            </Descriptions.Item>
+            <Descriptions.Item label="Sửa vào ngày"
+            span={20}
+            >
+                {category.updated_at??"Không có"}
+            </Descriptions.Item>
+            
         </Descriptions>
       </>
     )
@@ -114,15 +118,15 @@ import BrandService from '../../services/brandService';
 
 const mapStateToProps = (state) => ({
     title:state.titleReducer.title,
-    brand: state.brandReducer.brand,
+    category: state.categoryReducer.category,
   });
   
   const mapDispatchToProps = {
     setTitle:setTitle,
-    getBrand:getBrand
+    getCategory:getCategory
   };
   
   export default connect(
     mapStateToProps,
     mapDispatchToProps
-  )(withRouter(ShowBrands));
+  )(withRouter(ShowCatgory));

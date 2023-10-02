@@ -7,7 +7,7 @@ import { PageHeader } from "@ant-design/pro-layout";
 import { Button, Divider, Modal, Skeleton, Space, Table, Tag } from "antd";
 import ContentHeader from "../common/ContentHeader";
 import Column from "antd/lib/table/Column";
-import "../../css/CustomButton.css";
+
 import { connect } from "react-redux";
 import { clearCategory, deleteCategory, getCategories } from "../../redux/actions/categoryAction";
 import { setTitle } from "../../redux/actions/titleAction";

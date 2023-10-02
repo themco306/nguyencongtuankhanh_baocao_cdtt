@@ -11,6 +11,7 @@ import com.nguyencongtuankhanh.web_backend.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -139,4 +140,34 @@ public class ProductController {
         
         return new ResponseEntity<>(productService.getProductBriefsByName(query, pageable),HttpStatus.OK);
     }
+
+    @GetMapping
+    public ResponseEntity<?> getBrand(){
+        var list = productService.findAll();
+        var newList= list.stream().map(item -> {
+            ProductDto dto = new ProductDto();
+            BeanUtils.copyProperties(item, dto);
+          
+            // Copy image information
+            if (item.getImage() != null) {
+                ProductImageDto imageDto = new ProductImageDto();
+                BeanUtils.copyProperties(item.getImage(), imageDto);
+                dto.setImage(imageDto);
+            }
+    
+            // Copy images information
+            if (item.getImages() != null) {
+                List<ProductImageDto> imagesDto = item.getImages().stream().map(image -> {
+                    ProductImageDto imageDto = new ProductImageDto();
+                    BeanUtils.copyProperties(image, imageDto);
+                    return imageDto;
+                }).collect(Collectors.toList());
+                dto.setImages(imagesDto);
+            }
+    
+            return dto;
+        }).collect(Collectors.toList());
+        return new ResponseEntity<>(newList, HttpStatus.OK);
+    }
+    
 }

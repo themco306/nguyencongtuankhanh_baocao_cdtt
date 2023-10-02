@@ -5,6 +5,7 @@ import {
   COMMON_EROR_SET,
   COMMON_LOADING_SET,
   COMMON_MESSAGE_SET,
+  PRODUCTS_SET,
   PRODUCT_APPEND,
   PRODUCT_SET,
 } from "./actionTypes";
@@ -52,7 +53,43 @@ export const insertProduct = (product,navigate) => async (dispatch) => {
   });
   navigate("/products/list")
 };
+export const getProducts=()=>async(dispatch)=>{
+  const service=new ProductService()
+  try {
+      console.log('list PRODUCTS_SET')
 
+      dispatch({
+          type:COMMON_LOADING_SET,
+          payload:true
+        })
+  
+      const response = await service.getProducts()
+      console.log(response)
+      if(response.status===200){
+          dispatch({
+              type:PRODUCTS_SET,
+              payload:response.data
+          })
+      }else{
+          dispatch({
+              type :COMMON_EROR_SET ,
+              payload:response.message
+          })
+      }
+
+  } catch (e) {
+      
+      dispatch({
+          type :COMMON_EROR_SET ,
+          payload:e.response.data?e.response.data.message:e.message
+      })
+
+  }
+  dispatch({
+      type:COMMON_LOADING_SET,
+      payload:false
+    })
+}
 // export const updateProduct = (product) => async (dispatch) => {
 //   const service = new ProductService();
 //   try {
