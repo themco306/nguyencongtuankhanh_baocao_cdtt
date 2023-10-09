@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.var;
@@ -155,12 +156,22 @@ public class ProductService {
     dto.setId(savedEntity.getId());
     return dto;
   }
-
+  public Product updateBrandStatus(int id) {
+    Product product = findById(id);
+    int currentStatus = product.getStatus();
+    int newStatus = (currentStatus == 0) ? 1 : 0;
+    product.setStatus(newStatus);
+    var date= LocalDateTime.now();
+    product.setUpdated_at(date);
+    product.setUpdated_by(1);
+    
+    return productRepository.save(product);
+}
   @Transactional(rollbackFor = Exception.class)
   public void deleteProductById(int id) {
     var found = productRepository
       .findById(id)
-      .orElseThrow(() -> new ProductException("Sản phẩm không tồ"));
+      .orElseThrow(() -> new ProductException("Sản phẩm không tồn tại"));
     if (found.getImage() != null) {
       fileStorageService.deleteProductImagesFile(
         found.getImage().getFileName()
@@ -205,34 +216,40 @@ public class ProductService {
     dto.setImage(imageDto);
     return dto;
   }
+public Product findById(int id){
+        Optional<Product> found=productRepository.findById(id);
+        if(found.isEmpty()){
+            throw new ProductException("Sản phẩm có Id "+id+" không tồn tại");
+        }
+        return found.get();
+    }
+  // public Page<ProductBriefDto> getProductBriefsByName(
+  //   String name,
+  //   Pageable pageable
+  // ) {
+  //   var list = productRepository.findByNameContainsIgnoreCase(name, pageable);
 
-  public Page<ProductBriefDto> getProductBriefsByName(
-    String name,
-    Pageable pageable
-  ) {
-    var list = productRepository.findByNameContainsIgnoreCase(name, pageable);
+  //   var newList = list
+  //     .getContent()
+  //     .stream()
+  //     .map(item -> {
+  //       ProductBriefDto dto = new ProductBriefDto();
+  //       BeanUtils.copyProperties(item, dto);
 
-    var newList = list
-      .getContent()
-      .stream()
-      .map(item -> {
-        ProductBriefDto dto = new ProductBriefDto();
-        BeanUtils.copyProperties(item, dto);
+  //       dto.setCategoryName(item.getCategory().getName());
+  //       dto.setBrandName(item.getBrand().getName());
+  //       dto.setImageFileName(item.getImage().getFileName());
+  //       return dto;
+  //     })
+  //     .collect(Collectors.toList());
 
-        dto.setCategoryName(item.getCategory().getName());
-        dto.setBrandName(item.getBrand().getName());
-        dto.setImageFileName(item.getImage().getFileName());
-        return dto;
-      })
-      .collect(Collectors.toList());
-
-    var newPage = new PageImpl<>(
-      newList,
-      list.getPageable(),
-      list.getTotalElements()
-    );
-    return newPage;
-  }
+  //   var newPage = new PageImpl<>(
+  //     newList,
+  //     list.getPageable(),
+  //     list.getTotalElements()
+  //   );
+  //   return newPage;
+  // }
 
   private Set<ProductImage> saveProductImages(ProductDto dto) {
     var entityList = new HashSet<ProductImage>();
@@ -258,5 +275,8 @@ public class ProductService {
 }
 public Page<Product> findAll(org.springframework.data.domain.Pageable pageable){
     return productRepository.findAll(pageable);
+}
+public Page<Product> findByName(String name,org.springframework.data.domain.Pageable pageable){
+  return productRepository.findByNameContainsIgnoreCase(name,pageable);
 }
 }

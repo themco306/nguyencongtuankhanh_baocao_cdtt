@@ -141,7 +141,8 @@ public class FileStorageService {
     try {
       Path filePath = location.resolve(fileName).normalize();
       if(!Files.exists(filePath)){
-        throw new FileNotFoundException("Không tìm thấy file "+fileName);
+        // throw new FileNotFoundException("Không tìm thấy file "+fileName);
+        return;
       }
       Files.delete(filePath);
     } catch (Exception e) {

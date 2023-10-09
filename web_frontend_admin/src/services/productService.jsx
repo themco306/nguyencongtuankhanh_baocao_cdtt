@@ -16,7 +16,7 @@ export default class ProductService{
         return  await axios.delete(API_PRODUCT+"/"+id)
     }
     getProduct=async(id)=>{
-        return  await axios.get(API_PRODUCT+"/"+id+"/get")
+        return  await axios.get(API_PRODUCT+"/"+id+"/getedit")
     }
     updateProduct=async(id,product)=>{
         let formData=new FormData();
@@ -34,5 +34,8 @@ export default class ProductService{
     }
     static getProductImageUploadUrl=()=>{
         return (API_PRODUCT+"/images/one")
+    }
+    updateProductStatus=async(id)=>{
+        return  await axios.patch(API_PRODUCT+"/"+id+"/status")
     }
 }

@@ -67,7 +67,7 @@ class BrandForm extends Component {
       ? BrandService.getBrandLogoUrl(brand.logo)
       : null;
     const initialLogo = brand.logo ? { url: logoUrl, uid: brand.logo } : null;
-    console.log("brand", brand);
+    console.log("initialLogo", initialLogo);
 
     const shouldShowUpload = !brand.logo;
 
@@ -190,6 +190,7 @@ class BrandForm extends Component {
                     onRemove={this.handelRemove}
                     maxCount={1}
                     beforeUpload={() => false}
+                  
                   >
                     <Button type="primary">Chọn Logo</Button>
                   </Upload>

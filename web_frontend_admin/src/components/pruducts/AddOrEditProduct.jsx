@@ -12,7 +12,8 @@ import CategoryService from "../../services/categoryService";
 import BrandService from "../../services/brandService";
 import { connect } from "react-redux";
 import ProductService from "../../services/productService";
-import { insertProduct } from "../../redux/actions/productAction";
+import { clearProduct, getProduct, insertProduct } from "../../redux/actions/productAction";
+import { setTitle } from "../../redux/actions/titleAction";
 
 class AddOrEditProduct extends Component {
     
@@ -43,6 +44,20 @@ class AddOrEditProduct extends Component {
       }
       
     }
+    componentDidMount() {
+      const { id } = this.props.router.params;
+      if (id) {
+        this.props.setTitle("Sửa Sản Phẩm");
+      
+          
+          this.props.getProduct(id);
+      
+      } else {
+        this.props.setTitle("Thêm Sản Phẩm");
+        this.props.clearProduct();
+      }
+      this.loadData();
+    }
     goNext=(values)=>{
         this.setState({...this.state,product:values,current:1})
     }
@@ -69,6 +84,19 @@ class AddOrEditProduct extends Component {
       }
       return null
     }
+    // static getDerivedStateFromProps(nextProps, prevState) {
+    //   const { product } = nextProps;
+    //   if (product && product.images) {
+    //     const productImages = product.images.map((item) => ({
+    //       ...item,
+    //       uid: item.id,
+    //       url: ProductService.getProductImageUrl(item.fileName),
+    //       status: "done",
+    //     }));
+    //     return { ...prevState, productImages };
+    //   }
+    //   return { ...prevState, productImages: [] };
+    // }
     saveProduct=()=>{
       const {product,productImages,updatedProductImages} = this.state   
       console.log("save product")
@@ -110,9 +138,8 @@ class AddOrEditProduct extends Component {
       this.setState({...this.state,product:{},productImages:[]})
       this.props.insertProduct(newProduct,navigate)
     }
-    componentDidMount=()=>{
-        this.loadData();
-    }
+
+       
     loadData = async() => {
       try {
         const categoryService= new CategoryService()
@@ -135,7 +162,8 @@ class AddOrEditProduct extends Component {
   render() {
     const {navigate} = this.props.router
     const {steps,current,categories,brands,productImages} = this.state
-    const {product}=this.props
+    const {product,title}=this.props
+    console.log("prduct",product)
     const items = steps.map((item) => ({
         key: item.title,
         title: item.title,
@@ -145,7 +173,7 @@ class AddOrEditProduct extends Component {
       <>
         <ContentHeader
           navigate={navigate}
-          title={"title"}
+          title={title}
           className="site-page-header"
         ></ContentHeader> 
         <Row>
@@ -158,7 +186,7 @@ class AddOrEditProduct extends Component {
             <Col md={24}>
                 {current===0&&(<>
                 <Divider></Divider>
-                <ProductForm product={{  }} goNext={this.goNext} categories={categories} brands={brands}></ProductForm>
+                <ProductForm product={product} goNext={this.goNext} categories={categories} brands={brands}></ProductForm>
                 </>)}
                 {current===1&&(<>
                 <Divider></Divider>
@@ -196,11 +224,15 @@ class AddOrEditProduct extends Component {
 
 
 const mapStateToProps = (state) => ({
-  product:state.productReducer.product
+  product:state.productReducer.product,
+  title:state.titleReducer.title
 })
 
 const mapDispatchToProps = {
-    insertProduct:insertProduct
+    setTitle:setTitle,
+    insertProduct:insertProduct,
+    getProduct:getProduct,
+    clearProduct:clearProduct
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AddOrEditProduct))

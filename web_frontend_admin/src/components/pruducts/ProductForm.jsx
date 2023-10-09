@@ -1,3 +1,4 @@
+
 import { TbBrandSafari } from "react-icons/tb";
 import { MdOutlineCategory } from "react-icons/md";
 import { AiOutlineUpload } from "react-icons/ai";
@@ -87,6 +88,7 @@ class ProductForm extends Component {
   };
   render() {
     const { product, categories, brands } = this.props;
+    console.log("prduct form",product);
     const { descriptionCKData } = this.state;
     return (
       <>

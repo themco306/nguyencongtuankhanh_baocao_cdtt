@@ -32,7 +32,7 @@ public class ProductDto implements Serializable {
     private String detail;
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private String manufacture_date;
+    private LocalDateTime manufacture_date;
     private Integer status;
 
     private Integer category_id;   

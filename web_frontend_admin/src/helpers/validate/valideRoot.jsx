@@ -28,7 +28,7 @@ export default class ValidateRoot {
         if (!value || value.length === 0) {
           return Promise.resolve();
         }
-        const fileFormat = value[0].name.split('.').pop().toLowerCase();
+        const fileFormat = value[0].uid.split('.').pop().toLowerCase();
         if (allowedFormats.includes(fileFormat)) {
           return Promise.resolve();
         } else {

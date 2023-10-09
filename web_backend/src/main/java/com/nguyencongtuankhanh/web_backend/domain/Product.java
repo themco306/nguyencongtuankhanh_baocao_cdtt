@@ -63,7 +63,7 @@ public class Product extends AbstractEntity{
     private String description;
 
     @Column(name = "manufacture_date")
-    private String manufacture_date;
+    private LocalDateTime manufacture_date;
 
     @ManyToOne
     private Category category;

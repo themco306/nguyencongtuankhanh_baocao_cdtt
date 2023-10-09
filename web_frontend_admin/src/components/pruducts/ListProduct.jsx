@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import ContentHeader from '../common/ContentHeader';
 import ProductList from './ProductList';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Button, Col, Form, Input, Modal, Row } from 'antd';
 import withRouter from '../../helpers/withRouter';
 import { connect } from 'react-redux';
 import { setTitle } from '../../redux/actions/titleAction';
-import { getProducts } from '../../redux/actions/productAction';
+import { deleteProduct, getProducts, getProductsByName, updateProductStatus } from '../../redux/actions/productAction';
 // const products=[{
 //     id:1,
 //     name:"hat",
@@ -15,10 +15,58 @@ import { getProducts } from '../../redux/actions/productAction';
 // }]
 
  class ListProduct extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      product: {
+        id: "",
+        name: "",
+        metakey: "",
+        metadesc: "",
+        sortOrder: 0,
+        status: 0,
+   
+      },
+    };
+  }
   componentDidMount =()=>{
     this.props.getProducts();
     this.props.setTitle("Xem Sản Phẩm")
     console.log("did mount")
+  }
+  deleteBrand = () => {
+    this.props.deleteProduct(this.state.product.id);
+    console.log("delete brand");
+    this.onCancel()
+  };
+  handleChangeStatus=(id)=>{
+    this.props.updateProductStatus(id)
+  }
+  onCancel = () => {
+    this.setState({ ...this.state, product: {} });
+  };
+  onDeleteConfirm = (product) => {
+    this.setState({ ...this.state, product: product });
+    const message = "Bạn có thật sự muốn xóa " + product.name;
+    Modal.confirm({
+      title: "Xác nhận!",
+      content: `${message}`,
+      icon: "",
+      onOk: this.deleteBrand,
+      okText: "Xóa",
+      cancelText: "Trở lại",
+      onCancel: this.onCancel,
+    });
+  };
+  handleSearch=(value)=>{
+    console.log("page",value)
+    // const {pagination}=this.props
+    const params={
+      query:value.query,
+      size:5
+      }
+      this.props.getproductsByName(params)
   }
   render() {
     const { navigate } = this.props.router;
@@ -46,7 +94,7 @@ import { getProducts } from '../../redux/actions/productAction';
           <Col md={6}>
             <Button
               type="primary"
-              onClick={() => navigate("/product/add")}
+              onClick={() => navigate("/products/add")}
             >
               Thêm
             </Button>
@@ -56,6 +104,7 @@ import { getProducts } from '../../redux/actions/productAction';
           products={products}
           onDeleteConfirm={this.onDeleteConfirm}
           onEdit={this.onEdit}
+          handleChangeStatus={this.handleChangeStatus}
         />
         
         
@@ -71,10 +120,13 @@ const mapStateToProps = (state) => ({
   isLoading:state.commonReducer.isLoading,
   title:state.titleReducer.title
 })
-
+            
 const mapDispatchToProps = {
   setTitle:setTitle,
-  getProducts:getProducts
+  getProducts:getProducts,
+  deleteProduct:deleteProduct,
+  updateProductStatus:updateProductStatus,
+  getproductsByName:getProductsByName
 
 }
 

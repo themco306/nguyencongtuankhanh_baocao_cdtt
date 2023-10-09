@@ -174,6 +174,7 @@ function DashboardPage() {
 
             <Route path='/products/upload' element={<UploadImage />}></Route>
             <Route path='/products/add' element={<AddOrEditProduct />}></Route>
+            <Route path='/products/edit/:id' element={<AddOrEditProduct key='upd' />}></Route>
             <Route path='/products/list' element={<ListProduct />}></Route>
           </Routes>
           <Outlet>

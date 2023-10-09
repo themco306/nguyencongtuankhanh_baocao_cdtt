@@ -1,5 +1,7 @@
 package com.nguyencongtuankhanh.web_backend.controller;
 
+import com.nguyencongtuankhanh.web_backend.domain.Brand;
+import com.nguyencongtuankhanh.web_backend.domain.Product;
 import com.nguyencongtuankhanh.web_backend.dto.BrandDto;
 import com.nguyencongtuankhanh.web_backend.dto.ProductDto;
 import com.nguyencongtuankhanh.web_backend.dto.ProductImageDto;
@@ -81,7 +83,7 @@ public class ProductController {
     ProductImageDto dto = new ProductImageDto();
     BeanUtils.copyProperties(fileInfo, dto);
     dto.setStatus("done");
-    dto.setUrl("http://localhost:8080/api/v1/products/images/"+fileInfo.getFileName());
+    dto.setUrl("http://localhost:8080/api/products/images/"+fileInfo.getFileName());
     return new ResponseEntity<>(dto,HttpStatus.CREATED);
   }
   @DeleteMapping("/images/{fileName:.+}")
@@ -135,14 +137,42 @@ public class ProductController {
     productService.deleteProductById(id);
     return new ResponseEntity<>("Sản phẩm có Id: "+id+" đã được xóa!!",HttpStatus.OK);
   }
-     @GetMapping("/find")
-    public ResponseEntity<?> getProductBriefByName(@RequestParam("query") String query,@PageableDefault(size = 5,sort = "name",direction = Sort.Direction.ASC) Pageable pageable){
+    //  @GetMapping("/find")
+    // public ResponseEntity<?> getProductBriefByName(@RequestParam("query") String query,@PageableDefault(size = 5,sort = "name",direction = Sort.Direction.ASC) Pageable pageable){
         
-        return new ResponseEntity<>(productService.getProductBriefsByName(query, pageable),HttpStatus.OK);
+    //     return new ResponseEntity<>(productService.getProductBriefsByName(query, pageable),HttpStatus.OK);
+    // }
+    @GetMapping("/find")
+    public ResponseEntity<?> getBrand(@RequestParam("query") String query,@PageableDefault(size = 5,sort = "name",direction = Sort.Direction.ASC) Pageable pageable){
+        var list =productService.findByName(query,pageable);
+        var newList= list.getContent().stream().map(item->{
+            ProductDto dto=new ProductDto();
+            BeanUtils.copyProperties(item, dto);
+            if (item.getImage() != null) {
+                ProductImageDto imageDto = new ProductImageDto();
+                BeanUtils.copyProperties(item.getImage(), imageDto);
+                dto.setImage(imageDto);
+            }
+            return dto;
+       
+        }).collect(Collectors.toList());
+        var newPage=new PageImpl<>(newList,list.getPageable(),list.getTotalPages());
+        return new ResponseEntity<>(newPage,HttpStatus.OK);
     }
-
+@PatchMapping("/{id}/status")
+public ResponseEntity<?> updateBrandStatus(@PathVariable("id") int id) {
+    Product entity=productService.updateBrandStatus(id);
+    ProductDto dto= new ProductDto();
+    BeanUtils.copyProperties(entity, dto);
+    if (entity.getImage() != null) {
+      ProductImageDto imageDto = new ProductImageDto();
+      BeanUtils.copyProperties(entity.getImage(), imageDto);
+      dto.setImage(imageDto);
+  }
+    return new ResponseEntity<>(dto,HttpStatus.OK);
+}
     @GetMapping
-    public ResponseEntity<?> getBrand(){
+    public ResponseEntity<?> getProducts(){
         var list = productService.findAll();
         var newList= list.stream().map(item -> {
             ProductDto dto = new ProductDto();

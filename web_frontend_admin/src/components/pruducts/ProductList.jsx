@@ -10,7 +10,7 @@ import withRouter from '../../helpers/withRouter';
  class ProductList extends Component {
   render() {
 
-    const {products,onEdit,onDeleteConfirm} = this.props   
+    const {products,onEdit,onDeleteConfirm,handleChangeStatus} = this.props   
     const {navigate}=this.props.router
     return (
         <Table
@@ -36,7 +36,14 @@ import withRouter from '../../helpers/withRouter';
           align="center"
           render={(_,record)=>(
             <Space size={'middle'}>
-                <Image width={'50px'} src={ProductService.getProductImageUrl(record.image.fileName)}></Image>
+                {record.image && record.image.fileName ? (
+        <Image
+          width={'50px'}
+          src={ProductService.getProductImageUrl(record.image.fileName)}
+        />
+      ) : (
+        <Image width={'50px'} src={''} /> // Thay thế 'default-placeholder-image-url' bằng URL hình ảnh mặc định
+      )}
             </Space>
           )}
         ></Column>
@@ -71,14 +78,14 @@ import withRouter from '../../helpers/withRouter';
           width={"10%"}
           align="center"
           sorter={(a, b) => a.status - b.status}
-          render={(_, { status }) => {
+          render={(_, {id, status }) => {
             let color = "green";
             let name = "Hiển thị";
             if (status === 1) {
               color = "volcano";
               name = "Ẩn đi";
             }
-            return <Tag color={color}>{name}</Tag>;
+            return  <Tooltip placement='top' title="Nhấn để thay đổi"> <Tag style={{ cursor:'pointer' }} color={color} onClick={()=>handleChangeStatus(id)}>{name}</Tag></Tooltip>;
           }}
         ></Column>
         <Column
@@ -111,7 +118,7 @@ import withRouter from '../../helpers/withRouter';
                 key={record.key}
                 size="small"
                 className="custom-button-show"
-                onClick={()=>navigate("/products/view/" + record.id)}
+                onClick={()=>navigate("/products/show/" + record.id)}
               >
                 <TbMathGreater />
               </Button>
