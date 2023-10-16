@@ -2,15 +2,15 @@
 
 Thông tin sinh viên:Nguyễn Công Tuấn Khanh
 
-Thông tin đề tại: web bán quần áo nam
+Thông tin đề tại: web bán mô hình
 
-Công nghệ: java(Spring Boot) + ReactJS
+Công nghệ: laravel
 
 ##Kế hoạch: 
 
 Tuần 1: 6/09/2023………… 13/09/2023 (thiết kế giao diện trang admin + thiết kế database)
 
-Tuấn 2:14/09/2023………..20/09/2023 (tạo và test các API theo database )
+Tuấn 2:14/09/2023………..20/09/2023 (tạo và test các controller theo database )
 
 Tuần 3: 21/09/2023..........27/09/2023(làm chức năng thêm xóa sửa cho các trường trong database lần 1)
 
