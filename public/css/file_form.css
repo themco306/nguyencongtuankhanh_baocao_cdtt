@@ -1,0 +1,198 @@
+/* .container-image {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 34.37em;
+    position: relative;
+    margin: 3.12em auto;
+    padding: 3.12em 1.25em;
+    border-radius: 0.43em;
+    box-shadow: 0 1.25em 2.18em rgb(1, 28, 71, 0.3);
+}
+.container-image input[type="file"] {
+    display: none;
+}
+.container-image label {
+    display: block;
+    position: relative;
+    background-color: #025bee;
+    color: #ffffff;
+    font-size: 1.12em;
+    font-weight: 500;
+    text-align: center;
+    width: 18.75em;
+    padding: 1.12em 0;
+    margin: auto;
+    border-radius: 0.31em;
+    cursor: pointer;
+}
+.container-image #num-of-files1,
+.container-image #num-of-files {
+    font-weight: 400;
+    text-align: center;
+    margin: 1.25em 0 1.87em 0;
+}
+.container-image ul {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+}
+.container-image li {
+    font-weight: 500;
+    background-color: #eff5ff;
+    color: #025bee;
+    margin-bottom: 1em;
+    padding: 1.1em 1em;
+    border-radius: 0.3em;
+    display: flex;
+    justify-content: space-between;
+} */
+
+
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600&display=swap');
+
+.form_images ,::after,::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.form_images {
+
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-family: 'Mulish', sans-serif;
+}
+
+/* MAIN STYLE */
+
+.form_images .card {
+    width: 400px;
+    height: auto;
+    padding: 15px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    overflow: hidden;
+    background: #fafbff;
+}
+
+.form_images .card .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.form_images .card p {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #878a9a;
+}
+
+.form_images .card button {
+    outline: 0;
+    border: 0;
+        -webkit-appearence: none;
+	background: #5256ad;
+	color: #fff;
+	border-radius: 4px;
+	transition: 0.3s;
+	cursor: pointer;
+	font-weight: 400;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+	font-size: 0.8rem;
+	padding: 8px 13px;
+}
+
+.form_images .card button:hover {
+	opacity: 0.8;
+}
+
+.form_images .card button:active {
+	transform: translateY(5px);
+}
+
+.form_images .card .drag-area {
+	width: 100%;
+	height: 160px;
+	border-radius: 5px;
+	border: 2px dashed #d5d5e1;
+	color: #c8c9dd;
+	font-size: 0.9rem;
+	font-weight: 500;
+	position: relative;
+	background: #dfe3f259;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	user-select: none;
+	-webkit-user-select: none;
+	margin-top: 10px;
+}
+
+.form_images .card .drag-area .visible {
+	font-size: 18px;
+}
+.form_images .card .select {
+    color: #5256ad;
+	margin-left: 5px;
+	cursor: pointer;
+	transition: 0.4s;
+}
+
+.form_images .card .select:hover {
+	opacity: 0.6;
+}
+
+.form_images .card .container {
+	width: 100%;
+	height: auto;
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	max-height: 200px;
+	overflow-y: auto;
+	margin-top: 10px;
+}
+
+.form_images .card .container .image {
+	width: calc(26% - 19px);
+	margin-right: 15px;
+	height: 75px;
+	position: relative;
+	margin-bottom: 8px;
+    border: dashed 2px rgb(255, 0, 0);
+}
+
+.form_images .card .container .image img {
+	width: 100%;
+	height: 100%;
+	border-radius: 5px;
+}
+
+.form_images .card .container .image span {
+	position: absolute;
+	top: -2px;
+	right: 9px;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+/* dragover class will used in drag and drop system */
+.form_images .card .drag-area.dragover {
+	background: rgba(0, 0, 0, 0.4);
+}
+
+.form_images .card .drag-area.dragover .on-drop {
+	display: inline;
+	font-size: 28px;
+}
+
+.form_images .card input,
+.form_images .card .drag-area .on-drop, 
+.form_images .card .drag-area.dragover .visible {
+	display: none;
+}

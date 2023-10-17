@@ -1,0 +1,102 @@
+.myaccount .checkout-breadcrumbs a{
+  color: #BCB6B2!important ;
+  transition: color .4s;
+}
+.myaccount .checkout-breadcrumbs a:hover{
+  color: #46423E!important  ;
+  transition: color .4s;
+}
+.myaccount .left-content img{
+    border-radius: 50% ;
+}
+.myaccount .left-content p{
+  margin: 0px;
+    
+}
+.myaccount .left-content div.name{
+    display: flex; justify-content: center; align-items: center;
+    color: #777;
+    
+}
+.myaccount .left-content ul{
+    margin:  0px;
+    padding: 0px;
+}
+.myaccount .left-content ul li {
+    margin: 0px;
+    padding: .5rem 0px;
+    position: relative;
+}
+
+.myaccount .left-content ul li::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 4px;
+    height: 0;
+    background-color: #fa6e4f;
+    transition: all 0.3s ease-in-out;
+}
+
+.myaccount .left-content ul li:hover::before {
+    top: 0;
+    height: 100%;
+}
+.myaccount .left-content ul li:not(:last-child){
+    border-bottom: 1px solid #B6B2B0 ;
+}
+
+
+.myaccount .left-content ul li a{
+    font-size: small;
+    text-transform: uppercase;
+    color: #777;
+    font-weight: 300;
+    transition: color 0.5s;
+}
+.myaccount .left-content ul li a i{
+   color: #fa6e4f;
+}
+.myaccount .left-content ul li:hover a{
+    color: #444;
+     
+  }
+  
+.myaccount .right-content  a{
+    color: #fa6e4f;
+    transition: color 0.5s;
+}
+.myaccount .right-content a:hover {
+    color: #A54312;
+     
+  }
+  .myaccount .right-content  button{
+    transition: all 0.5s;
+    background-color: #fa6e4f;
+    color: white; 
+    border: none;
+}
+.myaccount .right-content button:hover{
+    background-color: #B64E1E ;
+  }
+  .myaccount .right-content a.btn_addcart{
+    cursor: pointer;
+ 
+  }
+  .myaccount .right-content i{
+    cursor: pointer;
+  }
+  .myaccount .right-content i:hover{
+    color: red;
+
+  }
+  .myaccount .right-content span.badge{
+  background-color: orange;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+
+  }
+
+ 
