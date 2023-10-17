@@ -109,10 +109,10 @@
                         <div class="col-4 align-middle ">Giao hàng</div>
                         <div class="col-8">
                             <div class="row text-end">
-                                <p>Đồng giá: <span class="fw-semibold">0K VND</span> </p>
-                                <p style="font-size: 80%">Vận chuyển đến <span class="fw-bold">y, Huyện Ba Bể, Bắc
-                                        Kạn.</span> </p>
-                                <p style="font-size: 73%; color:#64F111 ">chọn tiến hành thanh toán để đổi địa chỉ</p>
+                                
+                                <p>Đồng giá: <span class="fw-semibold">0 VND</span> </p>
+                        
+                                <p style="font-size: 73%; color:#37800d ">chọn tiến hành thanh toán để đổi địa chỉ</p>
                             </div>
                         </div>
                     </div>

@@ -28,9 +28,9 @@ class ProductUpdateRequest extends FormRequest
             'metakey' => 'required|string|max:255',
             'qty' => 'required|integer|min:1|max:100',
             'price' => 'required|numeric|min:1000',
-            'price_sale' => 'nullable|required_with:date_begin,date_end|numeric|min:1000|lt:price',
-            'date_begin' => 'nullable|required_with:price_sale|date',
-            'date_end' => 'nullable|required_with:price_sale,date_begin|date|after:date_begin',
+            'price_sale' => 'nullable|required_with:date_begin,date_end|numeric|min:1000|lte:price',
+            'date_begin' => 'nullable|required_with:date_end|date',
+            'date_end' => 'nullable|required_with:date_begin|date|after:date_begin',
             'images.*' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
 
         ];

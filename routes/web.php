@@ -13,6 +13,8 @@ use App\Http\Controllers\backend\OrderController;
 use App\Http\Controllers\backend\PageController;
 use App\Http\Controllers\backend\PostController;
 use App\Http\Controllers\backend\ProductController;
+use App\Http\Controllers\backend\ProductSaleController;
+use App\Http\Controllers\backend\ProductStoreController;
 use App\Http\Controllers\backend\SliderController;
 use App\Http\Controllers\backend\TopicController;
 use App\Http\Controllers\backend\UserController;
@@ -220,9 +222,26 @@ Route::prefix('admin')->middleware('adminlogin')->group(function () {
     });
     //ProductController================================================================================================
     Route::get('product/trash', [ProductController::class, 'trash'])->name('product.trash');
+    Route::get('product/sale/edit/{product}', [ProductSaleController::class, 'edit_sale'])->name('product.edit_sale');
+    Route::get('product/store/create/{product?}', [ProductStoreController::class, 'create_store'])
+        ->name('product.create_store');
+    Route::get('product/store', [ProductStoreController::class, 'index_store'])->name('product.index_store');
+    Route::get('product/sale/create', [ProductSaleController::class, 'create_sale'])
+        ->name('product.create_sale');
+
+    Route::get('product/sale', [ProductSaleController::class, 'index_sale'])->name('product.index_sale');
+
     Route::resource('product', ProductController::class);
 
     Route::prefix('product')->group(function () {
+
+        Route::get('store/create/qty/{product?}', [ProductStoreController::class, 'get_product_qty'])->name('product.get_qty');
+        Route::get('sale/create/info/{product?}', [ProductSaleController::class, 'get_product_info'])->name('product.get_info');
+
+
+        Route::post('store_store', [ProductStoreController::class, 'store_store'])->name('product.store_store');
+        Route::post('store_sale', [ProductSaleController::class, 'store_sale'])->name('product.store_sale');
+        Route::post('edit_store_sale', [ProductSaleController::class, 'edit_store_sale'])->name('product.edit_store_sale');
         Route::get('status/{product}', [ProductController::class, 'status'])->name('product.status');
         Route::get('delete/{product}', [ProductController::class, 'delete'])->name('product.delete');
         Route::get('restore/{product}', [ProductController::class, 'restore'])->name('product.restore');

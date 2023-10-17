@@ -26,11 +26,8 @@ class ProductStoreRequest extends FormRequest
             'detail' => 'required|string|max:1500',
             'metadesc' => 'required|string|max:255',
             'metakey' => 'required|string|max:255',
-            'qty' => 'required|integer|min:1|max:100',
             'price' => 'required|numeric|min:1000',
-            'price_sale' => 'nullable|required_with:date_begin,date_end|numeric|min:1000|lt:price',
-            'date_begin' => 'nullable|required_with:price_sale|date',
-            'date_end' => 'nullable|required_with:price_sale,date_begin|date|after:date_begin',
+
             'images' => 'required|array|min:2',
             'images.*' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
 
@@ -59,21 +56,13 @@ class ProductStoreRequest extends FormRequest
 
             'metakey.required' => $messages['required'],
 
-            'qty.min' => $messages['min'],
-            'qty.max' => $messages['max'],
-            'qty.required' => $messages['required'],
+            // 'qty.min' => $messages['min'],
+            // 'qty.max' => $messages['max'],
+            // 'qty.required' => $messages['required'],
 
             'price.required' => $messages['required'],
             'price.min' => $messages['min'],
 
-            'price_sale.min' => $messages['min'],
-            'price_sale.lt' => 'Phải nhỏ hơn giá gốc',
-            'price_sale.required_with' => $messages['required'],
-
-            'date_begin.required_with' => $messages['required'],
-
-            'date_end.required_with' => $messages['required'],
-            'date_end.after' => 'Ngày kết thúc phải nhỏ hơn ngày bắt đầu',
 
 
             'images.required' => 'Hình ảnh không được để trống.',

@@ -71,21 +71,21 @@ class SiteCheckoutController extends Controller
             $product->qty -= $cart->qty;
             $product->save();
         }
-        // $user = Auth::guard('users')->user();
-        // try {
-        //     Mail::send(
-        //         'emails.checkorder_send',
-        //         compact('order', 'user'),
-        //         function ($send_email) use ($user) {
-        //             $send_email->subject('ShopTK - Xác nhận đơn hàng');
-        //             $send_email->to($user->email, $user->name);
-        //         }
-        //     );
-        // } catch (\Exception $e) {
-        //     // Lấy thông điệp lỗi từ đối tượng ngoại lệ
-        //     $error_message = $e->getMessage();
-        //     return redirect()->route('site.checkout')->with('message', ['type' => 'danger', 'msg' => $error_message]);
-        // }
+        $user = Auth::guard('users')->user();
+        try {
+            Mail::send(
+                'emails.checkorder_send',
+                compact('order', 'user'),
+                function ($send_email) use ($user) {
+                    $send_email->subject('ShopTK - Xác nhận đơn hàng');
+                    $send_email->to($user->email, $user->name);
+                }
+            );
+        } catch (\Exception $e) {
+            // Lấy thông điệp lỗi từ đối tượng ngoại lệ
+            $error_message = $e->getMessage();
+            return redirect()->route('site.checkout')->with('message', ['type' => 'danger', 'msg' => $error_message]);
+        }
         $carts = Carts::where('user_id', Auth::guard('users')->user()->id)->get();
         foreach ($carts as $cart) {
             $cart->delete();

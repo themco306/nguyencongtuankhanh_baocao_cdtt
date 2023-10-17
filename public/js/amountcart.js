@@ -26,6 +26,7 @@ $(document).ready(function () {
         value = isNaN(value) || value == 0 ? 1 : value;
         value = value > qty_max ? qty_max : value;
         $(this).val(value);
+        
     });
     $(".delete-cart-item").click(function (e) {
         e.preventDefault();

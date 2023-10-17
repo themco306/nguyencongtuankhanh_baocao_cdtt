@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-7 mb-3 ">
-        <label for="price_sale">Giá khuyến mãi</label>
-        <input name="price_sale" id="price_sale" value="{{ old('price_sale') }}"
+        <label for="discount">Giá khuyến mãi</label>
+        <input name="discount" id="discount" value="{{ old('discount') }}"
             type="number" class="form-control ">
-        @if ($errors->has('price_sale'))
+        @if ($errors->has('discount'))
             <div class="text-danger">
-                {{ $errors->first('price_sale') }}
+                {{ $errors->first('discount') }}
             </div>
         @endif
     </div>

@@ -66,7 +66,9 @@ class SiteCartController extends Controller
         $title = "Giỏ Hàng";
 
         $carts = Carts::where('user_id', Auth::guard('users')->user()->id)->orderBy('created_at', 'desc')->get();
-        return view('frontend.show_carts', compact('title', 'carts'));
+
+
+        return view('frontend.show_carts', compact('title', 'carts',));
     }
     public function delcart(Request $request)
     {

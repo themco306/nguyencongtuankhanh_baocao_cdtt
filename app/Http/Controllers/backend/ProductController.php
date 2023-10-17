@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Product_images;
 use App\Models\Product_sale;
+use App\Models\Product_store;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -19,7 +20,14 @@ use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
-
+    public function update_qty($id, $qty)
+    {
+        $product = Product::find($id);
+        $product->qty += $qty;
+        $product->updated_at = date('Y-m-d H:i:s');
+        $product->updated_by = Auth::guard('admin')->user()->id;
+        $product->save();
+    }
     public function index()
     {
         //$list=Product::all();//try van tat ca
@@ -28,12 +36,21 @@ class ProductController extends Controller
             ->where('product.status', '!=', '0')
             ->orderBy('product.created_at', 'desc')
             ->select("product.*", "category.name as category_name", "brand.name as brand_name")
-            ->get();
 
+            ->get();
         $title = 'Tất Cả Sản Phẩm';
         return view("backend.product.index", compact('product', 'title'));
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // public function index_store($id = null)
+    // {
+    //     $products = Product::select('id', 'name', 'images')->findAll();
+    //     if ($id) {
+    //         $product_store = Product_store::orderBy('product_id', 'desc')->findBy($id);
+    //     }
+    //     $title = 'Danh sách nhập sản phẩm';
+    //     return view("backend.product.store.index", compact('title', 'products', 'product_store'));
+    // }
     public function create()
     {
         $title = 'Thêm Sản Phẩm';
@@ -77,7 +94,7 @@ class ProductController extends Controller
             ->select('product.*', 'product_sale.price_sale', 'product_sale.date_begin', 'product_sale.date_end')
             ->first();
         if ($product == null) {
-            return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại']);
+            return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại ']);
         }
         $list_brand = Brand::where('status', '!=', '0')
             ->get();
@@ -287,7 +304,7 @@ class ProductController extends Controller
         $product->metadesc = $request->metadesc;
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
-        $product->qty = $request->qty;
+        $product->qty = 0;
         $product->price = $request->price;
         // $product->level = 1;
         $product->status = $request->status;
@@ -295,13 +312,15 @@ class ProductController extends Controller
         $product->created_by = Auth::guard('admin')->user()->id;
         //upload file
         if ($product->save()) {
-            $product_sale = new Product_sale();
-            if ($request->filled('price_sale')) {
-                $product_sale->price_sale = $request->price_sale;
-                $product_sale->date_begin = $request->date_begin;
-                $product_sale->date_end = $request->date_end;
-            }
-            $product->sale()->save($product_sale);
+
+            // if ($request->filled('discount')) {
+            //     $product_sale = new Product_sale();
+            //     $product_sale->discount = $request->discount;
+            //     $product_sale->date_begin = $request->date_begin;
+            //     $product_sale->date_end = $request->date_end;
+            //     $product->sale()->save($product_sale);
+            // }
+
             if ($request->hasFile('images')) {
                 $path = 'images/product/';
                 $count = 1;

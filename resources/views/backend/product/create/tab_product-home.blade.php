@@ -51,15 +51,6 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="qty">Số lượng </label>
-            <input name="qty" id="qty" type="number" class="form-control " value="{{ old('qty') }}">
-            @if ($errors->has('qty'))
-                <div class="text-danger">
-                    {{ $errors->first('qty') }}
-                </div>
-            @endif
-        </div>
-        <div class="mb-3">
             <label for="price">Giá</label>
             <input name="price" id="price" type="number" class="form-control" value="{{ old('price') }}">
             @if ($errors->has('price'))

@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product_sale extends Model
+class Product_store extends Model
 {
     use HasFactory;
-    protected $table = 'product_sale';
+    protected $table = 'product_store';
     public $timestamps = false;
+
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');

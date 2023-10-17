@@ -17,6 +17,18 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('product.index_store') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Nhập sản phẩm</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('product.index_sale') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Giảm giá</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('category.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Danh mục sản phẩm</p>
