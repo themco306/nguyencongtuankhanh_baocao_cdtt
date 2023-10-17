@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
@@ -64,3 +65,32 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+=======
+#PHIẾU ĐĂNG KÝ
+
+Thông tin sinh viên:Nguyễn Công Tuấn Khanh
+
+Thông tin đề tại: web bán mô hình
+
+Công nghệ: laravel
+
+##Kế hoạch: 
+
+Tuần 1: 6/09/2023………… 13/09/2023 (thiết kế giao diện trang admin + thiết kế database)
+
+Tuấn 2:14/09/2023………..20/09/2023 (tạo và test các controller theo database )
+
+Tuần 3: 21/09/2023..........27/09/2023(làm chức năng thêm xóa sửa cho các trường trong database lần 1)
+
+Tuần 4: 28/09/2023..........04/10/2023((làm chức năng thêm xóa sửa cho các trường trong database lần 2)
+
+Tuần 5: 05/10/2023..........11/10/2023( thiết kế giao diện web  cho khách hàng)
+
+Tuần 6: 12/10/2023..........18/10/2023(làm các trang liên quan đến trang đơn, sản phẩm)
+
+Tuần 7: 19/10/2023..........25/10/2023( thực hiện chức năng đăng nhập, đăng ký, thông tin khách hàng)
+
+Tuần 8: 26/10/2023..........01/11/2023(thực hiện các chức năng lọc giá, tìm kiếm,liên hệ,….)
+
+Tuần 9: 02/11/2023..........08/11/2023(làm chức năng giỏ hàng, thanh toán)
+>>>>>>> d7d5b53e7bdad0998672264721bc0b1c2fbf504a
