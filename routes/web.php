@@ -3,6 +3,7 @@
 use App\Http\Controllers\backend\BrandController;
 //
 use App\Http\Controllers\backend\CategoryController;
+use App\Http\Controllers\backend\ConfigController;
 //
 use App\Http\Controllers\backend\ContactController;
 use App\Http\Controllers\backend\CustomerController;
@@ -92,6 +93,10 @@ Route::post('admin/login', [LoginController::class, 'postlogin'])->name('admin.p
 Route::get('admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
 Route::prefix('admin')->middleware('adminlogin')->group(function () {
     //Trang Admin
+
+    Route::get('config', [ConfigController::class, 'index'])->name('config.index');
+    Route::post('config/addoredit', [ConfigController::class, 'addoredit'])->name('config.addoredit');
+
     //BrandController================================================================================================
     Route::get('brand/trash', [BrandController::class, 'trash'])->name('brand.trash');
     Route::resource('brand', BrandController::class);

@@ -1,24 +1,11 @@
-// let fileInput = document.getElementById("file-input");
-// let fileList = document.getElementById("files-list");
-// let numOfFiles = document.getElementById("num-of-files");
+document.addEventListener("DOMContentLoaded", function() {
+    let existingImages = document.getElementById('imageData');
+    console.log(existingImages);
+    // Tiếp tục xử lý dữ liệu ở đây
+  });
 
-// fileInput.addEventListener("change", () => {
-//     fileList.innerHTML = "";
-//     numOfFiles.textContent = `Đã chọn ${fileInput.files.length} ảnh`;
-
-//     for (i of fileInput.files) {
-//         let reader = new FileReader();
-//         let listItem = document.createElement("li");
-//         let fileName = i.name;
-//         let fileSize = (i.size / 1024).toFixed(1);
-//         listItem.innerHTML = `<p>${fileName}</p><p>${fileSize}KB</p>`;
-//         if (fileSize >= 1024) {
-//             fileSize = (fileSize / 1024).toFixed(1);
-//             listItem.innerHTML = `<p>${fileName}</p><p>${fileSize}MB</p>`;
-//         }
-//         fileList.appendChild(listItem);
-//     }
-// });
+// Gọi hàm showExistingImages() và chuyền danh sách hình ảnh đã tạo trước đó vào
+showExistingImages(existingImages);
 let files = [],
 dragArea = document.querySelector('.drag-area'),
 input = document.querySelector('.drag-area input'),
@@ -54,7 +41,16 @@ function showImages() {
 			</div>`
 	}, '');
 }
-
+function showExistingImages(existingImages) {
+	console.log(existingImages,"ccccccccc");
+	container.innerHTML = existingImages.reduce((prev, curr, index) => {
+	  return `${prev}
+		<div class="image">
+		  <span onclick="delImage(${index})">&times;</span>
+		  <img src="${curr.image}" />
+		</div>`;
+	}, '');
+  }
 /* DELETE IMAGE */
 function delImage(index) {
    files.splice(index, 1);

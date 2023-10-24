@@ -62,9 +62,7 @@ class SiteController extends Controller
             ['parent_id', '=', 0],
             ['status', '=', 1]
         ])->orderBy('sort_order', 'desc')->get();
-        $new_product = Product::with(['sale' => function ($query) {
-            $query->whereRaw('? between date_begin and date_end', [now()]);
-        }])->where('status', '1')->Orderby('created_at', 'desc')->take(4)->get();
+        $new_product = Product::where('status', '1')->Orderby('created_at', 'desc')->take(4)->get();
         return view('frontend.home', compact('list_category', 'title', 'new_product'));
     }
 
@@ -72,6 +70,7 @@ class SiteController extends Controller
     {
         // $list_category = Category::where('status', '1')->orderBy('created_at', 'desc')->get();
         // $list_brand = Brand::where('status', '1')->orderBy('created_at', 'desc')->get();
+
         if (isset($_GET['ten'])) {
             $ten = $_GET['ten'];
             $ten = $ten == 'z-a' ? 'desc' : 'asc';
@@ -85,9 +84,25 @@ class SiteController extends Controller
                 $query->whereRaw('? between date_begin and date_end', [now()]);
             }])->where('status', '1')->Orderby('price', $gia)->paginate($this->paginate);
         } else {
+            // $list_product = Product::where('status', '1')->Orderby('created_at', 'desc')->paginate($this->paginate);
+            // $new_list_product = collect(); // Khởi tạo một đối tượng Collection trống
+
+            // foreach ($list_product as $product) {
+            //     if ($product->sale && $product->sale->date_begin <= \Carbon\Carbon::now() && $product->sale->date_end >= \Carbon\Carbon::now()) {
+            //         $price = $product->price - ($product->sale->discount / 100 * $product->price);
+            //         if ($price >= $min_price && $price <= $max_price) {
+            //             $new_list_product->push($product); // Thêm sản phẩm vào đối tượng Collection
+            //         }
+            //     } else {
+            //         if ($product->price >= $min_price && $product->price <= $max_price) {
+            //             $new_list_product->push($product); // Thêm sản phẩm vào đối tượng Collection
+            //         }
+            //     }
+            // }
+            // dd($new_list_producut);
             $list_product = Product::with(['sale' => function ($query) {
                 $query->whereRaw('? between date_begin and date_end', [now()]);
-            }])->where('status', '1')->Orderby('created_at', 'desc')->paginate($this->paginate);
+            }])->where('status', '1')->paginate($this->paginate);
         }
 
         return view('frontend.all_product', compact('list_product'));

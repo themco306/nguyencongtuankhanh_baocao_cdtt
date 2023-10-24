@@ -56,11 +56,12 @@ class ProductSaleController extends Controller
     }
     public function edit_sale($product_id)
     {
-        $product_sale = Product_sale::where('product_id', $product_id)->first();
+        // $product_sale = Product_sale::where('product_id', $product_id)->first();
+        $product_sale = Product_sale::find($product_id);
         if (!$product_sale) {
             return redirect()->route('product.index_sale')->with('message', ['type' => 'danger', 'msg' => 'Giảm giá không tồn tại']);
         }
-        $products = Product::select('id', 'name')->get();
+        $products = Product::has('sale')->select('id', 'name')->get();
         $html_product_id = "";
         foreach ($products as $product) {
             $html_product_id .= "<option value='" . $product->id . "'" . (($product->id == old('product_id', $product_id)) ? 'selected' : ' ') . ">" . $product->name . "</option>";
@@ -81,7 +82,7 @@ class ProductSaleController extends Controller
         $product_sale->date_begin = $request->date_begin;
         $product_sale->date_end = $request->date_end;
         $product_sale->save();
-        return redirect()->route('product.edit_sale', ['product' => $request->product_id])->with('message', ['type' => 'success', 'msg' => 'Sửa thành công']);
+        return redirect()->route('product.edit_sale', ['product' => $product_sale->id])->with('message', ['type' => 'success', 'msg' => 'Sửa thành công']);
     }
     public function store_sale(ProductSaleStoreRequest $request)
     {

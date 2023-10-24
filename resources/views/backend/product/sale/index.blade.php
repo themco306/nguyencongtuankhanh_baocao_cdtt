@@ -82,12 +82,14 @@
                                 <td>
                                     <a 
                                     href="{{ route('product.edit_sale', ['product' => $row->id]) }}">
+                                
                                     @if($row->date_begin <= \Carbon\Carbon::now() && $row->date_end >= \Carbon\Carbon::now())
-                                            <p  class="text-success" title="Nhấn vào để nhập thêm">Giảm {{ $row->sale->discount }}%</p>
+                                            <p  class="text-success" title="Nhấn vào để nhập thêm">Giảm {{ $row->discount }}%</p>
                                         @else
                                             <p class="text-danger" title="Nhấn vào để gia hạn">Hết hạn giảm</p>
                                      
                                         @endif
+                    
                                     </a>
                                     
 

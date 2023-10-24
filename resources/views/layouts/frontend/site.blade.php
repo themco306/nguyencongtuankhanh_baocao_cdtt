@@ -22,7 +22,8 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/site.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('css/toastify.css') }}">
+    <link href="{{ asset('/css/card_product.css') }}" rel="stylesheet">
 
     @yield('header')
 </head>
@@ -311,6 +312,8 @@
 </script>
 @endif
     <script src="{{ asset('js/site.js') }}"></script>
+    <script src="{{ asset('js/toastify.js') }}"></script>
+
     <script type="text/javascript">
    function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");

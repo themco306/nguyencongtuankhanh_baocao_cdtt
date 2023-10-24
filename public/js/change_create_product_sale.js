@@ -1,14 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
    load()
+  
 });
 
 function load(){
     // Lấy giá trị ban đầu của product_id
     var productId =$("#product_id").val()
-
     // Gọi hàm getProductQty() với giá trị ban đầu của productId
     getProductInfo(productId);
-
+    setPriceEnd($("#discount").val())
     // Lắng nghe sự kiện thay đổi của product_id
     $("#product_id").on("change.select2", function () {
         var productId = $(this).val();
@@ -56,6 +56,7 @@ function load(){
            
         } 
     });
+
 }
 function setPriceEnd(discount) {
     var priceSelling = parseFloat(document.getElementById("price_selling").value);
@@ -75,7 +76,7 @@ function getProductInfo(productId) {
             document.getElementById("qty_base").value = data.qty_base;
             document.getElementById("price_base").value = data.price_base;
             document.getElementById("price_selling").value = data.price_selling;
-            
+            setPriceEnd($("#discount").val());
         })
         .catch((error) => {
             console.log("Error:", error);

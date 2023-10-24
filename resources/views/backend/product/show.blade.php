@@ -153,15 +153,20 @@ href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.cs
                             <td>{{ $product->price }}</td>
                         </tr>
                         <tr>
-                            @php
-                                if (!empty($product->sale->price_sale)) {
-                                        $price_sale = $product->sale->price_sale;
-                                        } else {
-                                            $price_sale='';                                    
-                                        }
-                            @endphp
-                            <th>Giá khuyến mãi</th>
-                            <td>{{ $price_sale }}</td>
+                            <th>Khuyến mãi</th>
+                            <td> @if ($product->sale )
+                                @if($product->sale->date_begin <= \Carbon\Carbon::now() && $product->sale->date_end >= \Carbon\Carbon::now())
+                                    
+                                        <p class="text-success" title="Nhấn vào để nhập thêm">Giảm {{ $product->sale->discount }}%</p>
+                                   
+                                    @else
+        
+                                        <p class="text-success" title="Nhấn vào để gia hạn">Hết hạn giảm</p>
+                                   
+                                    @endif
+                                @else
+                                <p>Chưa giảm</p>
+                                @endif</td>
                         </tr>
                         <tr>
                             <th>Ngày tạo</th>
@@ -169,7 +174,7 @@ href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.cs
                         </tr>
                         <tr>
                             <th>Người tạo</th>
-                            <td>{{ $product->created_by }}</td>
+                            <td>{{ $product->user_create->name }}</td>
                         </tr>
                         <tr>
                             <th>Ngày sửa cuối</th>
@@ -177,7 +182,7 @@ href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.cs
                         </tr>
                         <tr>
                             <th>Người sửa cuối</th>
-                            <td>{{ $product->updated_by }}</td>
+                            <td>{{ $product->user_update->name ??"Không có" }}</td>
                         </tr>
                         <tr>
                             <th>Trạng thái</th>

@@ -14,6 +14,15 @@
     <script src="{{ asset('js/amountcart.js') }}"></script>
     <script src="{{ asset('js/add2cart.js') }}"></script>
 @endsection
+@php
+use App\Helpers\ProductHelper;
+
+$prices = ProductHelper::calculatePrice($product);
+$discountedPrice=$prices->discountedPrice ;
+$price=$prices->price;
+$discount=$prices->discount;
+$inSale=$prices->inSale;
+@endphp
 @section('content')
     <div class=" layout-product container body">
         <div class="row mb-3">
@@ -87,11 +96,11 @@
                     </div>
                 </div>
                 <span>Giá bán:</span>
-                @if ($product->sale->price_sale != null)
-                    <p class="product2__pricemain d-inline-block"> {{ number_format($product->sale->price_sale) }}</p>
-                    <span class="text-decoration-line-through">{{ number_format($product->price) }}</span>
+                @if ($inSale==true)
+                    <p class="product2__pricemain d-inline-block"> {{ $discountedPrice }}</p>
+                    <span class="text-decoration-line-through">{{ $price }}</span>
                 @else
-                    <p class="product2__pricemain d-inline-block"> {{ number_format($product->price) }}</p>
+                    <p class="product2__pricemain d-inline-block"> {{ $price }}</p>
                 @endif
 
                 <div class="text-info my-2">

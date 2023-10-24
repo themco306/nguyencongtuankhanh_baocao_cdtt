@@ -2,6 +2,17 @@
 @section('title',$title??'Trang Quản Lý')
 @section('content')
 <section class="content">
+    @php
+       
+        $imageData = [];
+    foreach ($product->images as $image) {
+        $imageData[] = [
+            'image' => $image->image,
+        ];
+    }
+
+    @endphp
+    
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
@@ -54,11 +65,6 @@
                                     Ảnh</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link " id="sales-tab" data-bs-toggle="tab" data-bs-target="#sales"
-                                    type="button" role="tab" aria-controls="sales" aria-selected="false">Khuyến
-                                    Mãi</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="details-tab" data-bs-toggle="tab" data-bs-target="#details"
                                     type="button" role="tab" aria-controls="details" aria-selected="false">Chi Tiết
                                     </button>
@@ -76,12 +82,6 @@
                                 @includeIf('backend.product.edit.tab_product-images')
                               
                                
-                            </div>
-                            {{-- Khuyến Mãi --}}
-                            <div class="tab-pane fade " id="sales" role="tabpanel" aria-labelledby="sales-tab">
-                                @includeIf('backend.product.edit.tab_product-sales')
-                              
-                                
                             </div>
                             {{-- Khách Hàng[Tìm] --}}
                             <div class="tab-pane fade" id="details" role="tabpanel" aria-labelledby="details-tab">

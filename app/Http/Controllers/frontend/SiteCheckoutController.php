@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SiteCheckoutStoreRequest;
 use App\Models\Carts;
 use App\Models\Order;
 use App\Models\Orderdetail;
@@ -31,7 +32,7 @@ class SiteCheckoutController extends Controller
 
         return view('frontend.checkout.index', compact('user', 'carts'));
     }
-    public function placeorder(Request $request)
+    public function placeorder(SiteCheckoutStoreRequest $request)
     {
         $order = new Order();
         $timestamp = strtotime(now());
@@ -57,13 +58,16 @@ class SiteCheckoutController extends Controller
             $orderdetail->qty = $cart->qty;
 
             $product = $cart->product;
-            $product_price = $product->price; // Định nghĩa giá trị mặc định cho biến $product_price
-            if ($product->sale->price_sale != null) {
-                $now = now();
-                if ($product->sale->date_begin < $now && $now < $product->sale->date_end) {
-                    $product_price = $product->sale->price_sale;
-                }
+
+            $prices = \App\Helpers\ProductHelper::calculatePrice($product);
+
+            $product_price = $prices->price; // Set a default value for $product_price
+
+            if ($prices->inSale) {
+                $product_price = $prices->discountedPrice;
             }
+
+
             $orderdetail->price = $product_price;
             $orderdetail->amount = $product_price * $cart->qty;
             $orderdetail->save();

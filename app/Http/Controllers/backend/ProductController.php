@@ -90,8 +90,6 @@ class ProductController extends Controller
     {
         $title = 'Cập Nhật Sản Phẩm';
         $product = Product::where('product.id', $id)
-            ->join('product_sale', 'product.id', '=', 'product_sale.product_id')
-            ->select('product.*', 'product_sale.price_sale', 'product_sale.date_begin', 'product_sale.date_end')
             ->first();
         if ($product == null) {
             return redirect()->route('product.index')->with('message', ['type' => 'danger', 'msg' => 'Mẫu tin không tồn tại ']);
@@ -374,11 +372,6 @@ class ProductController extends Controller
 
 
         if ($product->save()) {
-            $product_sale = $product->sale;
-            $product_sale->price_sale = $request->price_sale;
-            $product_sale->date_begin = $request->date_begin;
-            $product_sale->date_end = $request->date_end;
-            $product->sale()->save($product_sale);
             if ($request->hasFile('images')) {
                 $path = 'images/product/';
                 $files = $request->file('images');

@@ -5,12 +5,12 @@
     <div class="group ">
         <div class="progress"></div>
         <div class="range-input">
-          <input type="range" class="range-min" min="0" max="10000000" value="0" step="1000">
-          <input type="range" class="range-max" min="0" max="10000000" value="10000000" step="1000">
+          <input type="range" class="range-min" min="{{ $min_price }}" max="{{ $max_price }}" value="{{ $min_price }}" step="1000">
+          <input type="range" class="range-max" min="{{ $min_price }}" max="{{ $max_price }}" value="{{ $max_price }}" step="1000">
         </div>
         <div class="text-range">
-          <div class="text-min">0</div>
-          <div class="text-max">10.000.000</div>
+          <div class="text-min">{{ $min_price }}</div>
+          <div class="text-max">{{ $max_price }}</div>
         </div>
      </div>
      <div class="mb-2 mt-5 text-end"> <button class="btn btn-sm btn-success">Lọc</button></div>

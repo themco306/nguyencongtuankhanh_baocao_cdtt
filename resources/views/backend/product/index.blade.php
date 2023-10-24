@@ -114,9 +114,10 @@
                                                     <p title="Nhấn vào để nhập thêm">Hết hàng</p>
                                                 </a>
                                             @endif
-                                            <a 
-                                                    href="{{ route('product.edit_sale', ['product' => $row->id]) }}">
+                                            
                                             @if ($row->sale )
+                                            <a 
+                                                    href="{{ route('product.edit_sale', ['product' => $row->sale->id]) }}">
                                             @if($row->sale->date_begin <= \Carbon\Carbon::now() && $row->sale->date_end >= \Carbon\Carbon::now())
                                                 
                                                     <p class="text-success" title="Nhấn vào để nhập thêm">Giảm {{ $row->sale->discount }}%</p>
@@ -126,8 +127,9 @@
                                                     <p class="text-success" title="Nhấn vào để gia hạn">Hết hạn giảm</p>
                                                
                                                 @endif
+                                            </a>
                                             @endif
-                                        </a>
+                                      
 
                                         </td>
                                         <td class="text-center">

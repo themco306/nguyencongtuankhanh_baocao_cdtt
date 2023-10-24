@@ -1,6 +1,5 @@
 <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
         <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="fa-brands fa-docker"></i>
@@ -119,6 +118,12 @@
                     <a href="{{ route('slider.index') }}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Slider</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('config.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Config</p>
                     </a>
                 </li>
             </ul>

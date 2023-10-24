@@ -37,4 +37,12 @@ class Product extends Model
     {
         return $this->hasMany(Product_store::class);
     }
+    public function user_create()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function user_update()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 }
