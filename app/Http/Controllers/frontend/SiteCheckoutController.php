@@ -29,8 +29,8 @@ class SiteCheckoutController extends Controller
             }
         }
         $carts = Carts::where('user_id', Auth::guard('users')->user()->id)->get();
-
-        return view('frontend.checkout.index', compact('user', 'carts'));
+        $title = "Chi tiết thanh toán";
+        return view('frontend.checkout.index', compact('user', 'carts', 'title'));
     }
     public function placeorder(SiteCheckoutStoreRequest $request)
     {
@@ -109,8 +109,8 @@ class SiteCheckoutController extends Controller
         foreach ($orderdetail as $item) {
             $total_payment += $item->amount;
         }
-
-        return view('frontend.checkout.ordercomplete', compact('order', 'total_payment'));
+        $title = "Hoàn thành đặt hàng";
+        return view('frontend.checkout.ordercomplete', compact('order', 'total_payment', 'title'));
     }
     public function orderaccept($id, $accept_token)
     {

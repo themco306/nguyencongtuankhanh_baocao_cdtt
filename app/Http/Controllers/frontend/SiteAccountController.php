@@ -18,12 +18,14 @@ class SiteAccountController extends Controller
     public function myaccount()
     {
         $user = Auth::guard('users')->user();
-        return view('frontend.customer.myaccount', compact('user'));
+        $title = "Tài khoản của tôi";
+        return view('frontend.customer.myaccount', compact('user', 'title'));
     }
     public function edit()
     {
         $user = Auth::guard('users')->user();
-        return view('frontend.customer.myaccount-edit', compact('user'));
+        $title = "Tài khoản của tôi";
+        return view('frontend.customer.myaccount-edit', compact('user', 'title'));
     }
     public function postedit(Request $request)
     {
@@ -135,12 +137,16 @@ class SiteAccountController extends Controller
             ['type' => 'success', 'text' => 'Đã giao'],
             ['type' => 'danger', 'text' => 'Đã hủy'],
         ];
-        return view('frontend.customer.myaccount-order', compact('user', 'order', 'list_status'));
+        $title = "Tài khoản của tôi";
+
+        return view('frontend.customer.myaccount-order', compact('user', 'order', 'list_status', 'title'));
     }
     public function address()
     {
         $user = Auth::guard('users')->user();
-        return view('frontend.customer.myaccount-address', compact('user'));
+        $title = "Tài khoản của tôi";
+
+        return view('frontend.customer.myaccount-address', compact('user', 'title'));
     }
     public function postaddress(Request $request)
     {
@@ -170,10 +176,14 @@ class SiteAccountController extends Controller
     public function wishlist()
     {
         $user = Auth::guard('users')->user();
-        return view('frontend.customer.myaccount-wishlist', compact('user'));
+        $title = "Tài khoản của tôi";
+
+        return view('frontend.customer.myaccount-wishlist', compact('user', 'title'));
     }
     public function temp_wishlist()
     {
-        return view('frontend.temp_wishlist');
+        $title = "Tài khoản của tôi";
+
+        return view('frontend.temp_wishlist', compact('title'));
     }
 }

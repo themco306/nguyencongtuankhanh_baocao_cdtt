@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="{{ asset('css/myaccount.css') }}">
 @endsection
 @section('footer')
+<script src="{{ asset('js/add2cart.js') }}"></script>
+
     <script src="{{ asset('js/show_wishlist_ma.js') }}"></script>
 @endsection
 @section('content')
@@ -46,6 +48,7 @@
         <div><h4 class="fs-5">Yêu thích CỦA TÔI <span class="badge fa-bounce" id="badge"></span></h4> </div>
         <table class="table">
             <thead class="table-light">
+                <input type="hidden" value="{{ route('site.addcart') }}" id="addcart_url">
               <tr>
                 <th style="width: 5%" scope="col"></th>
                 <th style="width: 15%" scope="col"></th>

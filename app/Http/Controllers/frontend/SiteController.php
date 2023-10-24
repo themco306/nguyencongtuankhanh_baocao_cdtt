@@ -104,8 +104,8 @@ class SiteController extends Controller
                 $query->whereRaw('? between date_begin and date_end', [now()]);
             }])->where('status', '1')->paginate($this->paginate);
         }
-
-        return view('frontend.all_product', compact('list_product'));
+        $title = "Tất cả sản phẩm";
+        return view('frontend.all_product', compact('list_product', 'title'));
     }
     protected function product_category($slug)
     {
@@ -129,7 +129,9 @@ class SiteController extends Controller
                 $query->whereRaw('? between date_begin and date_end', [now()]);
             }])->where('status', '=', '1')->whereIn('category_id', [$cat->id])->OrderBy('created_at', 'desc')->paginate($this->paginate);
         }
-        return view('frontend.product_category', compact('list_product', 'cat'));
+        $title = "Sản phẩm theo thương hiệu";
+
+        return view('frontend.product_category', compact('list_product', 'cat', 'title'));
     }
     protected function product_brand($slug)
     {
@@ -153,7 +155,9 @@ class SiteController extends Controller
                 $query->whereRaw('? between date_begin and date_end', [now()]);
             }])->where('status', '=', '1')->whereIn('brand_id', [$brand->id])->OrderBy('created_at', 'desc')->paginate($this->paginate);
         }
-        return view('frontend.product_brand', compact('list_product', 'brand'));
+        $title = "Sản phẩm theo danh mục";
+
+        return view('frontend.product_brand', compact('list_product', 'brand', 'title'));
     }
     public function all_post()
     {
@@ -161,7 +165,9 @@ class SiteController extends Controller
             ['type', '=', 'post'],
             ['status', '=', '1']
         ])->orderBy('created_at', 'desc')->paginate($this->paginate);
-        return view('frontend.all_post', compact('list_post'));
+        $title = "Bài viết";
+
+        return view('frontend.all_post', compact('list_post', 'title'));
     }
     protected function post_topic($slug)
     {
@@ -172,18 +178,23 @@ class SiteController extends Controller
             ['status', '=', '1'],
             ['topic_id', '=', $topic->id]
         ])->orderBy('created_at', 'desc')->paginate($this->paginate);
-        return view('frontend.post_topic', compact('list_post', 'topic'));
+        $title = "Bài viết";
+
+        return view('frontend.post_topic', compact('list_post', 'topic', 'title'));
     }
     protected function post_detail($post_single)
     {
         $topic = $post_single->topic;
         $list_post = Post::where([['status', '1'], ['topic_id', $topic->id], ['id', '!=', $post_single->id]])->Orderby('created_at', 'desc')->take(4)->get();
-        return view('frontend.post_detail', compact('list_post', 'post_single'));
+        $title = "Bài viết";
+
+        return view('frontend.post_detail', compact('list_post', 'post_single', 'title'));
     }
     protected function post_page($slug)
     {
         $page = Post::where([['slug', '=', $slug], ['status', '=', 1]])->first();
-        return view('frontend.post_page', compact('page'));
+        $title = "Trang đơn";
+        return view('frontend.post_page', compact('page', 'title'));
     }
     protected function product_detail($product)
     {
@@ -197,11 +208,14 @@ class SiteController extends Controller
             ['category_id', '=', $product->category_id],
             ['id', '!=', $product->id]
         ])->orderBy('created_at', 'desc')->take(4)->get();
-        return view('frontend.product_detail', compact('product', 'same_products'));
+        $title = "Chi tiết sản phẩm";
+
+        return view('frontend.product_detail', compact('product', 'same_products', 'title'));
     }
 
     protected function error_404($slug)
     {
+
         return view('errors.404', compact('slug'));
     }
 }

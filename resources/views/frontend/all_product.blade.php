@@ -1,5 +1,5 @@
 @extends('layouts.frontend.site')
-@section('title','Trang chủ')
+@section('title',$title)
 @section('header')
 <link rel="stylesheet" href="{{ asset('css/form_filter.css') }}">
 @endsection

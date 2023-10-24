@@ -19,7 +19,8 @@ class SiteLoginController extends Controller
      */
     public function getlogin()
     {
-        return view('frontend.login');
+        $title = "Đăng nhập";
+        return view('frontend.login', compact('title'));
     }
     public function register(Request $request)
     {
@@ -119,7 +120,8 @@ class SiteLoginController extends Controller
     }
     public function forget_password()
     {
-        return view('frontend.forget_password');
+        $title = "Quên mật khẩu ?";
+        return view('frontend.forget_password', compact('title'));
     }
     public function postforget_password(Request $request)
     {
@@ -163,7 +165,8 @@ class SiteLoginController extends Controller
         $user = User::find($user);
         $id = $user->id;
         if ($user->actived_token === $actived_token && $user->expires_at > now()) {
-            return view('frontend.get_password', compact('id'));
+            $title = "Đặt lại mật khẩu";
+            return view('frontend.get_password', compact('id', 'title'));
         }
         $slug = "Có thể liên kết đã hết hiệu lực hoặc gặp sự cố mạng";
         return view('errors.404', compact('slug'));
@@ -229,7 +232,8 @@ class SiteLoginController extends Controller
             return redirect()->route('site.index');
         }
         $error_login = "Thông tin đăng nhập không chính xác";
-        return view('frontend.login', compact('error_login'));
+        $title = "Đăng nhập";
+        return view('frontend.login', compact('error_login', 'title'));
     }
     public function logout(Request $request)
     {

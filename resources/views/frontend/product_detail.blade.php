@@ -1,5 +1,5 @@
 @extends('layouts.frontend.site')
-@section('title', 'Trang chủ')
+@section('title', $title)
 @section('header')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" />
     <link rel="stylesheet" href="{{ asset('css/buy_amount.css') }}">
