@@ -117,7 +117,7 @@ class SiteCheckoutController extends Controller
         $order = Order::where('id', $id)->first();
         if ($order->accept_token === $accept_token) {
             if ($order->expires_at < now()) {
-                return redirect()->route('site.ordercomplete')->with('message', ['type' => 'danger', 'msg' => 'Mã xác nhận đã hết hạn!! Vui lòng đặt hàng lại!!']);
+                return redirect()->route('site.ordercomplete', ['code' => $order->code])->with('message', ['type' => 'danger', 'msg' => 'Mã xác nhận đã hết hạn!! Vui lòng đặt hàng lại!!']);
             }
             $order->status = 1;
             $order->accept_token = null;
@@ -125,9 +125,9 @@ class SiteCheckoutController extends Controller
             $order->updated_by = Auth::guard('users')->user()->id;
             $order->updated_at = date('Y-m-d H:i:s');
             $order->save();
-            return redirect()->route('site.ordercomplete')->with('message', ['type' => 'success', 'msg' => 'Xác nhận đơn hàng thành công !! Vui lòng thanh toán để đơn hàng của bạn được đóng gói và gửi đi!!']);
+            return redirect()->route('site.ordercomplete', ['code' => $order->code])->with('message', ['type' => 'success', 'msg' => 'Xác nhận đơn hàng thành công !! Vui lòng thanh toán để đơn hàng của bạn được đóng gói và gửi đi!!']);
         } else {
-            return redirect()->route('site.ordercomplete')->with('message', ['type' => 'danger', 'msg' => 'Mã xác nhận đã bị chỉnh sửa !!Vui lòng vào Gmail để nhấn xác nhận lại!!']);
+            return redirect()->route('site.ordercomplete', ['code' => $order->code])->with('message', ['type' => 'danger', 'msg' => 'Mã xác nhận đã bị chỉnh sửa !!Vui lòng vào Gmail để nhấn xác nhận lại!!']);
         }
     }
     public function execPostRequest($url, $data)

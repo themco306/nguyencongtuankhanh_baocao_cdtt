@@ -67,7 +67,7 @@ $inSale=$prices->inSale;
                             <p>> Xuất sứ </p>
                         </div>
                         <div class="col-6">
-                            <p class="fw-bold"></p>
+                            <p class="fw-bold">{{ $product->brand->name }}</p>
                         </div>
                     </div>
                 </div>

@@ -186,6 +186,7 @@ class ProductController extends Controller
                 }
             }
             $product->sale()->delete();
+            $product->store()->delete();
             $product->images()->delete();
             return redirect()->route('product.trash')->with('message', ['type' => 'success', 'msg' => 'Xóa vĩnh viễn thành công!']);
         }

@@ -28,7 +28,7 @@
             <div class="product my-3">
                 <div class="row">
                     @foreach($list_product as $product)
-                    <div class="col-6 col-md-4">
+                    <div class="col-6 col-md-4 my-2">
                         <x-product-item :productitem="$product"/>
                         </div>
                     @endforeach

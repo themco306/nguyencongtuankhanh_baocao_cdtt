@@ -26,7 +26,7 @@ class ProductUpdateRequest extends FormRequest
             'detail' => 'required|string|max:1500',
             'metadesc' => 'required|string|max:255',
             'metakey' => 'required|string|max:255',
-            'qty' => 'required|integer|min:1|max:100',
+            'qty' => 'required|integer|min:0|max:100',
             'price' => 'required|numeric|min:1000',
             'price_sale' => 'nullable|required_with:date_begin,date_end|numeric|min:1000|lte:price',
             'date_begin' => 'nullable|required_with:date_end|date',

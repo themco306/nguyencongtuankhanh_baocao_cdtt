@@ -23,7 +23,7 @@
     </div>
 </div> --}}
 <div class="row">
-    <div class="form_images">
+    {{-- <div class="form_images">
         <div class="card">
             <div class="top">
                 <p>Kéo và thả để thêm ảnh</p>
@@ -46,8 +46,8 @@
                 </div>
             @endif</div>
         </div>
-    </div>
+    </div> --}}
    
-   
+    <input name="images[]" id="imageData" type="file" class="file" multiple />
 
 </div>

@@ -4,7 +4,7 @@
 <script src="{{ asset('js/add2cart.js') }}"></script>
 @endsection
 @section('content')
-<div class="">
+<div class="container">
 <x-slider-show/>
 </div>
     <section class="body container mt-4">

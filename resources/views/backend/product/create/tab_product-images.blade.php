@@ -1,5 +1,5 @@
 <div class="row">
-        <div class="form_images">
+        {{-- <div class="form_images">
 			<div class="card">
 				<div class="top">
 					<p>Kéo và thả để thêm ảnh</p>
@@ -12,7 +12,7 @@
 						<span class="select" role="button">Thêm</span>
 					</span>
 					<span class="on-drop">Thả ra</span>
-					<input name="images[]" type="file" class="file" multiple />
+					<input name="images[]" id="imageData" type="file" class="file" multiple />
 				</div>
 
 				<div class="container"> @if ($errors->has('images'))
@@ -21,8 +21,8 @@
 					</div>
 				@endif</div>
 			</div>
-		</div>
+		</div> --}}
        
-       
+		<input name="images[]" id="imageData" type="file" class="file" multiple />
 
 </div>

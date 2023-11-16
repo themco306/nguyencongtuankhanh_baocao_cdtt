@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class SiteController extends Controller
 {
-    public $paginate = 2;
+    public $paginate = 6;
     public $min_price = 0;
     public $max_price = 1000000;
     public function index($slug = null)
